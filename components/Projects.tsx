@@ -8,6 +8,35 @@ import Image from "next/image";
 
 const projects = [
   {
+    title: "BookWise Library",
+    description: "Sistem perpustakaan universitas modern dengan fitur peminjaman digital dan manajemen stok buku real-time. Menggunakan PostgreSQL untuk manajemen relasi data yang kompleks dengan performa tinggi dan keamanan data terjamin.",
+    stack: ["Next.js", "PostgreSQL", "Tailwind CSS", "NextAuth"],
+    design: ["Figma"],
+    color: "from-blue-600 to-indigo-700",
+    github: "https://github.com/nabilrobbani84-debug/university-_library",
+    image: "/bookwise.png"
+  },
+  {
+    title: "Recruitment Platform",
+    description: "Platform pencarian kerja modern yang menghubungkan talenta dengan perusahaan impian. Menampilkan antarmuka yang bersih dengan fitur pencarian kerja canggih dan dashboard pelamar yang intuitif.",
+    stack: ["Typescript", "React.js", "Tailwind CSS"],
+    design: ["Figma"],
+    color: "from-blue-500 to-cyan-400",
+    github: "https://github.com/nabilrobbani84-debug/Recruitment",
+    image: "/recruitment.png"
+  },
+  {
+    title: "Modiva App",
+    description: "Aplikasi mobile monitoring TTD remaja putri dengan pelaporan digital, dashboard kepatuhan, dan edukasi kesehatan terpadu.",
+    stack: ["React Native", "Expo", "NativeWind"],
+    testing: ["Blackbox Testing", "UAT"],
+    methodology: ["Scrum"],
+    design: ["Figma"],
+    color: "from-rose-500 to-red-600",
+    github: "https://github.com/nabilrobbani84-debug/mobile_app_Tester",
+    image: "/modiva.png"
+  },
+  {
     title: "Helpdesk Hub",
     description: "Ticketing system berbasis web dengan fitur reporting, auto-assignment, dan RBAC.",
     stack: ["React.js", "Laravel", "MySQL"],
@@ -80,7 +109,7 @@ const ProjectCard = ({ project }: { project: any }) => {
         rotateX,
         transformStyle: "preserve-3d",
       }}
-      className="relative h-[28rem] w-full rounded-xl bg-slate-900 border border-white/10 group perspective-1000 cursor-pointer"
+      className="relative h-[32rem] w-full rounded-xl bg-slate-900 border border-white/10 group perspective-1000 cursor-pointer"
     >
       <div
         style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" }}
@@ -115,7 +144,7 @@ const ProjectCard = ({ project }: { project: any }) => {
             <p className="text-gray-300 mb-4 text-sm line-clamp-3">{project.description}</p>
             
             <div className="mt-auto">
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-2">
                     {project.stack.map((tech: string) => (
                         <span key={tech} className="px-2 py-1 text-xs rounded bg-white/10 border border-white/5 text-gray-400">
                             {tech}
@@ -123,16 +152,49 @@ const ProjectCard = ({ project }: { project: any }) => {
                     ))}
                 </div>
 
-                <div className="flex gap-4">
+                {project.testing && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                      {project.testing.map((test: string) => (
+                          <span key={test} className="px-2 py-1 text-xs rounded bg-rose-500/10 border border-rose-500/20 text-rose-400">
+                              {test}
+                          </span>
+                      ))}
+                  </div>
+                )}
+
+                {project.methodology && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                      {project.methodology.map((method: string) => (
+                          <span key={method} className="px-2 py-1 text-xs rounded bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                              {method}
+                          </span>
+                      ))}
+                  </div>
+                )}
+
+                {project.design && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                      {project.design.map((tool: string) => (
+                          <span key={tool} className="px-2 py-1 text-xs rounded bg-purple-500/10 border border-purple-500/20 text-purple-400">
+                              {tool}
+                          </span>
+                      ))}
+                  </div>
+                )}
+
+                {!project.design && !project.methodology && !project.testing && <div className="mb-4"></div>}
+
+                <div className="flex gap-3">
                     {project.github && (
                     <a
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-full bg-white/5 hover:bg-cyan-500/20 hover:text-cyan-400 transition-colors text-white"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 hover:text-cyan-400 transition-all text-white text-sm font-medium z-20"
                         title="View Code"
                     >
                         <Github size={18} />
+                        <span>GitHub</span>
                     </a>
                     )}
                     {project.demo && project.demo !== '#' && (
@@ -140,10 +202,11 @@ const ProjectCard = ({ project }: { project: any }) => {
                         href={project.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-full bg-white/5 hover:bg-cyan-500/20 hover:text-cyan-400 transition-colors text-white"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 transition-all text-sm font-medium z-20"
                         title="Live Demo"
                     >
                         <ExternalLink size={18} />
+                        <span>Live Demo</span>
                     </a>
                     )}
                 </div>

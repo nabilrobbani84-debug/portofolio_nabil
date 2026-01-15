@@ -12,7 +12,7 @@ const certs = [
   {
     name: "Fullstack Web Development",
     issuer: "NF Academy",
-    date: "2023",
+    date: "2024",
   },
 ];
 
