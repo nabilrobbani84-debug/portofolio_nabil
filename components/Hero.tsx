@@ -57,45 +57,36 @@ export default function Hero() {
            className="max-w-4xl mx-auto pointer-events-auto"
         >
           {/* ... Content ... */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-            </span>
-            <span className="text-sm text-gray-300 font-medium">Available for new projects</span>
-          </div>
-
-          <h1 className="text-6xl md:text-8xl font-bold mb-8 tracking-tight leading-tight">
-            Building digital
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-gradient-x">
-               experiences
-            </span>
+          <span className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-cyan-400 uppercase border border-cyan-400/30 rounded-full bg-cyan-400/10">
+            Portfolio 2026
+          </span>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+            Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 text-glow-cyan">Nabil Robbani</span>
           </h1>
-
-          <p className="text-xl md:text-2xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            I am Nabil Robbani, a <span className="text-white font-semibold">Software Engineer</span> specialized in <span className="text-cyan-400">Frontend & Fullstack Development</span>.
+          <p className="text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            Mahasiswa Teknik Informatika | Software Engineer
+            <br />
+            <span className="text-sm md:text-lg text-gray-500">
+              Specialized in Frontend & Fullstack Development
+            </span>
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative px-8 py-4 bg-white text-slate-950 rounded-full font-bold shadow-lg shadow-white/10 flex items-center gap-3 overflow-hidden"
+              className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full font-semibold text-white shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-2"
             >
-              <span className="relative z-10">Contact Me</span>
-              <Mail className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform" />
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-10 transition-opacity" />
+              <Download size={18} /> Download CV
             </motion.button>
-            
-            <motion.button
+            <motion.a
+              href="mailto:nabilrobbani6@gmail.com"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-semibold backdrop-blur-md hover:bg-white/10 flex items-center gap-3 transition-all"
+              className="px-8 py-3 bg-white/5 border border-white/10 backdrop-blur-md rounded-full font-semibold text-white hover:bg-white/10 flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
-              <span>Download CV</span>
-              <Download className="w-5 h-5" />
-            </motion.button>
+              <Mail size={18} /> Contact Me
+            </motion.a>
           </div>
         </motion.div>
       </div>
