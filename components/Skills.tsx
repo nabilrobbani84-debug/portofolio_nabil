@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ScrollReveal } from "./ScrollAnimation";
 
 const skills = [
   "HTML", "CSS", "React", "Laravel", "Node.js", "Figma", "Git", "MySQL", "Next.js", "Vue.js", "Tailwind CSS"
@@ -10,9 +11,11 @@ export default function Skills() {
   return (
     <section id="skills" className="py-20 bg-slate-950 overflow-hidden relative">
       <div className="container mx-auto px-6 mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-center">
-          Technical <span className="text-purple-500">Skills</span>
-        </h2>
+        <ScrollReveal width="100%">
+            <h2 className="text-3xl md:text-4xl font-bold text-center">
+            Technical <span className="text-purple-500">Skills</span>
+            </h2>
+        </ScrollReveal>
       </div>
 
       <div className="relative w-full flex overflow-x-hidden group">

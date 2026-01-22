@@ -5,8 +5,17 @@ import { ExternalLink, Github } from "lucide-react";
 import React, { useRef } from "react";
 
 import Image from "next/image";
+import { StaggeredList, StaggerItem } from "./ScrollAnimation";
 
 const projects = [
+  {
+    title: "Ruqyah Syar'iyyah",
+    description: "Platform web komprehensif untuk digitalisasi klinik pengobatan Islami. Fitur utama mencakup sistem reservasi terintegrasi WhatsApp Gateway, manajemen konten admin, dan optimasi SEO lokal menggunakan Structured Data.",
+    stack: ["Django", "Python", "Tailwind CSS", "PostgreSQL"],
+    color: "from-green-800 to-amber-500",
+    github: "https://github.com/nabilrobbani84-debug/ruqyah-syariyyah",
+    image: "/ruqyah.png"
+  },
   {
     title: "BookWise Library",
     description: "Sistem perpustakaan universitas modern dengan fitur peminjaman digital dan manajemen stok buku real-time. Menggunakan PostgreSQL untuk manajemen relasi data yang kompleks dengan performa tinggi dan keamanan data terjamin.",
@@ -34,7 +43,7 @@ const projects = [
     design: ["Figma"],
     color: "from-rose-500 to-red-600",
     github: "https://github.com/nabilrobbani84-debug/mobile_app_Tester",
-    image: "/modiva.png"
+    image: "/modiva_v2.png"
   },
   {
     title: "Helpdesk Hub",
@@ -226,11 +235,13 @@ export default function Projects() {
           Featured <span className="text-cyan-400">Projects</span>
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <StaggeredList className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {projects.map((project, index) => (
-            <ProjectCard key={index} project={project} />
+             <StaggerItem key={index}>
+                <ProjectCard project={project} />
+             </StaggerItem>
           ))}
-        </div>
+        </StaggeredList>
       </div>
     </section>
   );

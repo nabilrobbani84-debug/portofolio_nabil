@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
+import { ScrollReveal } from "./ScrollAnimation";
 
 const experiences = [
   {
@@ -86,9 +87,11 @@ export default function Experience() {
         </h2>
         
         <div className="max-w-3xl mx-auto">
-          {experiences.map((exp, index) => (
-            <ExperienceCard key={index} item={exp} index={index} />
-          ))}
+          <ScrollReveal width="100%">
+            {experiences.map((exp, index) => (
+              <ExperienceCard key={index} item={exp} index={index} />
+            ))}
+          </ScrollReveal>
         </div>
       </div>
     </section>
