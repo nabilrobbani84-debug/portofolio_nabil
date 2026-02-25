@@ -1,247 +1,322 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
-import React, { useRef } from "react";
-
+import { motion } from "framer-motion";
+import { ExternalLink, Github, Code2, Layers, Cpu, Server, Container, Rocket } from "lucide-react";
 import Image from "next/image";
-import { StaggeredList, StaggerItem } from "./ScrollAnimation";
+import { ScrollReveal } from "./ScrollAnimation";
 
-const projects = [
+// ─── Data ───────────────────────────────────────────────────────────────────
+
+interface Badge {
+  label: string;
+  color: "cyan" | "purple" | "rose" | "amber" | "sky" | "orange" | "green" | "indigo";
+  icon: string;
+}
+
+interface Project {
+  title: string;
+  description: string;
+  badges: Badge[];
+  github?: string;
+  demo?: string;
+  image?: string;
+  accent: string;        // tailwind gradient class
+  featured?: boolean;   // first card gets larger treatment
+}
+
+const projects: Project[] = [
+  {
+    title: "Dukun Duplikat Kunci",
+    description:
+      "Platform bisnis digital modern untuk jasa duplikat kunci profesional. Website dibangun menggunakan Next.js & TypeScript untuk performa optimal, menampilkan landing page atraktif dengan desain dark navy  & gold yang elegan, sistem pemesanan terintegrasi WhatsApp, halaman detail layanan (motor, mobil, rumah, brankas), serta fitur layanan panggil 24 jam. Backend menggunakan Java Spring Boot yang dicontainerisasi dengan Docker untuk kemudahan deployment. Frontend di-deploy ke Firebase Hosting untuk distribusi CDN global yang stabil dan cepat.",
+    badges: [
+      { label: "Next.js", color: "cyan", icon: "▲" },
+      { label: "TypeScript", color: "sky", icon: "TS" },
+      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
+      { label: "Java Spring Boot", color: "orange", icon: "☕" },
+      { label: "Docker", color: "sky", icon: "🐳" },
+      { label: "Firebase Hosting", color: "amber", icon: "🚀" },
+    ],
+    accent: "from-yellow-500 via-amber-400 to-orange-500",
+    github: "https://github.com/nabilrobbani84-debug/duplikat_kunci",
+    image: "/duplikat-kunci.svg",
+    featured: true,
+  },
   {
     title: "Ruqyah Syar'iyyah",
-    description: "Platform web komprehensif untuk digitalisasi klinik pengobatan Islami. Fitur utama mencakup sistem reservasi terintegrasi WhatsApp Gateway, manajemen konten admin, dan optimasi SEO lokal menggunakan Structured Data.",
-    stack: ["Django", "Python", "Tailwind CSS", "PostgreSQL"],
-    color: "from-green-800 to-amber-500",
+    description:
+      "Platform web komprehensif untuk digitalisasi klinik pengobatan Islami. Fitur utama mencakup sistem reservasi terintegrasi WhatsApp Gateway, manajemen konten admin, dan optimasi SEO lokal menggunakan Structured Data untuk meningkatkan visibilitas bisnis di mesin pencari.",
+    badges: [
+      { label: "Django", color: "green", icon: "🐍" },
+      { label: "Python", color: "amber", icon: "🐍" },
+      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
+      { label: "PostgreSQL", color: "sky", icon: "🐘" },
+    ],
+    accent: "from-green-500 via-emerald-400 to-teal-500",
     github: "https://github.com/nabilrobbani84-debug/ruqyah-syariyyah",
-    image: "/ruqyah.png"
+    image: "/ruqyah.png",
   },
   {
     title: "BookWise Library",
-    description: "Sistem perpustakaan universitas modern dengan fitur peminjaman digital dan manajemen stok buku real-time. Menggunakan PostgreSQL untuk manajemen relasi data yang kompleks dengan performa tinggi dan keamanan data terjamin.",
-    stack: ["Next.js", "PostgreSQL", "Tailwind CSS", "NextAuth"],
-    design: ["Figma"],
-    color: "from-blue-600 to-indigo-700",
+    description:
+      "Sistem perpustakaan universitas modern dengan fitur peminjaman digital dan manajemen stok buku real-time. Menggunakan PostgreSQL untuk manajemen relasi data yang kompleks dengan performa tinggi, keamanan data terjamin, dan autentikasi multi-role via NextAuth.",
+    badges: [
+      { label: "Next.js", color: "cyan", icon: "▲" },
+      { label: "PostgreSQL", color: "sky", icon: "🐘" },
+      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
+      { label: "NextAuth", color: "purple", icon: "🔐" },
+      { label: "Figma", color: "purple", icon: "🎭" },
+    ],
+    accent: "from-blue-500 via-indigo-500 to-violet-600",
     github: "https://github.com/nabilrobbani84-debug/university-_library",
-    image: "/bookwise.png"
+    image: "/bookwise.png",
   },
   {
     title: "Recruitment Platform",
-    description: "Platform pencarian kerja modern yang menghubungkan talenta dengan perusahaan impian. Menampilkan antarmuka yang bersih dengan fitur pencarian kerja canggih dan dashboard pelamar yang intuitif.",
-    stack: ["Typescript", "React.js", "Tailwind CSS"],
-    design: ["Figma"],
-    color: "from-blue-500 to-cyan-400",
+    description:
+      "Platform pencarian kerja modern yang menghubungkan talenta dengan perusahaan impian. Menampilkan antarmuka yang bersih dengan fitur pencarian kerja canggih, sistem filter multi-kriteria, dan dashboard pelamar yang intuitif dan responsif di semua perangkat.",
+    badges: [
+      { label: "TypeScript", color: "sky", icon: "TS" },
+      { label: "React.js", color: "cyan", icon: "⚛️" },
+      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
+      { label: "Figma", color: "purple", icon: "🎭" },
+    ],
+    accent: "from-blue-400 via-cyan-400 to-sky-500",
     github: "https://github.com/nabilrobbani84-debug/Recruitment",
-    image: "/recruitment.png"
+    image: "/recruitment.png",
   },
   {
     title: "Modiva App",
-    description: "Aplikasi mobile monitoring TTD remaja putri dengan pelaporan digital, dashboard kepatuhan, dan edukasi kesehatan terpadu.",
-    stack: ["React Native", "Expo", "NativeWind"],
-    testing: ["Blackbox Testing", "UAT"],
-    methodology: ["Scrum"],
-    design: ["Figma"],
-    color: "from-rose-500 to-red-600",
+    description:
+      "Aplikasi mobile monitoring TTD (Tablet Tambah Darah) remaja putri dengan sistem pelaporan digital yang terintegrasi, dashboard kepatuhan untuk tenaga kesehatan, dan fitur edukasi kesehatan terpadu. Dikembangkan menggunakan metodologi Scrum dan diuji dengan Blackbox Testing & UAT.",
+    badges: [
+      { label: "React Native", color: "cyan", icon: "📱" },
+      { label: "Expo", color: "indigo", icon: "⚡" },
+      { label: "NativeWind", color: "cyan", icon: "🌬️" },
+      { label: "Figma", color: "purple", icon: "🎭" },
+      { label: "Scrum", color: "amber", icon: "🔄" },
+      { label: "UAT", color: "rose", icon: "✅" },
+    ],
+    accent: "from-rose-500 via-pink-500 to-red-500",
     github: "https://github.com/nabilrobbani84-debug/mobile_app_Tester",
-    image: "/modiva_v2.png"
+    image: "/modiva_v2.png",
   },
   {
     title: "Helpdesk Hub",
-    description: "Ticketing system berbasis web dengan fitur reporting, auto-assignment, dan RBAC.",
-    stack: ["React.js", "Laravel", "MySQL"],
-    color: "from-blue-600 to-cyan-500",
+    description:
+      "Ticketing system berbasis web yang komprehensif dengan fitur reporting detail, sistem auto-assignment tiket ke agen yang tersedia, dan Role-Based Access Control (RBAC) menggunakan tiga level pengguna: Admin, Agent, dan User untuk manajemen permintaan dukungan yang efisien.",
+    badges: [
+      { label: "React.js", color: "cyan", icon: "⚛️" },
+      { label: "Laravel", color: "rose", icon: "🔥" },
+      { label: "MySQL", color: "orange", icon: "🗄️" },
+    ],
+    accent: "from-blue-500 via-cyan-400 to-teal-500",
     github: "https://github.com/nabilrobbani84-debug/helpdesk",
-    // demo: "https://your-deploy-url.com", // Uncomment and add URL when ready
-    image: "/helpdesk.png"
+    image: "/helpdesk.png",
   },
   {
     title: "Web MovieApp",
-    description: "Web app informatif film dengan integrasi API dan state management efisien.",
-    stack: ["React.js", "CSS", "API"],
-    color: "from-purple-600 to-pink-500",
-    github: "https://github.com/nabilrobbani84/MF-Project2-Kelompok4", 
-    // demo: "#", // Uncomment and add URL when ready
-    image: "/movieapp.png"
+    description:
+      "Web application informatif film yang menampilkan koleksi film dengan data lengkap dari TMDB API. Dilengkapi fitur pencarian real-time, halaman detail film, sistem rating, dan state management yang efisien untuk pengalaman browsing film yang menyenangkan.",
+    badges: [
+      { label: "React.js", color: "cyan", icon: "⚛️" },
+      { label: "CSS", color: "purple", icon: "🎨" },
+      { label: "TMDB API", color: "amber", icon: "🎬" },
+    ],
+    accent: "from-purple-500 via-violet-500 to-pink-500",
+    github: "https://github.com/nabilrobbani84/MF-Project2-Kelompok4",
+    image: "/movieapp.png",
   },
   {
     title: "Kidstation",
-    description: "Sistem manajemen stok dan kasir (POS) untuk toko bayi premium dengan dashboard analitik penjualan real-time.",
-    stack: ["Laravel", "MySQL", "Bootstrap"],
-    color: "from-indigo-600 to-blue-500",
+    description:
+      "Sistem manajemen stok dan kasir (POS) untuk toko bayi premium dengan dashboard analitik penjualan real-time. Fitur utama meliputi manajemen produk, transaksi kasir, laporan harian/bulanan, dan manajemen stok otomatis untuk membantu operasional toko berjalan lebih efisien.",
+    badges: [
+      { label: "Laravel", color: "rose", icon: "🔥" },
+      { label: "MySQL", color: "orange", icon: "🗄️" },
+      { label: "Bootstrap", color: "purple", icon: "🅱️" },
+    ],
+    accent: "from-indigo-500 via-blue-500 to-cyan-500",
     github: "https://github.com/nabilrobbani84-debug/kidstation",
-    image: "/kidstation.png"
+    image: "/kidstation.png",
   },
 ];
 
-const ProjectCard = ({ project }: { project: any }) => {
-  const ref = useRef<HTMLDivElement>(null);
+// ─── Badge Color Map ─────────────────────────────────────────────────────────
 
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+const badgeColors: Record<string, string> = {
+  cyan:   "bg-cyan-500/10 border-cyan-500/30 text-cyan-400",
+  purple: "bg-purple-500/10 border-purple-500/30 text-purple-400",
+  rose:   "bg-rose-500/10 border-rose-500/30 text-rose-400",
+  amber:  "bg-amber-500/10 border-amber-500/30 text-amber-400",
+  sky:    "bg-sky-500/10 border-sky-500/30 text-sky-400",
+  orange: "bg-orange-500/10 border-orange-500/30 text-orange-400",
+  green:  "bg-green-500/10 border-green-500/30 text-green-400",
+  indigo: "bg-indigo-500/10 border-indigo-500/30 text-indigo-400",
+};
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
+// ─── Project Card ────────────────────────────────────────────────────────────
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!ref.current) return;
-
-    const rect = ref.current.getBoundingClientRect();
-
-    const width = rect.width;
-    const height = rect.height;
-
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+  const isEven = index % 2 === 0;
 
   return (
     <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateY,
-        rotateX,
-        transformStyle: "preserve-3d",
-      }}
-      className="relative h-[32rem] w-full rounded-xl bg-slate-900 border border-white/10 group perspective-1000 cursor-pointer"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+      className="group relative"
     >
+      {/* Glow backdrop */}
       <div
-        style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" }}
-        className="absolute inset-4 bg-slate-800 shadow-lg rounded-xl overflow-hidden flex flex-col"
-      >
-        {/* Image / Header Section */}
-        <div className="relative h-48 w-full shrink-0 overflow-hidden transform-style-3d">
-            {project.image ? (
-                <div className="relative w-full h-full group-hover:scale-110 transition-transform duration-500">
-                     <Image 
-                        src={project.image} 
-                        alt={project.title} 
-                        fill 
-                        className="object-cover object-top"
-                     />
-                     <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors" />
-                </div>
-            ) : (
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-30`} />
-            )}
-            
-            {!project.image && (
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <h3 className="text-3xl font-bold text-white/10">{project.title.substring(0, 2)}</h3>
-                 </div>
-            )}
-        </div>
-        
-        {/* Content Section */}
-        <div className="p-6 flex flex-col flex-1 transform translate-z-10 bg-slate-800">
-            <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-cyan-400 transition-colors">{project.title}</h3>
-            <p className="text-gray-300 mb-4 text-sm line-clamp-3">{project.description}</p>
-            
-            <div className="mt-auto">
-                <div className="flex flex-wrap gap-2 mb-2">
-                    {project.stack.map((tech: string) => (
-                        <span key={tech} className="px-2 py-1 text-xs rounded bg-white/10 border border-white/5 text-gray-400">
-                            {tech}
-                        </span>
-                    ))}
-                </div>
+        className={`absolute -inset-px rounded-2xl bg-gradient-to-r ${project.accent} opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500`}
+      />
 
-                {project.testing && (
-                  <div className="flex flex-wrap gap-2 mb-2">
-                      {project.testing.map((test: string) => (
-                          <span key={test} className="px-2 py-1 text-xs rounded bg-rose-500/10 border border-rose-500/20 text-rose-400">
-                              {test}
-                          </span>
-                      ))}
-                  </div>
-                )}
+      <div className="relative rounded-2xl bg-slate-900/90 border border-white/8 overflow-hidden backdrop-blur-sm flex flex-col md:flex-row">
 
-                {project.methodology && (
-                  <div className="flex flex-wrap gap-2 mb-2">
-                      {project.methodology.map((method: string) => (
-                          <span key={method} className="px-2 py-1 text-xs rounded bg-amber-500/10 border border-amber-500/20 text-amber-400">
-                              {method}
-                          </span>
-                      ))}
-                  </div>
-                )}
+        {/* ── Image Panel ── */}
+        <div className={`relative w-full md:w-[42%] shrink-0 min-h-[220px] md:min-h-[280px] overflow-hidden ${isEven ? "md:order-first" : "md:order-last"}`}>
+          {/* Gradient accent bar */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${project.accent} opacity-20`} />
 
-                {project.design && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                      {project.design.map((tool: string) => (
-                          <span key={tool} className="px-2 py-1 text-xs rounded bg-purple-500/10 border border-purple-500/20 text-purple-400">
-                              {tool}
-                          </span>
-                      ))}
-                  </div>
-                )}
-
-                {!project.design && !project.methodology && !project.testing && <div className="mb-4"></div>}
-
-                <div className="flex gap-3">
-                    {project.github && (
-                    <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 hover:text-cyan-400 transition-all text-white text-sm font-medium z-20"
-                        title="View Code"
-                    >
-                        <Github size={18} />
-                        <span>GitHub</span>
-                    </a>
-                    )}
-                    {project.demo && project.demo !== '#' && (
-                    <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 transition-all text-sm font-medium z-20"
-                        title="Live Demo"
-                    >
-                        <ExternalLink size={18} />
-                        <span>Live Demo</span>
-                    </a>
-                    )}
-                </div>
+          {project.image ? (
+            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700 ease-out">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover object-top"
+              />
+              {/* Overlay fade */}
+              <div className={`absolute inset-0 bg-gradient-to-r ${isEven ? "from-transparent to-slate-900/70" : "from-slate-900/70 to-transparent"} md:block hidden`} />
+              <div className="absolute inset-0 bg-slate-900/30 md:hidden" />
             </div>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className={`text-7xl font-black bg-gradient-to-br ${project.accent} bg-clip-text text-transparent opacity-20`}>
+                {project.title.slice(0, 2).toUpperCase()}
+              </span>
+            </div>
+          )}
+
+          {/* Number tag */}
+          <div className="absolute top-4 left-4 z-10">
+            <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br ${project.accent} text-white text-xs font-bold shadow-lg`}>
+              {String(index + 1).padStart(2, "0")}
+            </span>
+          </div>
+        </div>
+
+        {/* ── Content Panel ── */}
+        <div className="flex-1 p-6 md:p-8 flex flex-col justify-between gap-4">
+
+          {/* Title */}
+          <div>
+            <h3 className={`text-xl md:text-2xl font-bold text-white mb-3 group-hover:bg-gradient-to-r group-hover:${project.accent} group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300`}>
+              {project.title}
+            </h3>
+
+            {/* Description — full text, no clamp */}
+            <p className="text-gray-400 text-sm md:text-[0.93rem] leading-relaxed">
+              {project.description}
+            </p>
+          </div>
+
+          {/* Badges */}
+          <div className="flex flex-wrap gap-2">
+            {project.badges.map((badge) => (
+              <span
+                key={badge.label}
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${badgeColors[badge.color]}`}
+              >
+                <span className="text-[10px]">{badge.icon}</span>
+                {badge.label}
+              </span>
+            ))}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 pt-1">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-sm font-medium transition-all duration-200"
+              >
+                <Github size={15} />
+                Source Code
+              </a>
+            )}
+            {project.demo && project.demo !== "#" && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r ${project.accent} text-white text-sm font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200`}
+              >
+                <ExternalLink size={15} />
+                Live Demo
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
   );
 };
 
+// ─── Section ─────────────────────────────────────────────────────────────────
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-20 text-white relative">
-      <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">
-          Featured <span className="text-cyan-400">Projects</span>
-        </h2>
-        
-        <StaggeredList className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+    <section id="projects" className="py-24 text-white relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+
+      <div className="container mx-auto px-6 max-w-5xl">
+
+        {/* Section header */}
+        <ScrollReveal width="100%">
+          <div className="text-center mb-16">
+            <span className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-cyan-400 uppercase border border-cyan-400/30 rounded-full bg-cyan-400/10">
+              Portfolio
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+              Featured{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+                Projects
+              </span>
+            </h2>
+            <p className="mt-4 text-gray-400 max-w-xl mx-auto text-sm md:text-base">
+              Kumpulan proyek pilihan yang menunjukkan kemampuan teknis dan kreativitas dalam pengembangan software.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        {/* Project list */}
+        <div className="flex flex-col gap-6">
           {projects.map((project, index) => (
-             <StaggerItem key={index}>
-                <ProjectCard project={project} />
-             </StaggerItem>
+            <ProjectCard key={project.title} project={project} index={index} />
           ))}
-        </StaggeredList>
+        </div>
+
+        {/* Footer note */}
+        <ScrollReveal width="100%">
+          <p className="text-center text-gray-600 text-sm mt-12">
+            dan masih banyak lagi ·{" "}
+            <a
+              href="https://github.com/nabilrobbani84-debug"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-cyan-500 hover:text-cyan-400 underline underline-offset-2 transition-colors"
+            >
+              Lihat semua di GitHub →
+            </a>
+          </p>
+        </ScrollReveal>
       </div>
     </section>
   );

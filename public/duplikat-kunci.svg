@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d2040;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a3a6b;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#0a1628;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="800" height="450" fill="url(#bg)"/>
+  
+  <!-- Glow effect top left -->
+  <ellipse cx="120" cy="200" rx="200" ry="180" fill="url(#glow)" opacity="0.5"/>
+  
+  <!-- Navbar -->
+  <rect width="800" height="56" fill="#0d1b35" opacity="0.95"/>
+  
+  <!-- Logo area -->
+  <!-- Key icon -->
+  <circle cx="28" cy="28" r="10" fill="none" stroke="#f5c518" stroke-width="2.5"/>
+  <circle cx="28" cy="28" r="5" fill="none" stroke="#f5c518" stroke-width="2"/>
+  <line x1="35" y1="28" x2="55" y2="28" stroke="#f5c518" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="51" y1="28" x2="51" y2="34" stroke="#f5c518" stroke-width="2" stroke-linecap="round"/>
+  <line x1="55" y1="28" x2="55" y2="34" stroke="#f5c518" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Logo text -->
+  <text x="65" y="33" font-family="Arial, sans-serif" font-weight="700" font-size="12" fill="#f5c518" letter-spacing="1">DUKUN DUPLIKAT KUNCI</text>
+  
+  <!-- Nav links -->
+  <text x="560" y="33" font-family="Arial, sans-serif" font-size="13" fill="#ffffff" opacity="0.8">Beranda</text>
+  <text x="630" y="33" font-family="Arial, sans-serif" font-size="13" fill="#ffffff" opacity="0.8">Layanan</text>
+  <text x="700" y="33" font-family="Arial, sans-serif" font-size="13" fill="#ffffff" opacity="0.8">Tentang</text>
+  
+  <!-- CTA Button in nav -->
+  <rect x="690" y="16" width="100" height="30" rx="15" fill="#f5c518"/>
+  <text x="740" y="36" font-family="Arial, sans-serif" font-weight="700" font-size="12" fill="#0a1628" text-anchor="middle">Hubungi Kami</text>
+  
+  <!-- Hero section text -->
+  <text x="60" y="130" font-family="Arial, sans-serif" font-weight="900" font-size="38" fill="#ffffff">Solusi Kunci</text>
+  <text x="60" y="180" font-family="Arial, sans-serif" font-weight="900" font-size="38" fill="#f5c518">Profesional &amp; Cepat</text>
+  
+  <text x="60" y="215" font-family="Arial, sans-serif" font-size="13" fill="#8899bb">Ahli duplikat kunci segala jenis kendaraan, rumah,</text>
+  <text x="60" y="234" font-family="Arial, sans-serif" font-size="13" fill="#8899bb">dan brankas. Layanan panggil 24 jam.</text>
+  
+  <!-- WhatsApp Button -->
+  <rect x="60" y="260" width="175" height="44" rx="22" fill="#f5c518"/>
+  <text x="113" y="287" font-family="Arial, sans-serif" font-weight="700" font-size="14" fill="#0a1628">Hubungi Sekarang</text>
+  
+  <!-- Outlined Button -->
+  <rect x="248" y="260" width="140" height="44" rx="22" fill="none" stroke="#f5c518" stroke-width="2"/>
+  <text x="318" y="287" font-family="Arial, sans-serif" font-size="14" fill="#f5c518" text-anchor="middle">Lihat Layanan</text>
+  
+  <!-- Key illustration (right side) -->
+  <g transform="translate(520, 180) rotate(-15)">
+    <!-- Key ring -->
+    <circle cx="60" cy="60" r="55" fill="none" stroke="#8f6e2b" stroke-width="14" opacity="0.85"/>
+    <circle cx="60" cy="60" r="30" fill="none" stroke="#8f6e2b" stroke-width="8" opacity="0.5"/>
+    <!-- Key shaft -->
+    <rect x="108" y="50" width="160" height="20" rx="10" fill="#8f6e2b" opacity="0.85"/>
+    <!-- Key teeth -->
+    <rect x="220" y="70" width="14" height="28" rx="4" fill="#8f6e2b" opacity="0.85"/>
+    <rect x="248" y="70" width="14" height="20" rx="4" fill="#8f6e2b" opacity="0.85"/>
+  </g>
+  
+  <!-- Service badges -->
+  <rect x="60" y="340" width="110" height="28" rx="14" fill="#1a3a6b" opacity="0.7"/>
+  <text x="115" y="359" font-family="Arial, sans-serif" font-size="11" fill="#f5c518" text-anchor="middle">🔑 Motor &amp; Mobil</text>
+  
+  <rect x="184" y="340" width="90" height="28" rx="14" fill="#1a3a6b" opacity="0.7"/>
+  <text x="229" y="359" font-family="Arial, sans-serif" font-size="11" fill="#f5c518" text-anchor="middle">🏠 Rumah</text>
+  
+  <rect x="288" y="340" width="100" height="28" rx="14" fill="#1a3a6b" opacity="0.7"/>
+  <text x="338" y="359" font-family="Arial, sans-serif" font-size="11" fill="#f5c518" text-anchor="middle">⌚ 24 Jam</text>
+  
+  <!-- Bottom bar -->
+  <rect y="420" width="800" height="30" fill="#060e1e" opacity="0.8"/>
+  <text x="400" y="440" font-family="Arial, sans-serif" font-size="11" fill="#445577" text-anchor="middle">© 2025 Dukun Duplikat Kunci · Next.js · Tailwind CSS · Firebase Hosting</text>
+</svg>
