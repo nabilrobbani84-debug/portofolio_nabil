@@ -54,6 +54,7 @@ const projects: Project[] = [
     ],
     accent: "from-green-500 via-emerald-400 to-teal-500",
     github: "https://github.com/nabilrobbani84-debug/ruqyah-syariyyah",
+    demo: "https://ruqyah-syariyyah.vercel.app",
     image: "/ruqyah.png",
   },
   {
