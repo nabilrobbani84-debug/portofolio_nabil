@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Warkop QR Payment System preview</title>
+  <desc id="desc">Dark dashboard preview with buyer phone, QR payment, cashier orders, and admin revenue cards.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06111f"/>
+      <stop offset="0.52" stop-color="#0b1221"/>
+      <stop offset="1" stop-color="#180a16"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#172033"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00d2ff"/>
+      <stop offset="0.56" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#ff007a"/>
+    </linearGradient>
+    <linearGradient id="cash" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#00d2ff"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+  <circle cx="118" cy="92" r="160" fill="#00d2ff" opacity="0.08"/>
+  <circle cx="690" cy="360" r="170" fill="#ff007a" opacity="0.08"/>
+
+  <g transform="translate(46 38)">
+    <rect width="708" height="374" rx="24" fill="#0f172a" opacity="0.82" stroke="#ffffff" stroke-opacity="0.08"/>
+    <rect x="1" y="1" width="706" height="58" rx="24" fill="#111827" opacity="0.96"/>
+    <circle cx="31" cy="30" r="11" fill="#ea580c"/>
+    <path d="M37 27h2a4 4 0 0 1 0 8h-2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <path d="M22 27h15v8a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z" fill="#fff"/>
+    <path d="M26 18v5m6-5v5m6-5v5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <text x="57" y="35" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">Warkop QR Payment</text>
+    <text x="232" y="35" font-family="Arial, sans-serif" font-size="12" fill="#94a3b8">Buyer</text>
+    <text x="288" y="35" font-family="Arial, sans-serif" font-size="12" fill="#94a3b8">Kasir</text>
+    <text x="339" y="35" font-family="Arial, sans-serif" font-size="12" fill="#94a3b8">Admin</text>
+    <rect x="575" y="18" width="98" height="24" rx="12" fill="url(#accent)"/>
+    <text x="624" y="34" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">QRIS Ready</text>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="86" y="122" width="178" height="252" rx="26" fill="#050b16" stroke="#243044" stroke-width="2"/>
+    <rect x="99" y="142" width="152" height="212" rx="18" fill="url(#panel)"/>
+    <rect x="121" y="159" width="108" height="24" rx="12" fill="#111827" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="175" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#00d2ff">Meja 01</text>
+    <text x="120" y="212" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Menu Warkop</text>
+    <text x="120" y="232" font-family="Arial, sans-serif" font-size="10" fill="#94a3b8">Scan QR, pesan, bayar</text>
+    <rect x="119" y="252" width="112" height="28" rx="10" fill="#1f2937"/>
+    <circle cx="134" cy="266" r="7" fill="#f59e0b"/>
+    <text x="148" y="270" font-family="Arial, sans-serif" font-size="10" fill="#e5e7eb">Kopi Aren</text>
+    <rect x="119" y="288" width="112" height="28" rx="10" fill="#1f2937"/>
+    <circle cx="134" cy="302" r="7" fill="#10b981"/>
+    <text x="148" y="306" font-family="Arial, sans-serif" font-size="10" fill="#e5e7eb">Indomie</text>
+    <rect x="119" y="326" width="112" height="18" rx="9" fill="url(#accent)"/>
+    <text x="175" y="339" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#ffffff">Checkout</text>
+  </g>
+
+  <g transform="translate(302 118)" filter="url(#softShadow)">
+    <rect width="204" height="122" rx="20" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="24" y="32" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Pembayaran</text>
+    <text x="24" y="53" font-family="Arial, sans-serif" font-size="11" fill="#94a3b8">Cash atau QRIS</text>
+    <rect x="24" y="72" width="68" height="28" rx="10" fill="#0b1221" stroke="#10b981" stroke-opacity="0.35"/>
+    <text x="58" y="91" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#10b981">Cash</text>
+    <rect x="108" y="72" width="70" height="28" rx="10" fill="#0b1221" stroke="#00d2ff" stroke-opacity="0.4"/>
+    <text x="143" y="91" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#00d2ff">QRIS</text>
+  </g>
+
+  <g transform="translate(546 112)" filter="url(#softShadow)">
+    <rect width="142" height="142" rx="22" fill="#ffffff"/>
+    <rect x="21" y="21" width="28" height="28" fill="#0f172a"/>
+    <rect x="28" y="28" width="14" height="14" fill="#ffffff"/>
+    <rect x="94" y="21" width="28" height="28" fill="#0f172a"/>
+    <rect x="101" y="28" width="14" height="14" fill="#ffffff"/>
+    <rect x="21" y="94" width="28" height="28" fill="#0f172a"/>
+    <rect x="28" y="101" width="14" height="14" fill="#ffffff"/>
+    <rect x="61" y="26" width="12" height="12" fill="#0f172a"/>
+    <rect x="75" y="40" width="12" height="12" fill="#0f172a"/>
+    <rect x="61" y="67" width="12" height="12" fill="#0f172a"/>
+    <rect x="82" y="72" width="10" height="10" fill="#0f172a"/>
+    <rect x="101" y="66" width="12" height="12" fill="#0f172a"/>
+    <rect x="58" y="98" width="12" height="12" fill="#0f172a"/>
+    <rect x="77" y="101" width="13" height="13" fill="#0f172a"/>
+    <rect x="101" y="96" width="21" height="10" fill="#0f172a"/>
+    <rect x="96" y="114" width="10" height="10" fill="#0f172a"/>
+  </g>
+
+  <g transform="translate(302 265)" filter="url(#softShadow)">
+    <rect width="386" height="98" rx="20" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="24" y="30" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Kasir Dashboard</text>
+    <rect x="24" y="48" width="92" height="28" rx="10" fill="#1f2937"/>
+    <text x="70" y="67" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#e5e7eb">Order Baru</text>
+    <rect x="132" y="48" width="94" height="28" rx="10" fill="#1f2937"/>
+    <text x="179" y="67" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#e5e7eb">Konfirmasi</text>
+    <rect x="242" y="48" width="112" height="28" rx="10" fill="url(#cash)" opacity="0.9"/>
+    <text x="298" y="67" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#04111d">Rp 128.000</text>
+  </g>
+
+  <path d="M264 247 C288 247 286 177 302 177" fill="none" stroke="#00d2ff" stroke-width="2" stroke-dasharray="5 7" opacity="0.65"/>
+  <path d="M506 180 C526 179 526 183 546 183" fill="none" stroke="#ff007a" stroke-width="2" stroke-dasharray="5 7" opacity="0.65"/>
+  <path d="M431 240 C430 250 430 255 430 265" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="5 7" opacity="0.65"/>
+</svg>

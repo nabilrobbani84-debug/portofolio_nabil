@@ -57,6 +57,23 @@ const projects: Project[] = [
     image: "/ruqyah.png",
   },
   {
+    title: "Warkop QR Payment System",
+    description:
+      "Sistem pemesanan warkop berbasis QR yang menghubungkan mode pembeli, kasir, dan admin dalam satu aplikasi. Pembeli dapat scan QR meja, memilih menu beserta varian, lalu membayar via tunai atau QRIS; kasir dapat memantau pesanan masuk, konfirmasi pembayaran, dan melihat riwayat transaksi; sementara admin mengelola menu, meja, QR code, laporan, pajak, keamanan akses, sinkronisasi Firestore, dan integrasi Google Sheets.",
+    badges: [
+      { label: "React.js", color: "cyan", icon: "⚛️" },
+      { label: "TypeScript", color: "sky", icon: "TS" },
+      { label: "Vite", color: "purple", icon: "⚡" },
+      { label: "Firebase", color: "amber", icon: "🔥" },
+      { label: "Firestore", color: "green", icon: "DB" },
+      { label: "QR Code", color: "indigo", icon: "QR" },
+    ],
+    accent: "from-cyan-500 via-blue-500 to-rose-500",
+    github: "https://github.com/nabilrobbani84-debug/system_payment-warkop",
+    demo: "https://warkop-d23a1.web.app",
+    image: "/warkop-payment.svg",
+  },
+  {
     title: "BookWise Library",
     description:
       "Sistem perpustakaan universitas modern dengan fitur peminjaman digital dan manajemen stok buku real-time. Menggunakan PostgreSQL untuk manajemen relasi data yang kompleks dengan performa tinggi, keamanan data terjamin, dan autentikasi multi-role via NextAuth.",
