@@ -75,6 +75,24 @@ const projects: Project[] = [
     image: "/warkop-payment.svg",
   },
   {
+    title: "FinTech Core API",
+    description:
+      "Monorepo platform transaksi keuangan berbasis microservices dengan backend Go dan pendekatan Clean Architecture. Sistem mencakup Auth Service untuk JWT, RBAC, bcrypt, enkripsi data user AES-GCM, dan HMAC email lookup; Transaction Service untuk deposit, withdraw, transfer, monthly report, Server-Sent Events, serta ledger PostgreSQL dengan row locking untuk menjaga konsistensi transaksi. Dilengkapi dashboard Next.js dan demo Streamlit aman untuk showcase arsitektur, endpoint explorer, snapshot ledger, dan simulasi transaksi tanpa koneksi ke sistem finansial produksi.",
+    badges: [
+      { label: "Go", color: "sky", icon: "GO" },
+      { label: "Microservices", color: "indigo", icon: "µ" },
+      { label: "PostgreSQL", color: "sky", icon: "🐘" },
+      { label: "MySQL", color: "orange", icon: "🗄️" },
+      { label: "gRPC", color: "purple", icon: "RPC" },
+      { label: "Docker", color: "cyan", icon: "🐳" },
+      { label: "Streamlit", color: "rose", icon: "▶" },
+    ],
+    accent: "from-emerald-500 via-cyan-500 to-blue-500",
+    github: "https://github.com/nabilrobbani84-debug/fintech_api",
+    demo: "https://share.streamlit.io/nabilrobbani84-debug/fintech_api/main/streamlit_app.py",
+    image: "/fintech-core-api.svg",
+  },
+  {
     title: "BookWise Library",
     description:
       "Sistem perpustakaan universitas modern dengan fitur peminjaman digital dan manajemen stok buku real-time. Menggunakan PostgreSQL untuk manajemen relasi data yang kompleks dengan performa tinggi, keamanan data terjamin, dan autentikasi multi-role via NextAuth.",
