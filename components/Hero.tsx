@@ -2,8 +2,9 @@
 
 import RobotCanvas from "./Robot3D";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, ArrowDown } from "lucide-react";
+import { Mail, Github, Linkedin, ArrowDown, Sparkles } from "lucide-react";
 import { Link } from "react-scroll";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const roles = [
@@ -48,6 +49,9 @@ const stats = [
 ];
 
 export default function Hero() {
+  // Falls back to the placeholder SVG until the real photo is uploaded to public/profile.jpg
+  const [photoSrc, setPhotoSrc] = useState("/profile.jpg");
+
   const [particles, setParticles] = useState<
     { id: number; duration: number; delay: number; left: string; size: number }[]
   >([]);
@@ -68,18 +72,20 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center overflow-hidden bg-slate-950 pt-28 pb-16"
     >
-      {/* 3D Robot Background */}
-      <div className="absolute inset-0 w-full h-full z-0 opacity-70 md:opacity-100">
+      {/* 3D Robot — subtle background layer */}
+      <div className="absolute inset-0 w-full h-full z-0 opacity-30 md:opacity-40 pointer-events-none">
         <RobotCanvas />
       </div>
 
-      {/* Left-anchored content */}
-      <div className="container mx-auto px-6 relative z-10 pointer-events-none">
+      {/* Two-column layout: text + photo */}
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
+        {/* ── Left: content ── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
-          className="max-w-2xl pointer-events-auto"
+          className="max-w-2xl order-2 lg:order-1"
         >
           {/* Availability badge */}
           <div className="inline-flex items-center gap-2 mb-6 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3.5 py-1.5">
@@ -175,6 +181,50 @@ export default function Hero() {
             </div>
           </div>
         </motion.div>
+
+        {/* ── Right: profile photo ── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+          className="order-1 lg:order-2 flex justify-center lg:justify-end"
+        >
+          <div className="relative group">
+            {/* Glow halo */}
+            <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-sky-500/30 via-indigo-500/20 to-purple-500/30 blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
+
+            {/* Photo frame */}
+            <div className="relative w-64 h-80 sm:w-72 sm:h-[22rem] lg:w-80 lg:h-[26rem] rounded-[2rem] overflow-hidden border border-white/15 shadow-2xl shadow-black/50">
+              <Image
+                src={photoSrc}
+                alt="Nabil Robbani"
+                fill
+                priority
+                sizes="(max-width: 1024px) 18rem, 20rem"
+                onError={() => setPhotoSrc("/profile-placeholder.svg")}
+                className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              {/* Bottom gradient for depth */}
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950/80 to-transparent" />
+            </div>
+
+            {/* Floating name chip */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/90 backdrop-blur-md px-4 py-2 shadow-lg whitespace-nowrap"
+            >
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
+                <Sparkles size={12} />
+              </span>
+              <span className="text-xs font-semibold text-white">
+                Software Engineer
+              </span>
+            </motion.div>
+          </div>
+        </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
