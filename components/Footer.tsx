@@ -14,11 +14,13 @@ export default function Footer() {
 
       <div className="container mx-auto px-6 text-center relative z-10">
         <ScrollReveal width="100%">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">
-                Get in <span className="text-cyan-400">Touch</span>
+            <span className="eyebrow">Contact</span>
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+                Let&apos;s work <span className="text-gradient">together</span>
             </h2>
             <p className="text-gray-400 mb-12 max-w-lg mx-auto leading-relaxed">
-                Feel free to reach out if you have a question, want to collaborate, or just want to connect.
+                Punya proyek menarik atau peluang kerja? Saya terbuka untuk kolaborasi,
+                magang, maupun freelance. Jangan ragu untuk menghubungi saya.
             </p>
 
             {/* Contact Buttons */}
@@ -74,7 +76,7 @@ export default function Footer() {
             {/* Social Links */}
             <div className="flex justify-center space-x-6 mb-12">
             <a
-                href="https://github.com/nabilrobbani84"
+                href="https://github.com/nabilrobbani84-debug"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-slate-800 transition-all hover:-translate-y-1 border border-white/5"

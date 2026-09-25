@@ -2,13 +2,14 @@
 
 @theme {
   --font-display: 'Outfit', sans-serif;
-  --color-neon-cyan: #00f3ff;
-  --color-neon-purple: #bc13fe;
+  --color-neon-cyan: #22d3ee;
+  --color-neon-purple: #a855f7;
+  --color-brand: #38bdf8;
 }
 
 :root {
-  --background: #020617;
-  --foreground: #ffffff;
+  --background: #060a16;
+  --foreground: #e8edf5;
 }
 
 body {
@@ -18,6 +19,7 @@ body {
   position: relative;
 }
 
+/* Subtle grain texture — softened for a professional feel */
 body::before {
   content: "";
   position: fixed;
@@ -25,11 +27,23 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.25;
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: overlay;
+}
+
+/* Ambient radial background glow */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(600px circle at 15% 10%, rgba(56, 189, 248, 0.06), transparent 40%),
+    radial-gradient(700px circle at 85% 30%, rgba(168, 85, 247, 0.05), transparent 45%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Custom Scrollbar */
@@ -37,10 +51,10 @@ body::before {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #0a1120;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: linear-gradient(#1e293b, #334155);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -51,18 +65,42 @@ body::before {
 .glass {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .glass-card {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.02) 100%
   );
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* Gradient text helper */
+.text-gradient {
+  background: linear-gradient(90deg, #38bdf8, #818cf8, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Section heading eyebrow */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 9999px;
+  background: rgba(56, 189, 248, 0.08);
 }
 
 /* 3D Card Effect */
@@ -73,10 +111,21 @@ body::before {
   transform-style: preserve-3d;
 }
 
-/* Neon Text Glow */
+/* Text Glow — toned down for a cleaner look */
 .text-glow-cyan {
-  text-shadow: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
 }
 .text-glow-purple {
-  text-shadow: 0 0 10px rgba(188, 19, 254, 0.5), 0 0 20px rgba(188, 19, 254, 0.3);
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+/* Animated gradient border */
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-shimmer {
+  background-size: 200% 200%;
+  animation: shimmer 6s ease infinite;
 }
