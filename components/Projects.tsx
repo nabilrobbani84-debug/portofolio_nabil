@@ -26,6 +26,23 @@ interface Project {
 
 const projects: Project[] = [
   {
+    title: "FlowSphere Management Dashboard",
+    description:
+      "Dashboard manajemen tim & proyek modern berbasis Angular 19. Menyajikan visualisasi data interaktif dengan Chart.js, papan tugas (kanban), analitik produktivitas, serta manajemen tim dan anggota. Dilengkapi elemen 3D dengan Three.js, animasi confetti, dan integrasi EmailJS untuk notifikasi instan (penugasan tugas, mention, dan persetujuan workflow). Ditata dengan Tailwind CSS, aksesibilitas yang diperhatikan, dan cakupan unit test yang komprehensif.",
+    badges: [
+      { label: "Angular 19", color: "rose", icon: "🅰️" },
+      { label: "TypeScript", color: "sky", icon: "TS" },
+      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
+      { label: "Chart.js", color: "purple", icon: "📊" },
+      { label: "Three.js", color: "indigo", icon: "🧊" },
+      { label: "EmailJS", color: "amber", icon: "✉️" },
+    ],
+    accent: "from-sky-500 via-indigo-500 to-purple-500",
+    github: "https://github.com/nabilrobbani84-debug/Management_Dashboard",
+    image: "/flowsphere.svg",
+    featured: true,
+  },
+  {
     title: "Dukun Duplikat Kunci",
     description:
       "Platform bisnis digital modern untuk jasa duplikat kunci profesional. Website dibangun menggunakan Next.js & TypeScript untuk performa optimal, menampilkan landing page atraktif dengan desain dark navy  & gold yang elegan, sistem pemesanan terintegrasi WhatsApp, halaman detail layanan (motor, mobil, rumah, brankas), serta fitur layanan panggil 24 jam. Backend menggunakan Java Spring Boot yang dicontainerisasi dengan Docker untuk kemudahan deployment. Frontend di-deploy ke Firebase Hosting untuk distribusi CDN global yang stabil dan cepat.",
