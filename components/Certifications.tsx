@@ -1,7 +1,7 @@
 "use client";
 
 import { Award, BadgeCheck } from "lucide-react";
-import { ScrollReveal, StaggeredList, StaggerItem } from "./ScrollAnimation";
+import { ScrollReveal, StaggeredList, StaggerItem, ParallaxBlob } from "./ScrollAnimation";
 
 const certs = [
   {
@@ -18,7 +18,12 @@ const certs = [
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="py-24 relative">
+    <section id="certifications" className="py-24 relative overflow-hidden">
+      <ParallaxBlob
+        offset={120}
+        x={40}
+        className="absolute -bottom-10 left-1/4 w-80 h-80 rounded-full bg-purple-500/10 blur-[120px] pointer-events-none"
+      />
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">

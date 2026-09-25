@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
-import { ScrollReveal } from "./ScrollAnimation";
+import { ScrollReveal, ParallaxBlob } from "./ScrollAnimation";
 
 const experiences = [
   {
@@ -80,7 +80,12 @@ const ExperienceCard = ({ item, index }: { item: any; index: number }) => {
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-24 relative">
+    <section id="experience" className="py-24 relative overflow-hidden">
+      <ParallaxBlob
+        offset={130}
+        x={-40}
+        className="absolute top-10 right-0 w-80 h-80 rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none"
+      />
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">

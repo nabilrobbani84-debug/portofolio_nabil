@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
-import React from "react";
+import { motion, Variants, useScroll, useTransform, useReducedMotion, MotionValue } from "framer-motion";
+import React, { useRef } from "react";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -84,3 +84,81 @@ export const StaggerItem = ({ children, className = "" }: { children: React.Reac
         </motion.div>
     );
 }
+
+/* ─────────────────────────────────────────────────────────────
+   PARALLAX UTILITIES (scroll-linked, GPU-accelerated transforms)
+   ───────────────────────────────────────────────────────────── */
+
+interface ParallaxProps {
+  children: React.ReactNode;
+  /** Vertical travel in px across the element's scroll range. Positive = moves up as you scroll down. */
+  offset?: number;
+  className?: string;
+  /** Optional: fade in/out as it scrolls through the viewport */
+  fade?: boolean;
+}
+
+/**
+ * Moves its children vertically at a different rate than the page scroll,
+ * creating a depth/parallax effect. Honors prefers-reduced-motion.
+ */
+export const Parallax = ({ children, offset = 80, className = "", fade = false }: ParallaxProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [offset, -offset]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.4, 1, 1, 0.4]);
+
+  return (
+    <div ref={ref} className={className}>
+      <motion.div style={reduce ? undefined : { y, opacity: fade ? opacity : undefined }}>
+        {children}
+      </motion.div>
+    </div>
+  );
+};
+
+/**
+ * A decorative floating blob/orb that drifts on scroll for ambient depth.
+ * Purely visual — place inside a `relative` section, absolutely positioned.
+ */
+export const ParallaxBlob = ({
+  className = "",
+  offset = 120,
+  x = 0,
+}: {
+  className?: string;
+  offset?: number;
+  x?: number;
+}) => {
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -offset]);
+  const xShift = useTransform(scrollYProgress, [0, 1], [0, x]);
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      style={reduce ? undefined : { y, x: xShift }}
+      className={className}
+    />
+  );
+};
+
+/** Small helper to build your own scroll-linked transform for a section. */
+export const useSectionParallax = (
+  ref: React.RefObject<HTMLElement | null>,
+  from = 60,
+  to = -60
+): MotionValue<number> => {
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  return useTransform(scrollYProgress, [0, 1], [from, to]);
+};

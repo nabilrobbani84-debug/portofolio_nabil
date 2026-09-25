@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
-import { ScrollReveal } from "./ScrollAnimation";
+import { ScrollReveal, ParallaxBlob } from "./ScrollAnimation";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 
@@ -329,9 +329,17 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
 export default function Projects() {
   return (
     <section id="projects" className="py-24 text-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
-      <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+      {/* Parallax background decoration */}
+      <ParallaxBlob
+        offset={180}
+        x={50}
+        className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-sky-500/[0.06] rounded-full blur-[120px] pointer-events-none"
+      />
+      <ParallaxBlob
+        offset={-160}
+        x={-40}
+        className="absolute bottom-1/4 right-0 w-[440px] h-[440px] bg-purple-500/[0.06] rounded-full blur-[120px] pointer-events-none"
+      />
 
       <div className="container mx-auto px-6 max-w-5xl">
 
