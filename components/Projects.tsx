@@ -193,96 +193,100 @@ const badgeColors: Record<string, string> = {
 
 // ─── Project Card ────────────────────────────────────────────────────────────
 
+const MAX_BADGES = 4;
+
 const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
-  const isEven = index % 2 === 0;
+  const visibleBadges = project.badges.slice(0, MAX_BADGES);
+  const hiddenCount = project.badges.length - visibleBadges.length;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
-      className="group relative"
+      transition={{ duration: 0.5, delay: (index % 2) * 0.08, ease: "easeOut" }}
+      className="group relative h-full"
     >
       {/* Glow backdrop */}
       <div
-        className={`absolute -inset-px rounded-2xl bg-gradient-to-r ${project.accent} opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500`}
+        className={`absolute -inset-px rounded-2xl bg-gradient-to-r ${project.accent} opacity-0 group-hover:opacity-60 blur-sm transition-opacity duration-500`}
       />
 
-      <div className="relative rounded-2xl bg-slate-900/90 border border-white/8 overflow-hidden backdrop-blur-sm flex flex-col md:flex-row">
+      <div className="relative h-full flex flex-col rounded-2xl bg-slate-900/90 border border-white/8 overflow-hidden backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1">
 
-        {/* ── Image Panel ── */}
-        <div className={`relative w-full md:w-[42%] shrink-0 min-h-[220px] md:min-h-[280px] overflow-hidden ${isEven ? "md:order-first" : "md:order-last"}`}>
-          {/* Gradient accent bar */}
+        {/* ── Image (fixed aspect ratio) ── */}
+        <div className="relative w-full aspect-[16/9] overflow-hidden shrink-0">
           <div className={`absolute inset-0 bg-gradient-to-br ${project.accent} opacity-20`} />
 
           {project.image ? (
-            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700 ease-out">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover object-top"
-              />
-              {/* Overlay fade */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${isEven ? "from-transparent to-slate-900/70" : "from-slate-900/70 to-transparent"} md:block hidden`} />
-              <div className="absolute inset-0 bg-slate-900/30 md:hidden" />
-            </div>
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+            />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className={`text-7xl font-black bg-gradient-to-br ${project.accent} bg-clip-text text-transparent opacity-20`}>
+              <span className={`text-7xl font-black bg-gradient-to-br ${project.accent} bg-clip-text text-transparent opacity-25`}>
                 {project.title.slice(0, 2).toUpperCase()}
               </span>
             </div>
           )}
 
+          {/* Fade for legibility */}
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/90 to-transparent" />
+
           {/* Number tag */}
-          <div className="absolute top-4 left-4 z-10">
+          <div className="absolute top-3 left-3 z-10">
             <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br ${project.accent} text-white text-xs font-bold shadow-lg`}>
               {String(index + 1).padStart(2, "0")}
             </span>
           </div>
         </div>
 
-        {/* ── Content Panel ── */}
-        <div className="flex-1 p-6 md:p-8 flex flex-col justify-between gap-4">
+        {/* ── Content ── */}
+        <div className="flex flex-col flex-1 p-5 md:p-6 gap-4">
 
-          {/* Title */}
-          <div>
-            <h3 className={`text-xl md:text-2xl font-bold text-white mb-3 group-hover:bg-gradient-to-r group-hover:${project.accent} group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300`}>
+          <div className="flex-1">
+            <h3 className="text-lg md:text-xl font-bold text-white mb-2 transition-colors group-hover:text-sky-300">
               {project.title}
             </h3>
 
-            {/* Description — full text, no clamp */}
-            <p className="text-gray-400 text-sm md:text-[0.93rem] leading-relaxed">
+            {/* Description clamped to 3 lines for uniform height */}
+            <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">
               {project.description}
             </p>
           </div>
 
-          {/* Badges */}
-          <div className="flex flex-wrap gap-2">
-            {project.badges.map((badge) => (
+          {/* Badges (capped) */}
+          <div className="flex flex-wrap gap-1.5">
+            {visibleBadges.map((badge) => (
               <span
                 key={badge.label}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${badgeColors[badge.color]}`}
+                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium border ${badgeColors[badge.color]}`}
               >
                 <span className="text-[10px]">{badge.icon}</span>
                 {badge.label}
               </span>
             ))}
+            {hiddenCount > 0 && (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border border-white/10 bg-white/5 text-gray-400">
+                +{hiddenCount}
+              </span>
+            )}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3 pt-1">
+          {/* Action Buttons (pinned to bottom) */}
+          <div className="flex items-center gap-2.5 mt-auto pt-4 border-t border-white/5">
             {project.github && (
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-sm font-medium transition-all duration-200"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-xs font-medium transition-all duration-200"
               >
-                <Github size={15} />
-                Source Code
+                <Github size={14} />
+                Code
               </a>
             )}
             {project.demo && project.demo !== "#" && (
@@ -290,9 +294,9 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r ${project.accent} text-white text-sm font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200`}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r ${project.accent} text-white text-xs font-semibold shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200`}
               >
-                <ExternalLink size={15} />
+                <ExternalLink size={14} />
                 Live Demo
               </a>
             )}
@@ -327,8 +331,8 @@ export default function Projects() {
           </div>
         </ScrollReveal>
 
-        {/* Project list */}
-        <div className="flex flex-col gap-6">
+        {/* Project grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((project, index) => (
             <ProjectCard key={project.title} project={project} index={index} />
           ))}
