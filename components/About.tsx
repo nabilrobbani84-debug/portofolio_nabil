@@ -1,7 +1,7 @@
 "use client";
 
 import { GraduationCap, MapPin, Code2, Rocket, Users, Sparkles } from "lucide-react";
-import { ScrollReveal } from "./ScrollAnimation";
+import { ScrollReveal, Parallax, ParallaxBlob } from "./ScrollAnimation";
 
 const highlights = [
   {
@@ -28,7 +28,19 @@ const highlights = [
 
 export default function About() {
   return (
-    <section id="about" className="py-24 relative">
+    <section id="about" className="py-24 relative overflow-hidden">
+      {/* Parallax background blobs */}
+      <ParallaxBlob
+        offset={140}
+        x={40}
+        className="absolute -top-20 -left-10 w-80 h-80 rounded-full bg-sky-500/10 blur-[120px] pointer-events-none"
+      />
+      <ParallaxBlob
+        offset={-100}
+        x={-30}
+        className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-purple-500/10 blur-[120px] pointer-events-none"
+      />
+
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
@@ -40,8 +52,9 @@ export default function About() {
         </ScrollReveal>
 
         <div className="grid lg:grid-cols-5 gap-8 items-start">
-          {/* Left: profile + education */}
-          <ScrollReveal width="100%" className="lg:col-span-2">
+          {/* Left: profile + education (gentle parallax lift) */}
+          <Parallax offset={40} className="lg:col-span-2">
+            <ScrollReveal width="100%">
             <div className="glass-card p-8 rounded-2xl flex flex-col items-center text-center">
               <div className="w-40 h-40 relative mb-6">
                 <div className="absolute inset-0 bg-gradient-to-br from-sky-400 to-indigo-500 rounded-2xl blur-md opacity-40" />
@@ -66,7 +79,8 @@ export default function About() {
                 </div>
               </div>
             </div>
-          </ScrollReveal>
+            </ScrollReveal>
+          </Parallax>
 
           {/* Right: bio + highlights */}
           <ScrollReveal width="100%" className="lg:col-span-3" delay={0.15}>

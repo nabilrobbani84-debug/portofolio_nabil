@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Mail, Github, Linkedin, ArrowDown, BadgeCheck } from "lucide-react";
 import { Link } from "react-scroll";
 import Image from "next/image";
@@ -57,13 +57,24 @@ export default function Hero() {
   // Falls back to the placeholder SVG until the real photo is uploaded to public/profile.jpg
   const [photoSrc, setPhotoSrc] = useState("/profile.jpg");
 
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  // Layered parallax: content drifts up slowly, photo drifts opposite, orbs move most
+  const contentY = useTransform(scrollYProgress, [0, 0.4], [0, -60]);
+  const photoY = useTransform(scrollYProgress, [0, 0.4], [0, 70]);
+  const orbY = useTransform(scrollYProgress, [0, 0.5], [0, 140]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.6]);
+
   return (
     <section
       id="home"
       className="relative min-h-screen flex items-center overflow-hidden bg-slate-950 pt-28 pb-20"
     >
-      {/* Ambient gradient orbs — clean, professional backdrop */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Ambient gradient orbs — clean, professional backdrop with parallax drift */}
+      <motion.div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={reduce ? undefined : { y: orbY }}
+      >
         <div className="absolute -top-24 -left-24 w-[32rem] h-[32rem] rounded-full bg-sky-500/10 blur-[120px]" />
         <div className="absolute top-1/3 right-0 w-[30rem] h-[30rem] rounded-full bg-indigo-500/10 blur-[120px]" />
         <div className="absolute bottom-0 left-1/3 w-[26rem] h-[26rem] rounded-full bg-purple-500/[0.07] blur-[120px]" />
@@ -80,17 +91,21 @@ export default function Hero() {
               "radial-gradient(ellipse 80% 60% at 50% 40%, black 40%, transparent 100%)",
           }}
         />
-      </div>
+      </motion.div>
 
       {/* Two-column layout: text + photo */}
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* ── Left: content ── */}
+          {/* ── Left: content (outer = scroll parallax, inner = entrance) ── */}
+          <motion.div
+            style={reduce ? undefined : { y: contentY, opacity: heroOpacity }}
+            className="lg:col-span-7 order-2 lg:order-1"
+          >
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="lg:col-span-7 max-w-2xl order-2 lg:order-1"
+            className="max-w-2xl"
           >
             {/* Availability badge */}
             <div className="inline-flex items-center gap-2 mb-6 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3.5 py-1.5">
@@ -176,13 +191,18 @@ export default function Hero() {
               </div>
             </div>
           </motion.div>
+          </motion.div>
 
-          {/* ── Right: profile photo ── */}
+          {/* ── Right: profile photo (outer = scroll parallax, inner = entrance) ── */}
+          <motion.div
+            style={reduce ? undefined : { y: photoY }}
+            className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end"
+          >
           <motion.div
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-            className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end"
+            className="w-full flex justify-center lg:justify-end"
           >
             <div className="relative group">
               {/* Soft glow halo */}
@@ -222,6 +242,7 @@ export default function Hero() {
                 </span>
               </motion.div>
             </div>
+          </motion.div>
           </motion.div>
         </div>
       </div>
