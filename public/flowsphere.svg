@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">FlowSphere management dashboard preview</title>
+  <desc id="desc">Dark Angular dashboard with sidebar, KPI cards, revenue line chart, and a kanban task board.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070d1b"/>
+      <stop offset="0.55" stop-color="#0b1221"/>
+      <stop offset="1" stop-color="#101a2e"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#172033"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="0.5" stop-color="#818cf8"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="chart" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+  <circle cx="120" cy="90" r="160" fill="#38bdf8" opacity="0.08"/>
+  <circle cx="690" cy="370" r="170" fill="#a855f7" opacity="0.08"/>
+
+  <!-- App shell -->
+  <g transform="translate(40 34)" filter="url(#softShadow)">
+    <rect width="720" height="382" rx="24" fill="#0f172a" opacity="0.85" stroke="#ffffff" stroke-opacity="0.08"/>
+
+    <!-- Sidebar -->
+    <rect x="1" y="1" width="150" height="380" rx="24" fill="#111827" opacity="0.96"/>
+    <circle cx="34" cy="36" r="11" fill="url(#accent)"/>
+    <text x="52" y="41" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">FlowSphere</text>
+    <rect x="20" y="72" width="112" height="26" rx="8" fill="url(#accent)" opacity="0.9"/>
+    <text x="38" y="89" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#04111d">Dashboard</text>
+    <text x="38" y="123" font-family="Arial, sans-serif" font-size="11" fill="#94a3b8">Tasks</text>
+    <text x="38" y="151" font-family="Arial, sans-serif" font-size="11" fill="#94a3b8">Team</text>
+    <text x="38" y="179" font-family="Arial, sans-serif" font-size="11" fill="#94a3b8">Analytics</text>
+    <text x="38" y="207" font-family="Arial, sans-serif" font-size="11" fill="#94a3b8">Reports</text>
+    <text x="38" y="235" font-family="Arial, sans-serif" font-size="11" fill="#94a3b8">Settings</text>
+
+    <!-- Topbar -->
+    <text x="176" y="41" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Overview</text>
+    <rect x="560" y="24" width="132" height="26" rx="13" fill="#0b1221" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="578" y="41" font-family="Arial, sans-serif" font-size="10" fill="#94a3b8">Search…</text>
+    <circle cx="708" cy="37" r="4" fill="#38bdf8"/>
+
+    <!-- KPI cards -->
+    <g transform="translate(176 64)">
+      <rect width="160" height="70" rx="16" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.06"/>
+      <text x="16" y="28" font-family="Arial, sans-serif" font-size="10" fill="#94a3b8">Total Tasks</text>
+      <text x="16" y="52" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff">1,248</text>
+      <text x="120" y="52" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#10b981">+12%</text>
+    </g>
+    <g transform="translate(348 64)">
+      <rect width="160" height="70" rx="16" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.06"/>
+      <text x="16" y="28" font-family="Arial, sans-serif" font-size="10" fill="#94a3b8">Completed</text>
+      <text x="16" y="52" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff">86%</text>
+      <text x="120" y="52" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#10b981">+4%</text>
+    </g>
+    <g transform="translate(520 64)">
+      <rect width="172" height="70" rx="16" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.06"/>
+      <text x="16" y="28" font-family="Arial, sans-serif" font-size="10" fill="#94a3b8">Active Members</text>
+      <text x="16" y="52" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff">32</text>
+      <circle cx="132" cy="46" r="8" fill="#38bdf8" opacity="0.8"/>
+      <circle cx="146" cy="46" r="8" fill="#818cf8" opacity="0.8"/>
+      <circle cx="160" cy="46" r="8" fill="#a855f7" opacity="0.8"/>
+    </g>
+
+    <!-- Line chart -->
+    <g transform="translate(176 148)">
+      <rect width="332" height="200" rx="18" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.06"/>
+      <text x="18" y="30" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Productivity</text>
+      <text x="18" y="48" font-family="Arial, sans-serif" font-size="9" fill="#94a3b8">Last 7 days</text>
+      <path d="M22 160 L70 120 L118 138 L166 96 L214 108 L262 66 L310 82 L310 176 L22 176 Z" fill="url(#chartFill)"/>
+      <path d="M22 160 L70 120 L118 138 L166 96 L214 108 L262 66 L310 82" fill="none" stroke="url(#chart)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="262" cy="66" r="4.5" fill="#ffffff" stroke="#38bdf8" stroke-width="2"/>
+    </g>
+
+    <!-- Kanban board -->
+    <g transform="translate(520 148)">
+      <rect width="172" height="200" rx="18" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.06"/>
+      <text x="16" y="28" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Board</text>
+      <rect x="16" y="42" width="140" height="34" rx="10" fill="#1f2937"/>
+      <rect x="16" y="42" width="4" height="34" rx="2" fill="#38bdf8"/>
+      <text x="28" y="63" font-family="Arial, sans-serif" font-size="9" fill="#e5e7eb">Design system</text>
+      <rect x="16" y="84" width="140" height="34" rx="10" fill="#1f2937"/>
+      <rect x="16" y="84" width="4" height="34" rx="2" fill="#818cf8"/>
+      <text x="28" y="105" font-family="Arial, sans-serif" font-size="9" fill="#e5e7eb">API integration</text>
+      <rect x="16" y="126" width="140" height="34" rx="10" fill="#1f2937"/>
+      <rect x="16" y="126" width="4" height="34" rx="2" fill="#a855f7"/>
+      <text x="28" y="147" font-family="Arial, sans-serif" font-size="9" fill="#e5e7eb">Release v2.0</text>
+      <rect x="16" y="168" width="140" height="20" rx="10" fill="url(#accent)" opacity="0.85"/>
+      <text x="86" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#04111d">+ Add task</text>
+    </g>
+  </g>
+</svg>
