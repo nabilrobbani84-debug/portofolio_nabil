@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink, Github, Code2, Layers, Cpu, Server, Container, Rocket } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 import { ScrollReveal } from "./ScrollAnimation";
 
@@ -317,14 +317,9 @@ export default function Projects() {
         {/* Section header */}
         <ScrollReveal width="100%">
           <div className="text-center mb-16">
-            <span className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-cyan-400 uppercase border border-cyan-400/30 rounded-full bg-cyan-400/10">
-              Portfolio
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-              Featured{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
-                Projects
-              </span>
+            <span className="eyebrow">Portfolio</span>
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
+              Featured <span className="text-gradient">Projects</span>
             </h2>
             <p className="mt-4 text-gray-400 max-w-xl mx-auto text-sm md:text-base">
               Kumpulan proyek pilihan yang menunjukkan kemampuan teknis dan kreativitas dalam pengembangan software.

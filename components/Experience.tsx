@@ -13,9 +13,9 @@ const experiences = [
     location: "Bandung, Indonesia (Remote)",
     description: "Developing and maintaining web applications using modern full-stack technologies. Collaborating with cross-functional teams to deliver high-quality software solutions.",
     skills: ["Figma", "Front-End Development", "React", "Laravel"],
-    color: "text-blue-400",
-    bg: "bg-blue-500/10",
-    border: "border-blue-500/20"
+    color: "text-sky-400",
+    bg: "bg-sky-500/10",
+    border: "border-sky-500/20"
   },
   {
     role: "Core Team Lead of Media",
@@ -46,7 +46,7 @@ const ExperienceCard = ({ item, index }: { item: any; index: number }) => {
       <div className={`p-6 rounded-xl border bg-slate-900/50 hover:bg-slate-800/50 transition-colors ${item.border}`}>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
             <div>
-                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors">{item.role}</h3>
+                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-sky-400 transition-colors">{item.role}</h3>
                 <p className="text-base text-gray-300 font-medium">{item.company} <span className="text-sm font-normal text-gray-500">• {item.type}</span></p>
             </div>
             
@@ -80,12 +80,17 @@ const ExperienceCard = ({ item, index }: { item: any; index: number }) => {
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-20 relative">
-      <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">
-          Work <span className="text-cyan-400">Experience</span>
-        </h2>
-        
+    <section id="experience" className="py-24 relative">
+      <div className="container mx-auto px-6 max-w-5xl relative z-10">
+        <ScrollReveal width="100%">
+          <div className="text-center mb-14">
+            <span className="eyebrow">Career</span>
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
+              Work <span className="text-gradient">Experience</span>
+            </h2>
+          </div>
+        </ScrollReveal>
+
         <div className="max-w-3xl mx-auto">
           <ScrollReveal width="100%">
             {experiences.map((exp, index) => (
