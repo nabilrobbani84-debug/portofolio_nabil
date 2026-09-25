@@ -59,11 +59,13 @@ export default function Hero() {
 
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll();
-  // Layered parallax: content drifts up slowly, photo drifts opposite, orbs move most
-  const contentY = useTransform(scrollYProgress, [0, 0.4], [0, -60]);
-  const photoY = useTransform(scrollYProgress, [0, 0.4], [0, 70]);
-  const orbY = useTransform(scrollYProgress, [0, 0.5], [0, 140]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.6]);
+  // Layered parallax — pronounced so the depth is clearly visible while scrolling.
+  // content drifts up, photo drifts down (opposite), orbs move most, then fades.
+  const contentY = useTransform(scrollYProgress, [0, 0.5], [0, -160]);
+  const photoY = useTransform(scrollYProgress, [0, 0.5], [0, 180]);
+  const orbY = useTransform(scrollYProgress, [0, 0.6], [0, 320]);
+  const orbScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.25]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0.35]);
 
   return (
     <section
@@ -73,7 +75,7 @@ export default function Hero() {
       {/* Ambient gradient orbs — clean, professional backdrop with parallax drift */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
-        style={reduce ? undefined : { y: orbY }}
+        style={reduce ? undefined : { y: orbY, scale: orbScale }}
       >
         <div className="absolute -top-24 -left-24 w-[32rem] h-[32rem] rounded-full bg-sky-500/10 blur-[120px]" />
         <div className="absolute top-1/3 right-0 w-[30rem] h-[30rem] rounded-full bg-indigo-500/10 blur-[120px]" />
@@ -94,8 +96,8 @@ export default function Hero() {
       </motion.div>
 
       {/* Two-column layout: text + photo */}
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div className="mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-20 relative z-10">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-12 items-center">
           {/* ── Left: content (outer = scroll parallax, inner = entrance) ── */}
           <motion.div
             style={reduce ? undefined : { y: contentY, opacity: heroOpacity }}
