@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ExternalLink, Github, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { ScrollReveal, ParallaxBlob } from "./ScrollAnimation";
 
@@ -210,7 +211,8 @@ const badgeColors: Record<string, string> = {
 
 // ─── Project Card ────────────────────────────────────────────────────────────
 
-const MAX_BADGES = 4;
+const MAX_BADGES = 3;
+const INITIAL_VISIBLE = 6;
 
 const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
   const visibleBadges = project.badges.slice(0, MAX_BADGES);
@@ -232,7 +234,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
       <div className="relative h-full flex flex-col rounded-2xl bg-slate-900/90 border border-white/8 overflow-hidden backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1">
 
         {/* ── Image (fixed aspect ratio) ── */}
-        <div className="relative w-full aspect-[16/9] overflow-hidden shrink-0">
+        <div className="relative w-full aspect-[16/8] overflow-hidden shrink-0">
           <div className={`absolute inset-0 bg-gradient-to-br ${project.accent} opacity-20`} />
 
           {project.image ? (
@@ -262,15 +264,15 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
         </div>
 
         {/* ── Content ── */}
-        <div className="flex flex-col flex-1 p-5 md:p-6 gap-4">
+        <div className="flex flex-col flex-1 p-4 gap-3">
 
           <div className="flex-1">
-            <h3 className="text-lg md:text-xl font-bold text-white mb-2 transition-colors group-hover:text-sky-300">
+            <h3 className="text-base md:text-lg font-bold text-white mb-2 transition-colors group-hover:text-sky-300">
               {project.title}
             </h3>
 
             {/* Description clamped to 3 lines for uniform height */}
-            <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">
+            <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
               {project.description}
             </p>
           </div>
@@ -294,7 +296,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
           </div>
 
           {/* Action Buttons (pinned to bottom) */}
-          <div className="flex items-center gap-2.5 mt-auto pt-4 border-t border-white/5">
+          <div className="flex items-center gap-2.5 mt-auto pt-3 border-t border-white/5">
             {project.github && (
               <a
                 href={project.github}
@@ -327,6 +329,9 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
 // ─── Section ─────────────────────────────────────────────────────────────────
 
 export default function Projects() {
+  const [showAll, setShowAll] = useState(false);
+  const visibleProjects = showAll ? projects : projects.slice(0, INITIAL_VISIBLE);
+
   return (
     <section id="projects" className="py-24 text-white relative overflow-hidden">
       {/* Parallax background decoration */}
@@ -341,11 +346,11 @@ export default function Projects() {
         className="absolute bottom-1/4 right-0 w-[440px] h-[440px] bg-purple-500/[0.06] rounded-full blur-[120px] pointer-events-none"
       />
 
-      <div className="container mx-auto px-6 max-w-5xl">
+      <div className="container mx-auto px-6 max-w-6xl">
 
         {/* Section header */}
         <ScrollReveal width="100%">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="eyebrow">Portfolio</span>
             <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
               Featured <span className="text-gradient">Projects</span>
@@ -357,15 +362,30 @@ export default function Projects() {
         </ScrollReveal>
 
         {/* Project grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <AnimatePresence initial={false}>
+            {visibleProjects.map((project, index) => (
+              <ProjectCard key={project.title} project={project} index={index} />
+            ))}
+          </AnimatePresence>
         </div>
+
+        {/* Show more / less */}
+        {projects.length > INITIAL_VISIBLE && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => setShowAll((v) => !v)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-sky-500/40 text-sm font-medium text-gray-300 hover:text-white transition-all"
+            >
+              {showAll ? "Tampilkan lebih sedikit" : `Tampilkan semua (${projects.length})`}
+              <ChevronDown size={16} className={`transition-transform ${showAll ? "rotate-180" : ""}`} />
+            </button>
+          </div>
+        )}
 
         {/* Footer note */}
         <ScrollReveal width="100%">
-          <p className="text-center text-gray-600 text-sm mt-12">
+          <p className="text-center text-gray-600 text-sm mt-8">
             dan masih banyak lagi ·{" "}
             <a
               href="https://github.com/nabilrobbani84-debug"

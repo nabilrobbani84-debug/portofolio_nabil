@@ -11,7 +11,7 @@ const categories = [
     color: "text-sky-400",
     bg: "bg-sky-500/10",
     border: "hover:border-sky-500/40",
-    skills: ["React", "Next.js", "Vue.js", "TypeScript", "Tailwind CSS", "HTML", "CSS"],
+    skills: ["React", "Next.js", "Vue.js", "TypeScript", "Tailwind CSS", "JavaScript", "HTML", "CSS", "Sass", "Bootstrap", "Redux", "Framer Motion", "Responsive Design"],
   },
   {
     title: "Backend",
@@ -19,7 +19,7 @@ const categories = [
     color: "text-indigo-400",
     bg: "bg-indigo-500/10",
     border: "hover:border-indigo-500/40",
-    skills: ["Laravel", "Node.js", "Django", "Go", "REST API"],
+    skills: ["Laravel", "Node.js", "Django", "Go", "Python", "Express.js", "PHP", "REST API", "GraphQL", "JWT Auth", "WebSocket"],
   },
   {
     title: "Database",
@@ -27,7 +27,7 @@ const categories = [
     color: "text-emerald-400",
     bg: "bg-emerald-500/10",
     border: "hover:border-emerald-500/40",
-    skills: ["MySQL", "PostgreSQL", "Firebase", "Firestore"],
+    skills: ["MySQL", "PostgreSQL", "Firebase", "Firestore", "MongoDB", "Redis", "SQLite", "Supabase", "Prisma"],
   },
   {
     title: "Tools & Design",
@@ -35,7 +35,7 @@ const categories = [
     color: "text-purple-400",
     bg: "bg-purple-500/10",
     border: "hover:border-purple-500/40",
-    skills: ["Git", "Docker", "Figma", "Vite", "Scrum"],
+    skills: ["Git", "Docker", "Figma", "Vite", "Scrum", "GitHub", "GitHub Actions", "CI/CD", "Vercel", "Postman", "Linux", "Nginx", "Jira"],
   },
 ];
 

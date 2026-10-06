@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${outfit.className} bg-slate-950 text-white antialiased`}>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body className={`${outfit.className} bg-slate-950 text-white antialiased`} suppressHydrationWarning>
         <StarCursor />
         {children}
         <WhatsAppFloat />
