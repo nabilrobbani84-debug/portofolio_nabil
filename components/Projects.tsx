@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, ChevronDown } from "lucide-react";
+import { ExternalLink, Github, ChevronDown, ArrowUpRight, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { ScrollReveal, ParallaxBlob } from "./ScrollAnimation";
 
@@ -328,9 +328,28 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
 
 // ─── Section ─────────────────────────────────────────────────────────────────
 
+const FILTERS = ["All", "Web Apps", "Internal Systems", "APIs", "Mobile Apps"] as const;
+type Filter = (typeof FILTERS)[number];
+
+const categoryMap: Record<string, Exclude<Filter, "All">> = {
+  "FlowSphere Management Dashboard": "Internal Systems",
+  "Dukun Duplikat Kunci": "Web Apps",
+  "Ruqyah Syar'iyyah": "Web Apps",
+  "Warkop QR Payment System": "Internal Systems",
+  "FinTech Core API": "APIs",
+  "BookWise Library": "Web Apps",
+  "Recruitment Platform": "Web Apps",
+  "Modiva App": "Mobile Apps",
+  "Helpdesk Hub": "Internal Systems",
+  "Web MovieApp": "Web Apps",
+  "Kidstation": "Internal Systems",
+};
+
 export default function Projects() {
   const [showAll, setShowAll] = useState(false);
-  const visibleProjects = showAll ? projects : projects.slice(0, INITIAL_VISIBLE);
+  const [filter, setFilter] = useState<Filter>("All");
+  const filtered = filter === "All" ? projects : projects.filter((p) => categoryMap[p.title] === filter);
+  const visibleProjects = showAll ? filtered : filtered.slice(0, INITIAL_VISIBLE);
 
   return (
     <section id="projects" className="py-24 text-white relative overflow-hidden">
@@ -350,16 +369,47 @@ export default function Projects() {
 
         {/* Section header */}
         <ScrollReveal width="100%">
-          <div className="text-center mb-10">
-            <span className="eyebrow">Portfolio</span>
-            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
-              Featured <span className="text-gradient">Projects</span>
-            </h2>
-            <p className="mt-4 text-gray-400 max-w-xl mx-auto text-sm md:text-base">
-              Kumpulan proyek pilihan yang menunjukkan kemampuan teknis dan kreativitas dalam pengembangan software.
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+            <div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold flex items-center gap-3">
+                Featured <span className="text-gradient">Projects</span>
+                <Sparkles className="text-amber-300" size={20} />
+              </h2>
+              <p className="mt-3 text-gray-400 max-w-md text-sm md:text-base">
+                Kumpulan proyek pilihan yang menunjukkan kemampuan teknis dan kreativitas dalam pengembangan software.
+              </p>
+            </div>
+            <a
+              href="https://github.com/nabilrobbani84-debug"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-sky-400 hover:text-sky-300 transition-colors shrink-0"
+            >
+              View all projects <ArrowUpRight size={16} />
+            </a>
           </div>
         </ScrollReveal>
+
+        {/* Filter pills */}
+        <div className="flex flex-wrap gap-2.5 mb-8">
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              id={`filter-${f.toLowerCase().replace(/\s+/g, "-")}`}
+              onClick={() => {
+                setFilter(f);
+                setShowAll(false);
+              }}
+              className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all ${
+                filter === f
+                  ? "bg-sky-400 border-sky-400 text-slate-950 shadow-lg shadow-sky-500/25"
+                  : "bg-white/5 border-white/15 text-gray-300 hover:border-sky-400/60 hover:text-white"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
 
         {/* Project grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -369,15 +419,18 @@ export default function Projects() {
             ))}
           </AnimatePresence>
         </div>
+        {filtered.length === 0 && (
+          <p className="text-center text-gray-500 py-10">Belum ada proyek di kategori ini.</p>
+        )}
 
         {/* Show more / less */}
-        {projects.length > INITIAL_VISIBLE && (
+        {filtered.length > INITIAL_VISIBLE && (
           <div className="flex justify-center mt-8">
             <button
               onClick={() => setShowAll((v) => !v)}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-sky-500/40 text-sm font-medium text-gray-300 hover:text-white transition-all"
             >
-              {showAll ? "Tampilkan lebih sedikit" : `Tampilkan semua (${projects.length})`}
+              {showAll ? "Tampilkan lebih sedikit" : `Tampilkan semua (${filtered.length})`}
               <ChevronDown size={16} className={`transition-transform ${showAll ? "rotate-180" : ""}`} />
             </button>
           </div>
