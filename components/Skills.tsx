@@ -45,6 +45,19 @@ const marquee = ["React", "Next.js", "TypeScript", "Laravel", "Node.js", "Tailwi
 export default function Skills() {
   return (
     <section id="skills" className="py-24 relative overflow-hidden">
+      {/* Floating background blobs */}
+      <motion.div
+        aria-hidden
+        className="absolute top-10 -left-24 w-80 h-80 rounded-full bg-sky-500/[0.07] blur-[100px] pointer-events-none"
+        animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="absolute bottom-20 -right-24 w-96 h-96 rounded-full bg-purple-500/[0.07] blur-[110px] pointer-events-none"
+        animate={{ x: [0, -60, 0], y: [0, -40, 0] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+      />
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
@@ -63,26 +76,42 @@ export default function Skills() {
           {categories.map((cat, i) => (
             <motion.div
               key={cat.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 40, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              whileHover={{ y: -6 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`glass-card p-6 rounded-2xl border border-white/8 ${cat.border} transition-colors`}
+              transition={{ duration: 0.6, delay: i * 0.12, ease: "easeOut" }}
+              className={`glass-card p-6 rounded-2xl border border-white/8 ${cat.border} hover:shadow-2xl hover:shadow-black/40 transition-colors`}
             >
               <div className="flex items-center gap-3 mb-5">
-                <div className={`p-2.5 rounded-xl ${cat.bg} ${cat.color}`}>
+                <motion.div
+                  className={`p-2.5 rounded-xl ${cat.bg} ${cat.color}`}
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ duration: 3 + i * 0.4, repeat: Infinity, ease: "easeInOut" }}
+                  whileHover={{ rotate: [0, -12, 12, 0], scale: 1.15 }}
+                >
                   <cat.icon size={22} />
-                </div>
+                </motion.div>
                 <h3 className="text-lg font-bold text-white">{cat.title}</h3>
               </div>
               <div className="flex flex-wrap gap-2">
-                {cat.skills.map((skill) => (
-                  <span
+                {cat.skills.map((skill, j) => (
+                  <motion.span
                     key={skill}
-                    className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/8 text-sm text-gray-300 hover:text-white hover:bg-white/[0.08] transition-colors"
+                    initial={{ opacity: 0, scale: 0.6, y: 10 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -3, scale: 1.08 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 18,
+                      delay: i * 0.12 + 0.25 + j * 0.04,
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/8 text-sm text-gray-300 hover:text-white hover:bg-white/[0.1] hover:border-white/25 cursor-default"
                   >
                     {skill}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </motion.div>

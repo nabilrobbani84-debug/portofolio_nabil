@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useSafeReducedMotion } from "./ScrollAnimation";
 import { Mail, Github, Linkedin, ArrowDown, BadgeCheck } from "lucide-react";
 import { Link } from "react-scroll";
 import Image from "next/image";
@@ -44,7 +45,7 @@ const Typewriter = () => {
 const stats = [
   { value: "10+", label: "Projects Built" },
   { value: "3.63", label: "GPA / IPK" },
-  { value: "1+", label: "Years Coding" },
+  { value: "4+", label: "Years Coding" },
 ];
 
 const socials = [
@@ -57,7 +58,7 @@ export default function Hero() {
   // Falls back to the placeholder SVG until the real photo is uploaded to public/profile.jpg
   const [photoSrc, setPhotoSrc] = useState("/profile.jpg");
 
-  const reduce = useReducedMotion();
+  const reduce = useSafeReducedMotion();
   const { scrollYProgress } = useScroll();
   // Layered parallax — pronounced so the depth is clearly visible while scrolling.
   // content drifts up, photo drifts down (opposite), orbs move most, then fades.

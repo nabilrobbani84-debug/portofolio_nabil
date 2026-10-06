@@ -1,7 +1,19 @@
 "use client";
 
 import { motion, Variants, useScroll, useTransform, useReducedMotion, MotionValue } from "framer-motion";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
+/**
+ * Hydration-safe version of useReducedMotion. Always returns false during SSR and
+ * the first client render (so server and client HTML match), then reflects the
+ * user's actual preference after mount.
+ */
+export const useSafeReducedMotion = (): boolean => {
+  const reduce = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted && !!reduce;
+};
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -104,7 +116,7 @@ interface ParallaxProps {
  */
 export const Parallax = ({ children, offset = 80, className = "", fade = false }: ParallaxProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useSafeReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -136,7 +148,7 @@ export const ParallaxBlob = ({
   offset?: number;
   x?: number;
 }) => {
-  const reduce = useReducedMotion();
+  const reduce = useSafeReducedMotion();
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -offset]);
   const xShift = useTransform(scrollYProgress, [0, 1], [0, x]);
