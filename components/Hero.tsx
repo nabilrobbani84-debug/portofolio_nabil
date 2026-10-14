@@ -14,9 +14,12 @@ const InteractiveProfile = dynamic(
     ssr: false,
     loading: () => (
       <div className="relative select-none" style={{ perspective: "1200px" }}>
-        <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-sky-500/30 via-indigo-500/20 to-purple-500/30 blur-2xl opacity-75 pointer-events-none" />
-        <div className="absolute -inset-1 rounded-[2.1rem] bg-gradient-to-br from-sky-400/40 via-transparent to-purple-500/40 pointer-events-none" />
-        <div className="relative w-64 h-80 sm:w-72 sm:h-[24rem] lg:w-[21rem] lg:h-[28rem] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-black/80 bg-slate-950">
+        {/* Glow halo */}
+        <div className="absolute -inset-10 rounded-[3rem] pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(56,189,248,0.35) 0%, rgba(99,102,241,0.2) 40%, transparent 100%)", filter: "blur(24px)" }} />
+        {/* Gradient border placeholder */}
+        <div className="absolute -inset-[3px] rounded-[2.2rem] pointer-events-none" style={{ background: "conic-gradient(from 0deg, #38bdf8, #818cf8, #a855f7, #ec4899, #38bdf8)" }} />
+        {/* Card */}
+        <div className="relative w-64 h-80 sm:w-72 sm:h-[24rem] lg:w-[21rem] lg:h-[28rem] rounded-[2rem] overflow-hidden border border-white/15 shadow-2xl shadow-black/90 bg-slate-950">
           <Image
             src="/digital-human-frames/frame_00.jpg"
             alt="Nabil Robbani 3D Digital Human"
@@ -25,8 +28,11 @@ const InteractiveProfile = dynamic(
             sizes="(max-width: 1024px) 18rem, 21rem"
             className="object-cover object-top"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-slate-950/25" />
+          {/* Loading shimmer */}
+          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/5 to-transparent" />
         </div>
+        {/* Role chip */}
         <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 shadow-xl shadow-black/40 whitespace-nowrap z-40 pointer-events-none">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
             <BadgeCheck size={14} />
