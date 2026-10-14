@@ -66,9 +66,9 @@ const StarCursor = () => {
     };
 
     const drawStar = (ctx: CanvasRenderingContext2D, x: number, y: number, spikes: number, outerRadius: number, innerRadius: number, rotation: number) => {
-        let cx = x;
-        let cy = y;
-        let step = Math.PI / spikes;
+        const cx = x;
+        const cy = y;
+        const step = Math.PI / spikes;
 
         ctx.beginPath();
         let rot = rotation;

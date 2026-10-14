@@ -123,7 +123,7 @@ export default function Footer() {
             </div>
             
             <div className="border-t border-white/5 pt-8">
-                <p className="text-gray-500 text-sm">
+                <p className="text-gray-500 text-sm" suppressHydrationWarning>
                 © {new Date().getFullYear()} Nabil Robbani. All rights reserved.
                 </p>
             </div>

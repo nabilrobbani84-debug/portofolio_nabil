@@ -2,12 +2,11 @@
 
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { RoundedBox, PerspectiveCamera, Float, Text, ContactShadows, Environment, MeshTransmissionMaterial } from '@react-three/drei';
+import { RoundedBox, PerspectiveCamera, Float, Text, ContactShadows, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
 const Robot = () => {
   const headRef = useRef<THREE.Group>(null);
-  const bodyRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     if (headRef.current) {

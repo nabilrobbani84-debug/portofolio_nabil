@@ -31,7 +31,9 @@ const experiences = [
   },
 ];
 
-const ExperienceCard = ({ item, index }: { item: any; index: number }) => {
+type ExperienceItem = (typeof experiences)[number];
+
+const ExperienceCard = ({ item, index }: { item: ExperienceItem; index: number }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

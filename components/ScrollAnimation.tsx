@@ -11,7 +11,15 @@ import React, { useEffect, useRef, useState } from "react";
 export const useSafeReducedMotion = (): boolean => {
   const reduce = useReducedMotion();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    let cancel = false;
+    requestAnimationFrame(() => {
+      if (!cancel) setMounted(true);
+    });
+    return () => {
+      cancel = true;
+    };
+  }, []);
   return mounted && !!reduce;
 };
 

@@ -4,8 +4,42 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useSafeReducedMotion } from "./ScrollAnimation";
 import { Mail, Github, Linkedin, ArrowDown, BadgeCheck } from "lucide-react";
 import { Link } from "react-scroll";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+
+const InteractiveProfile = dynamic(
+  () => import("./digital-human/InteractiveProfile"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="relative select-none" style={{ perspective: "1200px" }}>
+        <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-sky-500/30 via-indigo-500/20 to-purple-500/30 blur-2xl opacity-75 pointer-events-none" />
+        <div className="absolute -inset-1 rounded-[2.1rem] bg-gradient-to-br from-sky-400/40 via-transparent to-purple-500/40 pointer-events-none" />
+        <div className="relative w-64 h-80 sm:w-72 sm:h-[24rem] lg:w-[21rem] lg:h-[28rem] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-black/80 bg-slate-950">
+          <Image
+            src="/digital-human-frames/frame_00.jpg"
+            alt="Nabil Robbani 3D Digital Human"
+            fill
+            priority
+            sizes="(max-width: 1024px) 18rem, 21rem"
+            className="object-cover object-top"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/20" />
+        </div>
+        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 shadow-xl shadow-black/40 whitespace-nowrap z-40 pointer-events-none">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
+            <BadgeCheck size={14} />
+          </span>
+          <span className="flex flex-col leading-tight">
+            <span className="text-xs font-semibold text-white">Software Engineer</span>
+            <span className="text-[10px] text-gray-400">Frontend &amp; Fullstack</span>
+          </span>
+        </div>
+      </div>
+    ),
+  }
+);
 
 const roles = [
   "Frontend Developer",
@@ -24,9 +58,11 @@ const Typewriter = () => {
       return () => clearTimeout(t);
     }
     if (subIndex === 0 && deleting) {
-      setDeleting(false);
-      setIndex((prev) => (prev + 1) % roles.length);
-      return;
+      const t = setTimeout(() => {
+        setDeleting(false);
+        setIndex((prev) => (prev + 1) % roles.length);
+      }, 200);
+      return () => clearTimeout(t);
     }
     const timeout = setTimeout(() => {
       setSubIndex((prev) => prev + (deleting ? -1 : 1));
@@ -55,9 +91,6 @@ const socials = [
 ];
 
 export default function Hero() {
-  // Falls back to the placeholder SVG until the real photo is uploaded to public/profile.jpg
-  const [photoSrc, setPhotoSrc] = useState("/profile.jpg");
-
   const reduce = useSafeReducedMotion();
   const { scrollYProgress } = useScroll();
   // Layered parallax — pronounced so the depth is clearly visible while scrolling.
@@ -207,44 +240,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
             className="w-full flex justify-center lg:justify-end"
           >
-            <div className="relative group">
-              {/* Soft glow halo */}
-              <div className="absolute -inset-5 rounded-[2.25rem] bg-gradient-to-br from-sky-500/25 via-indigo-500/15 to-purple-500/25 blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
-
-              {/* Decorative gradient ring */}
-              <div className="absolute -inset-1 rounded-[2.1rem] bg-gradient-to-br from-sky-400/40 via-transparent to-purple-500/40" />
-
-              {/* Photo frame */}
-              <div className="relative w-64 h-80 sm:w-72 sm:h-[24rem] lg:w-[21rem] lg:h-[28rem] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-black/60">
-                <Image
-                  src={photoSrc}
-                  alt="Nabil Robbani — Software Engineer"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 18rem, 21rem"
-                  onError={() => setPhotoSrc("/profile-placeholder.svg")}
-                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                />
-                {/* Depth gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
-              </div>
-
-              {/* Verified role chip */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
-                className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 shadow-xl shadow-black/40 whitespace-nowrap"
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
-                  <BadgeCheck size={14} />
-                </span>
-                <span className="flex flex-col leading-tight">
-                  <span className="text-xs font-semibold text-white">Software Engineer</span>
-                  <span className="text-[10px] text-gray-400">Frontend &amp; Fullstack</span>
-                </span>
-              </motion.div>
-            </div>
+            <InteractiveProfile />
           </motion.div>
           </motion.div>
         </div>
