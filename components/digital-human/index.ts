@@ -1,3 +1,2 @@
-export { InteractiveProfile } from "./InteractiveProfile";
+export { InteractiveProfile, default } from "./InteractiveProfile";
 export { BackgroundDigitalHuman } from "./BackgroundDigitalHuman";
-export { default } from "./BackgroundDigitalHuman";
