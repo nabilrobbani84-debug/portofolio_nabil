@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google"; // Using Outfit for futuristic look
 import "./globals.css";
 import StarCursor from "@/components/StarCursor";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import Preloader from "@/components/Preloader";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={`${outfit.className} bg-slate-950 text-white antialiased`} suppressHydrationWarning>
+        <Preloader />
         <StarCursor />
         {children}
         <WhatsAppFloat />
