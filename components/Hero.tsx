@@ -120,7 +120,7 @@ export default function Hero() {
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                 </span>
                 <span className="text-xs font-medium text-emerald-300">
-                  Available for Internship &amp; Freelance
+                  Available for Career &amp; Freelance
                 </span>
               </div>
 
@@ -141,9 +141,9 @@ export default function Hero() {
               </div>
 
               <p className="mt-5 text-base md:text-lg text-gray-400 max-w-xl leading-relaxed">
-                Informatics Engineering student at STT Terpadu Nurul Fikri, focused on
-                crafting clean, performant, and user-friendly applications with React,
-                Next.js, and Laravel.
+                Informatics Engineering graduate from Sekolah Tinggi Teknologi Terpadu
+                Nurul Fikri (Class of 2026), focused on crafting clean, performant,
+                and user-friendly applications with React, Next.js, and Laravel.
               </p>
 
               {/* CTAs */}

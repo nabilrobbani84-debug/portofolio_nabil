@@ -71,7 +71,7 @@ export default function About() {
               <div className="w-full space-y-3 text-left mt-2">
                 <div className="flex items-center gap-3 text-sm text-gray-300">
                   <GraduationCap size={18} className="text-sky-400 shrink-0" />
-                  <span>Informatics Engineering — GPA 3.63</span>
+                  <span>Informatics Engineering Graduate (2026) — GPA 3.63</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-gray-300">
                   <MapPin size={18} className="text-sky-400 shrink-0" />
@@ -86,9 +86,12 @@ export default function About() {
           <ScrollReveal width="100%" className="lg:col-span-3" delay={0.15}>
             <div className="glass-card p-8 rounded-2xl h-full">
               <p className="text-gray-300 leading-relaxed mb-4">
-                Saya seorang mahasiswa Teknik Informatika di{" "}
-                <span className="text-sky-400 font-semibold">STT Terpadu Nurul Fikri</span>{" "}
-                dengan IPK <span className="text-indigo-400 font-bold">3.63</span> yang
+                Saya lulusan Teknik Informatika dari{" "}
+                <span className="text-sky-400 font-semibold">
+                  Sekolah Tinggi Teknologi Terpadu Nurul Fikri
+                </span>{" "}
+                tahun 2026 dengan IPK{" "}
+                <span className="text-indigo-400 font-bold">3.63</span> yang
                 memiliki passion mendalam dalam pengembangan aplikasi web modern dan
                 user-friendly.
               </p>
