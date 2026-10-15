@@ -141,9 +141,9 @@ export default function Hero() {
               </div>
 
               <p className="mt-5 text-base md:text-lg text-gray-400 max-w-xl leading-relaxed">
-                Informatics Engineering graduate from Sekolah Tinggi Teknologi Terpadu
-                Nurul Fikri (Class of 2026), focused on crafting clean, performant,
-                and user-friendly applications with React, Next.js, and Laravel.
+                Software Engineer specializing in building modern, high-performance web
+                applications and seamless digital experiences using React, Next.js, and
+                Laravel.
               </p>
 
               {/* CTAs */}
