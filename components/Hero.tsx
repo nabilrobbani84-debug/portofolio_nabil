@@ -11,7 +11,7 @@ const InteractiveProfile = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="relative w-64 h-80 sm:w-72 sm:h-[24rem] lg:w-[21rem] lg:h-[28rem] rounded-[2rem] bg-slate-900/60 animate-pulse" />
+      <div className="relative w-64 h-80 sm:w-72 sm:h-[24rem] lg:w-[21rem] lg:h-[28rem] flex items-center justify-center pointer-events-none" />
     ),
   }
 );
