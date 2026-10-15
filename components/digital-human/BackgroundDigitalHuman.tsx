@@ -11,12 +11,6 @@ import {
 } from "lucide-react";
 import { useSafeReducedMotion } from "../ScrollAnimation";
 
-const TOTAL_FRAMES = 48;
-const FRAME_PATHS: string[] = Array.from(
-  { length: TOTAL_FRAMES },
-  (_, i) => `/digitalhuman/frames/frame_${i.toString().padStart(2, "0")}.webp`
-);
-
 // Floating tech badges orbiting the character in the background
 const FLOAT_BADGES = [
   { icon: Code2,    label: "React",      color: "from-sky-400 to-cyan-400",     orbit: 0   },
@@ -39,22 +33,18 @@ const SPARKLES = [
 export function BackgroundDigitalHuman() {
   const reduce = useSafeReducedMotion();
 
-  const containerRef    = useRef<HTMLDivElement>(null);
-  const characterRef    = useRef<HTMLDivElement>(null);
-  const canvasRef       = useRef<HTMLCanvasElement>(null);
-  const glowRef         = useRef<HTMLDivElement>(null);
-  const badgesGroupRef  = useRef<HTMLDivElement>(null);
+  const containerRef   = useRef<HTMLDivElement>(null);
+  const characterRef   = useRef<HTMLDivElement>(null);
+  const videoRef       = useRef<HTMLVideoElement>(null);
+  const glowRef        = useRef<HTMLDivElement>(null);
+  const badgesGroupRef = useRef<HTMLDivElement>(null);
 
-  const imagesRef       = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
-  const imagesLoadedRef = useRef<boolean[]>(new Array(TOTAL_FRAMES).fill(false));
-
-  const [initialLoaded, setInitialLoaded] = useState(false);
-  const [badgeAngle, setBadgeAngle]       = useState(0);
+  const [badgeAngle, setBadgeAngle] = useState(0);
 
   // State refs for 60fps render loop
   const animStateRef = useRef({
-    targetFrame: 0,
-    currentFrame: 0,
+    videoDuration: 3.5,
+    targetVideoTime: 0,
     pointerX: 0,
     pointerY: 0,
     tiltX: 0,
@@ -62,33 +52,46 @@ export function BackgroundDigitalHuman() {
     floatOffset: 0,
     glowX: 50,
     glowY: 45,
-    lerpedOpacity: 0.92,
+    lerpedOpacity: 0.95,
     lerpedScale: 1.0,
+    lerpedZ: 0,
+    lerpedY: 0,
     scrollProgress: 0,
   });
 
-  // ── Preload 48 Transparent Frames ──
+  // ── Video Readiness & Autoplay Kickstart ──
   useEffect(() => {
-    let isCancelled = false;
-    const priorityIndices = [0, 47, 24, 12, 36, 1, 2, 3, 4, 5];
-    const otherIndices    = Array.from({ length: TOTAL_FRAMES }, (_, i) => i).filter(
-      (i) => !priorityIndices.includes(i)
-    );
-    const loadOrder = [...priorityIndices, ...otherIndices];
+    const video = videoRef.current;
+    if (!video) return;
 
-    loadOrder.forEach((index) => {
-      const img = new window.Image();
-      img.src = FRAME_PATHS[index];
-      img.onload = () => {
-        if (isCancelled) return;
-        imagesRef.current[index] = img;
-        imagesLoadedRef.current[index] = true;
-        if (index === 0) setInitialLoaded(true);
-      };
-    });
+    const onReady = () => {
+      if (video.duration && !isNaN(video.duration) && isFinite(video.duration)) {
+        animStateRef.current.videoDuration = video.duration;
+      }
+    };
+
+    if (video.readyState >= 1) {
+      onReady();
+    }
+
+    video.addEventListener("loadedmetadata", onReady);
+    video.addEventListener("canplay", onReady);
+
+    // Kickstart video decoding so first frame is painted crisp
+    video
+      .play()
+      .then(() => {
+        const scrollY = window.scrollY || 0;
+        if (scrollY === 0) {
+          video.pause();
+          video.currentTime = 0.01;
+        }
+      })
+      .catch(() => {});
 
     return () => {
-      isCancelled = true;
+      video.removeEventListener("loadedmetadata", onReady);
+      video.removeEventListener("canplay", onReady);
     };
   }, []);
 
@@ -120,15 +123,17 @@ export function BackgroundDigitalHuman() {
     };
   }, []);
 
-  // ── Global Scroll Listener: Drives video motion & background presence ──
+  // ── Global Scroll Listener: Drives video motion & forward 3D advance across page sections ──
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY || window.pageYOffset || 0;
-      // Scroll range 0 to 1400px maps to frame 0 -> 47 (putting on sunglasses)
-      const moveDistance = 1400;
+      // Scroll distance 2200px drives the video and forward motion across Hero, About, Skills
+      const moveDistance = 2200;
       const progress = Math.min(1, Math.max(0, scrollY / moveDistance));
       animStateRef.current.scrollProgress = progress;
-      animStateRef.current.targetFrame = progress * (TOTAL_FRAMES - 1);
+
+      const dur = animStateRef.current.videoDuration || 3.5;
+      animStateRef.current.targetVideoTime = progress * dur;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -136,125 +141,91 @@ export function BackgroundDigitalHuman() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ── DPR Canvas Resize ──
-  useEffect(() => {
-    const handleResize = () => {
-      const canvas = canvasRef.current;
-      const character = characterRef.current;
-      if (!canvas || !character) return;
-      const rect = character.getBoundingClientRect();
-      const dpr  = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width  = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // ── 60fps Loop: Canvas Frame Drawing + Scroll-driven seek + 3D Tilt ──
+  // ── 60fps Loop: Video Scrubbing + 3D Forward Zoom ("Maju ke Depan") + Mouse Tilt ──
   useEffect(() => {
     let animId: number;
     let lastTime = performance.now();
     let badgeAngleCurrent = 0;
 
-    const canvas = canvasRef.current;
-    const ctx = canvas ? canvas.getContext("2d", { alpha: true }) : null;
-
     const render = (time: number) => {
       const dt = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
       const state = animStateRef.current;
+      const video = videoRef.current;
 
-      // ── A. Frame Seek Interpolation ──
-      const diff = state.targetFrame - state.currentFrame;
-      state.currentFrame += diff * 0.16;
-      state.currentFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, state.currentFrame));
+      // ── A. Video Seek Interpolation ("gaya dari foto bergerak makin maju seperti pada videonya") ──
+      if (video && state.videoDuration > 0) {
+        const curTime = video.currentTime;
+        const target = state.targetVideoTime;
+        const diff = target - curTime;
 
-      // ── B. 60fps Canvas Frame Drawing (100% Transparent Cutout) ──
-      if (ctx && canvas && canvas.width > 0 && canvas.height > 0) {
-        const cw = canvas.width;
-        const ch = canvas.height;
-        ctx.clearRect(0, 0, cw, ch);
-
-        const fIndex = Math.max(0, Math.min(TOTAL_FRAMES - 1, state.currentFrame));
-        const i1 = Math.floor(fIndex);
-        const i2 = Math.min(TOTAL_FRAMES - 1, i1 + 1);
-        const blend = fIndex - i1;
-
-        const img1 = imagesRef.current[i1] || imagesRef.current[0];
-        const img2 = imagesRef.current[i2] || img1;
-
-        if (img1 && img1.complete && img1.naturalWidth > 0) {
-          const nw = img1.naturalWidth;
-          const nh = img1.naturalHeight;
-
-          // Fit image fully within canvas (contain) so head, sunglasses, and hands are NEVER clipped
-          const scale = Math.min(cw / nw, ch / nh);
-          const dw = nw * scale;
-          const dh = nh * scale;
-          const dx = (cw - dw) / 2;
-          const dy = ch - dh; // align to bottom
-
-          ctx.globalAlpha = 1.0;
-          ctx.drawImage(img1, 0, 0, nw, nh, dx, dy, dw, dh);
-
-          if (blend > 0.03 && img2 && img2.complete && img2.naturalWidth > 0) {
-            ctx.globalAlpha = blend;
-            ctx.drawImage(img2, 0, 0, nw, nh, dx, dy, dw, dh);
-            ctx.globalAlpha = 1.0;
-          }
+        if (Math.abs(diff) > 0.03) {
+          if (!video.paused) video.pause();
+          video.currentTime = Math.max(
+            0,
+            Math.min(state.videoDuration - 0.05, curTime + diff * 0.24)
+          );
         }
       }
 
-      // ── C. 3D Tilt from mouse ──
-      const targetTiltY = reduce ? 0 : state.pointerX * 7;
-      const targetTiltX = reduce ? 0 : -state.pointerY * 4;
+      // ── B. 3D Tilt from mouse ──
+      const targetTiltY = reduce ? 0 : state.pointerX * 8;
+      const targetTiltX = reduce ? 0 : -state.pointerY * 5;
       state.tiltY += (targetTiltY - state.tiltY) * 0.08;
       state.tiltX += (targetTiltX - state.tiltX) * 0.08;
 
-      // ── D. Ambient Depth & Opacity Shift across page ──
-      // Hero (progress=0): opacity 0.95 (crisp focal presence)
-      // Lower sections (progress=1): opacity 0.70 (vivid futuristic background without obscuring text)
-      const targetOpacity = 0.95 - state.scrollProgress * 0.25;
-      state.lerpedOpacity += (targetOpacity - state.lerpedOpacity) * 0.1;
+      // ── C. "Maju ke Depan" (3D Zoom & Perspective Advance on Scroll) ──
+      const sProgress = state.scrollProgress;
+      // In Hero: scale 1.0, translateZ 0px
+      // As user scrolls down to About, Skills: scale expands to 1.28 and translates forward 130px
+      const targetScale = reduce ? 1.0 : 1.0 + sProgress * 0.28;
+      const targetZ     = reduce ? 0 : sProgress * 130;
+      const targetY     = reduce ? 0 : sProgress * -20;
 
-      // Gentle scale expansion ("maju ke depan")
-      const targetScale = 1.0 + state.scrollProgress * 0.12;
       state.lerpedScale += (targetScale - state.lerpedScale) * 0.1;
+      state.lerpedZ     += (targetZ - state.lerpedZ) * 0.1;
+      state.lerpedY     += (targetY - state.lerpedY) * 0.1;
+
+      // Opacity: Hero (progress=0) is 0.95, smoothly settles at 0.68 in lower sections
+      // so it remains clearly visible in the background across About, Skills, and further pages!
+      const targetOpacity = 0.95 - sProgress * 0.27;
+      state.lerpedOpacity += (targetOpacity - state.lerpedOpacity) * 0.08;
 
       state.floatOffset = reduce ? 0 : Math.sin(time * 0.0016) * 5;
 
       if (characterRef.current) {
         characterRef.current.style.opacity = state.lerpedOpacity.toFixed(2);
         characterRef.current.style.transform = `
-          perspective(1200px)
+          perspective(1400px)
+          translateZ(${state.lerpedZ.toFixed(2)}px)
           scale(${state.lerpedScale.toFixed(3)})
-          translateY(${state.floatOffset.toFixed(2)}px)
+          translateY(${(state.lerpedY + state.floatOffset).toFixed(2)}px)
           rotateY(${state.tiltY.toFixed(2)}deg)
           rotateX(${state.tiltX.toFixed(2)}deg)
         `;
       }
 
-      // ── E. Ambient Glow updates ──
+      // ── D. Ambient Glow updates ──
       if (glowRef.current && !reduce) {
+        const glowOpacity = 0.35 + sProgress * 0.25;
+        const glowScale = 1.0 + sProgress * 0.2;
+        glowRef.current.style.transform = `scale(${glowScale.toFixed(2)})`;
         glowRef.current.style.background = `
           radial-gradient(circle at ${state.glowX}% ${state.glowY}%,
-            rgba(56,189,248,0.3) 0%,
-            rgba(99,102,241,0.18) 40%,
-            rgba(168,85,247,0.1) 68%,
+            rgba(56,189,248,${glowOpacity}) 0%,
+            rgba(99,102,241,${glowOpacity * 0.65}) 40%,
+            rgba(168,85,247,${glowOpacity * 0.35}) 70%,
             transparent 85%)
         `;
       }
 
-      // ── F. Orbit Badges & Scroll Fade ──
+      // ── E. Orbit Badges ──
       badgeAngleCurrent = (badgeAngleCurrent + dt * (reduce ? 0 : 14)) % 360;
       setBadgeAngle(badgeAngleCurrent);
 
-      // Gracefully fade out orbiting badges when scrolling into lower sections
+      // Gracefully soften orbiting badges in lower sections so content takes center stage
       if (badgesGroupRef.current) {
-        const badgeOpacity = Math.max(0, 1 - state.scrollProgress * 3.5);
+        const badgeOpacity = Math.max(0.2, 1 - sProgress * 1.5);
         badgesGroupRef.current.style.opacity = badgeOpacity.toFixed(2);
       }
 
@@ -276,24 +247,24 @@ export function BackgroundDigitalHuman() {
       aria-hidden="true"
     >
       {/* ── Positioned on the right side of the screen as a persistent background element ── */}
-      <div className="absolute right-0 sm:right-4 lg:right-10 xl:right-20 top-1/2 -translate-y-1/2 flex items-center justify-center">
+      <div className="absolute right-0 sm:right-2 lg:right-4 xl:right-14 top-1/2 -translate-y-1/2 flex items-center justify-center">
         {/* Background Cyber Ambient Glow */}
         <div
           ref={glowRef}
-          className="absolute -inset-16 rounded-full blur-3xl opacity-75 pointer-events-none transition-all duration-300"
+          className="absolute -inset-16 rounded-full blur-3xl opacity-80 pointer-events-none transition-all duration-300"
           style={{
             background:
-              "radial-gradient(circle at 50% 45%, rgba(56,189,248,0.3) 0%, rgba(99,102,241,0.18) 40%, rgba(168,85,247,0.1) 70%, transparent 100%)",
+              "radial-gradient(circle at 50% 45%, rgba(56,189,248,0.35) 0%, rgba(99,102,241,0.2) 40%, rgba(168,85,247,0.12) 70%, transparent 100%)",
           }}
         />
 
         {/* Rotating Cyber Portal Rings */}
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] h-[20rem] sm:w-[24rem] sm:h-[24rem] lg:w-[28rem] lg:h-[28rem] rounded-full border border-sky-400/15 border-dashed pointer-events-none animate-spin"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[22rem] h-[22rem] sm:w-[26rem] sm:h-[26rem] lg:w-[30rem] lg:h-[30rem] rounded-full border border-sky-400/20 border-dashed pointer-events-none animate-spin"
           style={{ animationDuration: "38s" }}
         />
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[16rem] h-[16rem] sm:w-[20rem] sm:h-[20rem] lg:w-[23rem] lg:h-[23rem] rounded-full border border-indigo-500/10 pointer-events-none animate-spin"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18rem] h-[18rem] sm:w-[22rem] sm:h-[22rem] lg:w-[25rem] lg:h-[25rem] rounded-full border border-indigo-500/15 pointer-events-none animate-spin"
           style={{ animationDuration: "26s", animationDirection: "reverse" }}
         />
 
@@ -307,20 +278,20 @@ export function BackgroundDigitalHuman() {
               reduce
                 ? {}
                 : {
-                    opacity: [0, 0.8, 0],
-                    scale: [0.5, 1.3, 0.5],
+                    opacity: [0, 0.85, 0],
+                    scale: [0.5, 1.4, 0.5],
                   }
             }
             transition={{ duration: 2.6, delay: s.delay, repeat: Infinity, ease: "easeInOut" }}
           />
         ))}
 
-        {/* ── Floating Tech Badges (Orbiting around the transparent character in background) ── */}
+        {/* ── Floating Tech Badges (Orbiting around the character in background) ── */}
         {!reduce && (
           <div ref={badgesGroupRef} className="pointer-events-none transition-opacity duration-300">
             {FLOAT_BADGES.map((badge, i) => {
               const angle = ((badgeAngle + badge.orbit) * Math.PI) / 180;
-              const rx = 165, ry = 135;
+              const rx = 185, ry = 150;
               const bx = Math.cos(angle) * rx;
               const by = Math.sin(angle) * ry;
               const Icon = badge.icon;
@@ -330,11 +301,11 @@ export function BackgroundDigitalHuman() {
                   className="absolute z-10 pointer-events-none hidden sm:block"
                   style={{
                     left: "50%",
-                    top: "40%",
+                    top: "45%",
                     transform: `translate(calc(-50% + ${bx}px), calc(-50% + ${by}px))`,
                   }}
                 >
-                  <div className="flex items-center gap-1.5 rounded-full bg-slate-900/70 border border-white/15 backdrop-blur-md shadow-lg shadow-black/50 px-2.5 py-1">
+                  <div className="flex items-center gap-1.5 rounded-full bg-slate-900/80 border border-white/15 backdrop-blur-md shadow-lg shadow-black/60 px-2.5 py-1">
                     <span
                       className={`flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gradient-to-br ${badge.color}`}
                     >
@@ -350,25 +321,41 @@ export function BackgroundDigitalHuman() {
           </div>
         )}
 
-        {/* ── Main Frameless Character Canvas (100% Transparent Cutout, ZERO Background) ── */}
+        {/* ── Main Character Video Card: Persistent Background Element Moving Forward ── */}
         <div
           ref={characterRef}
-          className="relative w-[16rem] h-[28.5rem] sm:w-[19rem] sm:h-[33.8rem] lg:w-[22rem] lg:h-[39rem] xl:w-[24.5rem] xl:h-[43.5rem] flex items-center justify-center pointer-events-none transition-opacity duration-300"
+          className="relative w-[18rem] h-[26rem] sm:w-[22rem] sm:h-[31rem] lg:w-[25rem] lg:h-[36rem] xl:w-[28rem] xl:h-[40rem] rounded-[2.4rem] p-[2.5px] pointer-events-none transition-opacity duration-300"
           style={{
             transformStyle: "preserve-3d",
             willChange: "transform, opacity",
           }}
         >
-          {/* 60fps Transparent Canvas */}
-          <canvas
-            ref={canvasRef}
-            className={`absolute inset-0 w-full h-full object-contain pointer-events-none transition-opacity duration-500 ${
-              initialLoaded ? "opacity-100" : "opacity-0"
-            }`}
+          {/* Animated Rotating Gradient Border */}
+          <div
+            className="absolute inset-0 rounded-[2.4rem] pointer-events-none opacity-85 animate-spin"
+            style={{
+              background:
+                "conic-gradient(from 0deg, #38bdf8, #818cf8, #a855f7, #ec4899, #38bdf8)",
+              animationDuration: "12s",
+            }}
           />
 
-          {/* Bottom subtle fade into slate-950 so suit blends organically */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent pointer-events-none" />
+          {/* Inner Video Container */}
+          <div className="relative w-full h-full rounded-[2.3rem] overflow-hidden bg-slate-950 border border-white/10 shadow-2xl shadow-sky-500/10">
+            {/* Main Video (about-me-loop2.mp4) */}
+            <video
+              ref={videoRef}
+              src="/digitalhuman/about-me-loop2.mp4"
+              playsInline
+              muted
+              autoPlay
+              preload="auto"
+              className="w-full h-full object-cover object-top pointer-events-none"
+            />
+
+            {/* Subtle bottom fade into dark slate-950 background */}
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent pointer-events-none z-10" />
+          </div>
         </div>
       </div>
     </div>
