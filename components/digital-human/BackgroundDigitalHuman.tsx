@@ -43,7 +43,7 @@ export function BackgroundDigitalHuman() {
 
   // State refs for 60fps render loop
   const animStateRef = useRef({
-    videoDuration: 3.5,
+    videoDuration: 10.0,
     targetVideoTime: 0,
     pointerX: 0,
     pointerY: 0,
@@ -77,7 +77,6 @@ export function BackgroundDigitalHuman() {
     video.addEventListener("loadedmetadata", onReady);
     video.addEventListener("canplay", onReady);
 
-    // Kickstart video decoding so first frame is painted crisp
     video
       .play()
       .then(() => {
@@ -127,12 +126,12 @@ export function BackgroundDigitalHuman() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY || window.pageYOffset || 0;
-      // Scroll distance 2200px drives the video and forward motion across Hero, About, Skills
-      const moveDistance = 2200;
+      // Scroll distance 2400px maps forward movement across Hero, About, Skills
+      const moveDistance = 2400;
       const progress = Math.min(1, Math.max(0, scrollY / moveDistance));
       animStateRef.current.scrollProgress = progress;
 
-      const dur = animStateRef.current.videoDuration || 3.5;
+      const dur = animStateRef.current.videoDuration || 10.0;
       animStateRef.current.targetVideoTime = progress * dur;
     };
 
@@ -177,18 +176,17 @@ export function BackgroundDigitalHuman() {
       // ── C. "Maju ke Depan" (3D Zoom & Perspective Advance on Scroll) ──
       const sProgress = state.scrollProgress;
       // In Hero: scale 1.0, translateZ 0px
-      // As user scrolls down to About, Skills: scale expands to 1.28 and translates forward 130px
-      const targetScale = reduce ? 1.0 : 1.0 + sProgress * 0.28;
-      const targetZ     = reduce ? 0 : sProgress * 130;
-      const targetY     = reduce ? 0 : sProgress * -20;
+      // As user scrolls down to About, Skills: video physically expands and advances forward 140px in 3D
+      const targetScale = reduce ? 1.0 : 1.0 + sProgress * 0.32;
+      const targetZ     = reduce ? 0 : sProgress * 140;
+      const targetY     = reduce ? 0 : sProgress * -25;
 
       state.lerpedScale += (targetScale - state.lerpedScale) * 0.1;
       state.lerpedZ     += (targetZ - state.lerpedZ) * 0.1;
       state.lerpedY     += (targetY - state.lerpedY) * 0.1;
 
-      // Opacity: Hero (progress=0) is 0.95, smoothly settles at 0.68 in lower sections
-      // so it remains clearly visible in the background across About, Skills, and further pages!
-      const targetOpacity = 0.95 - sProgress * 0.27;
+      // Opacity: Hero (progress=0) is 0.95, smoothly settles at 0.75 in lower sections
+      const targetOpacity = 0.95 - sProgress * 0.20;
       state.lerpedOpacity += (targetOpacity - state.lerpedOpacity) * 0.08;
 
       state.floatOffset = reduce ? 0 : Math.sin(time * 0.0016) * 5;
@@ -223,7 +221,6 @@ export function BackgroundDigitalHuman() {
       badgeAngleCurrent = (badgeAngleCurrent + dt * (reduce ? 0 : 14)) % 360;
       setBadgeAngle(badgeAngleCurrent);
 
-      // Gracefully soften orbiting badges in lower sections so content takes center stage
       if (badgesGroupRef.current) {
         const badgeOpacity = Math.max(0.2, 1 - sProgress * 1.5);
         badgesGroupRef.current.style.opacity = badgeOpacity.toFixed(2);
@@ -247,11 +244,11 @@ export function BackgroundDigitalHuman() {
       aria-hidden="true"
     >
       {/* ── Positioned on the right side of the screen as a persistent background element ── */}
-      <div className="absolute right-0 sm:right-2 lg:right-4 xl:right-14 top-1/2 -translate-y-1/2 flex items-center justify-center">
+      <div className="absolute right-0 sm:right-2 lg:right-4 xl:right-10 top-1/2 -translate-y-1/2 flex items-center justify-center">
         {/* Background Cyber Ambient Glow */}
         <div
           ref={glowRef}
-          className="absolute -inset-16 rounded-full blur-3xl opacity-80 pointer-events-none transition-all duration-300"
+          className="absolute -inset-24 rounded-full blur-3xl opacity-80 pointer-events-none transition-all duration-300"
           style={{
             background:
               "radial-gradient(circle at 50% 45%, rgba(56,189,248,0.35) 0%, rgba(99,102,241,0.2) 40%, rgba(168,85,247,0.12) 70%, transparent 100%)",
@@ -321,27 +318,25 @@ export function BackgroundDigitalHuman() {
           </div>
         )}
 
-        {/* ── Main Character Video Card: Persistent Background Element Moving Forward ── */}
+        {/* ── Main Frameless Character Video (TIDAK DIKOTAKIN: ZERO BOX, ZERO BORDER) ── */}
         <div
           ref={characterRef}
-          className="relative w-[18rem] h-[26rem] sm:w-[22rem] sm:h-[31rem] lg:w-[25rem] lg:h-[36rem] xl:w-[28rem] xl:h-[40rem] rounded-[2.4rem] p-[2.5px] pointer-events-none transition-opacity duration-300"
+          className="relative w-[20rem] h-[29rem] sm:w-[24rem] sm:h-[35rem] lg:w-[28rem] lg:h-[41rem] xl:w-[32rem] xl:h-[47rem] flex items-center justify-center pointer-events-none transition-opacity duration-300"
           style={{
             transformStyle: "preserve-3d",
             willChange: "transform, opacity",
           }}
         >
-          {/* Animated Rotating Gradient Border */}
+          {/* Frameless Feathered Video Container: Completely feather-soft oval mask that eliminates all straight borders */}
           <div
-            className="absolute inset-0 rounded-[2.4rem] pointer-events-none opacity-85 animate-spin"
+            className="relative w-full h-full overflow-hidden pointer-events-none flex items-center justify-center"
             style={{
-              background:
-                "conic-gradient(from 0deg, #38bdf8, #818cf8, #a855f7, #ec4899, #38bdf8)",
-              animationDuration: "12s",
+              maskImage:
+                "radial-gradient(ellipse 42% 44% at 50% 45%, black 25%, rgba(0,0,0,0.7) 45%, transparent 68%), linear-gradient(to bottom, black 60%, transparent 95%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 42% 44% at 50% 45%, black 25%, rgba(0,0,0,0.7) 45%, transparent 68%), linear-gradient(to bottom, black 60%, transparent 95%)",
             }}
-          />
-
-          {/* Inner Video Container */}
-          <div className="relative w-full h-full rounded-[2.3rem] overflow-hidden bg-slate-950 border border-white/10 shadow-2xl shadow-sky-500/10">
+          >
             {/* Main Video (about-me-loop2.mp4) */}
             <video
               ref={videoRef}
@@ -353,8 +348,8 @@ export function BackgroundDigitalHuman() {
               className="w-full h-full object-cover object-top pointer-events-none"
             />
 
-            {/* Subtle bottom fade into dark slate-950 background */}
-            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent pointer-events-none z-10" />
+            {/* Soft bottom dissolve into dark slate-950 */}
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent pointer-events-none" />
           </div>
         </div>
       </div>
