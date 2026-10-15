@@ -5,8 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   BadgeCheck,
   RotateCcw,
-  Play,
-  Pause,
   Sparkles,
   Code2,
   Database,
@@ -14,13 +12,11 @@ import {
   Cpu,
   Layers,
   Mouse,
-  Volume2,
-  VolumeX,
   ChevronDown,
 } from "lucide-react";
 import { useSafeReducedMotion } from "../ScrollAnimation";
 
-// Floating tech badges orbiting around the hero photo/video card
+// Floating tech badges orbiting around the hero profile card
 const FLOAT_BADGES = [
   { icon: Code2,    label: "React",      color: "from-sky-400 to-cyan-400",     orbit: 0   },
   { icon: Globe,    label: "Next.js",    color: "from-slate-300 to-white",      orbit: 72  },
@@ -51,16 +47,11 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
   const videoRef     = useRef<HTMLVideoElement>(null);
   const glowRef      = useRef<HTMLDivElement>(null);
 
-  const [mode, setMode]                       = useState<"scroll" | "auto">("scroll");
-  const [isVideoLoaded, setIsVideoLoaded]     = useState(false);
-  const [isMuted, setIsMuted]                 = useState(true);
-  const [hasScrolled, setHasScrolled]         = useState(false);
-  const [badgeAngle, setBadgeAngle]           = useState(0);
-  const [progressPercent, setProgressPercent] = useState(0);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [badgeAngle, setBadgeAngle]   = useState(0);
 
   // Anim state for 60fps render loop
   const animStateRef = useRef({
-    mode: "scroll" as "scroll" | "auto",
     pointerX: 0,
     pointerY: 0,
     tiltX: 0,
@@ -72,24 +63,46 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
     lerpedScale: 1.0,
     lerpedZ: 0,
     lerpedY: 0,
-    videoDuration: 3.0,
+    videoDuration: 10.0,
     targetVideoTime: 0,
   });
 
+  // ── Video Metadata & Initialization ──
   useEffect(() => {
-    animStateRef.current.mode = mode;
     const video = videoRef.current;
     if (!video) return;
 
-    if (mode === "auto") {
-      video.loop = true;
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [mode]);
+    const onReady = () => {
+      if (video.duration && !isNaN(video.duration) && isFinite(video.duration)) {
+        animStateRef.current.videoDuration = video.duration;
+      }
+    };
 
-  // ── Global Pointer Move for 3D Magnetic Tilt ──
+    if (video.readyState >= 1) {
+      onReady();
+    }
+
+    video.addEventListener("loadedmetadata", onReady);
+    video.addEventListener("canplay", onReady);
+
+    video
+      .play()
+      .then(() => {
+        const scrollY = window.scrollY || 0;
+        if (scrollY === 0) {
+          video.pause();
+          video.currentTime = 0.01;
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      video.removeEventListener("loadedmetadata", onReady);
+      video.removeEventListener("canplay", onReady);
+    };
+  }, []);
+
+  // ── Pointer Tracking for 3D Magnetic Tilt ──
   useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
       const card = cardRef.current;
@@ -129,12 +142,12 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
         setHasScrolled(true);
       }
 
-      // 0px to 850px scroll range drives the forward movement
-      const maxScrollDist = 850;
+      // 0px to 750px scroll range drives the forward movement in Hero
+      const maxScrollDist = 750;
       const progress = Math.min(1, Math.max(0, scrollY / maxScrollDist));
       animStateRef.current.scrollProgress = progress;
 
-      const dur = animStateRef.current.videoDuration || 3.0;
+      const dur = animStateRef.current.videoDuration || 10.0;
       animStateRef.current.targetVideoTime = progress * dur;
     };
 
@@ -143,22 +156,10 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasScrolled]);
 
-  // ── Video Metadata / Duration Handler ──
-  const handleLoadedMetadata = () => {
-    if (videoRef.current) {
-      const d = videoRef.current.duration;
-      if (d && !isNaN(d) && isFinite(d)) {
-        animStateRef.current.videoDuration = d;
-      }
-      setIsVideoLoaded(true);
-    }
-  };
-
-  // ── 60fps Loop: 3D Forward Zoom + Video Time Scrubbing + Orbit ──
+  // ── 60fps Loop: 3D Forward Zoom + Video Scrubbing + Orbiting Badges ──
   useEffect(() => {
     let animId: number;
     let lastTime = performance.now();
-    let uiCounter = 0;
     let badgeAngleCurrent = 0;
 
     const render = (time: number) => {
@@ -167,37 +168,33 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
       const state = animStateRef.current;
       const video = videoRef.current;
 
-      // ── A. Video Scrubbing based on scroll ("gaya dari foto bergerak makin maju") ──
-      if (state.mode === "scroll" && video && !video.paused && !video.seeking) {
-        video.pause();
-      }
-
-      if (state.mode === "scroll" && video && state.videoDuration > 0) {
+      // ── A. Video Scrubbing based on scroll ("videonya bergerak mengikuti pergerakan scroll") ──
+      if (video && state.videoDuration > 0) {
         const curTime = video.currentTime;
         const target = state.targetVideoTime;
         const diff = target - curTime;
 
-        // Smoothly interpolate current video playback frame
         if (Math.abs(diff) > 0.03) {
+          if (!video.paused) video.pause();
           video.currentTime = Math.max(
             0,
-            Math.min(state.videoDuration - 0.05, curTime + diff * 0.22)
+            Math.min(state.videoDuration - 0.05, curTime + diff * 0.25)
           );
         }
       }
 
       // ── B. 3D Magnetic Tilt ──
-      const targetTiltY = reduce ? 0 : state.pointerX * 12;
-      const targetTiltX = reduce ? 0 : -state.pointerY * 8;
+      const targetTiltY = reduce ? 0 : state.pointerX * 10;
+      const targetTiltX = reduce ? 0 : -state.pointerY * 6;
       state.tiltY += (targetTiltY - state.tiltY) * 0.08;
       state.tiltX += (targetTiltX - state.tiltX) * 0.08;
 
       // ── C. "Maju Ke Depan" (3D Zoom & Perspective Advance) ──
       const sProgress = state.scrollProgress;
-      // When scrolling down, card zooms forward towards user in 3D perspective
+      // When scrolling down, video physically advances forward in 3D perspective
       const targetScale = reduce ? 1.0 : 1.0 + sProgress * 0.22;
       const targetZ     = reduce ? 0 : sProgress * 110; // 110px translateZ towards camera
-      const targetY     = reduce ? 0 : sProgress * -25; // rises gently
+      const targetY     = reduce ? 0 : sProgress * -20; // rises gently
 
       state.lerpedScale += (targetScale - state.lerpedScale) * 0.12;
       state.lerpedZ     += (targetZ - state.lerpedZ) * 0.12;
@@ -219,26 +216,21 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
 
       // ── D. Ambient Glow Dynamic Shift ──
       if (glowRef.current && !reduce) {
-        const glowOpacity = 0.35 + sProgress * 0.35;
-        const glowScale = 1.0 + sProgress * 0.25;
+        const glowOpacity = 0.35 + sProgress * 0.25;
+        const glowScale = 1.0 + sProgress * 0.2;
         glowRef.current.style.transform = `scale(${glowScale.toFixed(2)})`;
         glowRef.current.style.background = `
           radial-gradient(circle at ${state.glowX}% ${state.glowY}%,
             rgba(56,189,248,${glowOpacity}) 0%,
-            rgba(99,102,241,${glowOpacity * 0.7}) 40%,
-            rgba(168,85,247,${glowOpacity * 0.4}) 70%,
+            rgba(99,102,241,${glowOpacity * 0.65}) 40%,
+            rgba(168,85,247,${glowOpacity * 0.35}) 70%,
             transparent 85%)
         `;
       }
 
-      // ── E. Orbiting Tech Badges Angle ──
+      // ── E. Orbiting Tech Badges ──
       badgeAngleCurrent = (badgeAngleCurrent + dt * (reduce ? 0 : 16)) % 360;
-      if (uiCounter % 4 === 0) {
-        setBadgeAngle(badgeAngleCurrent);
-        const pct = Math.round(sProgress * 100);
-        setProgressPercent(pct);
-      }
-      uiCounter++;
+      setBadgeAngle(badgeAngleCurrent);
 
       animId = requestAnimationFrame(render);
     };
@@ -249,24 +241,7 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
     };
   }, [reduce]);
 
-  // ── Mode & Sound Toggles ──
-  const toggleMode = useCallback((newMode: "scroll" | "auto") => {
-    setMode(newMode);
-    setHasScrolled(true);
-  }, []);
-
-  const toggleSound = useCallback(() => {
-    setIsMuted((prev) => {
-      const next = !prev;
-      if (videoRef.current) {
-        videoRef.current.muted = next;
-      }
-      return next;
-    });
-  }, []);
-
   const handleReset = useCallback(() => {
-    setMode("scroll");
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
     }
@@ -283,7 +258,7 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
       {/* ── Background Cyber Ambient Glow & Portal Ring ── */}
       <div
         ref={glowRef}
-        className="absolute -inset-10 rounded-full pointer-events-none transition-transform duration-300 blur-3xl opacity-85"
+        className="absolute -inset-10 rounded-full pointer-events-none transition-transform duration-300 blur-3xl opacity-80"
         style={{
           background:
             "radial-gradient(circle at 50% 45%, rgba(56,189,248,0.35) 0%, rgba(99,102,241,0.2) 40%, rgba(168,85,247,0.12) 70%, transparent 100%)",
@@ -292,11 +267,11 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
 
       {/* Rotating Cyber Portal Rings */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[21rem] h-[21rem] sm:w-[25rem] sm:h-[25rem] lg:w-[28rem] lg:h-[28rem] rounded-full border border-sky-400/20 border-dashed pointer-events-none animate-spin"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[21rem] h-[21rem] sm:w-[24rem] sm:h-[24rem] lg:w-[27rem] lg:h-[27rem] rounded-full border border-sky-400/20 border-dashed pointer-events-none animate-spin"
         style={{ animationDuration: "36s" }}
       />
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[17rem] h-[17rem] sm:w-[20rem] sm:h-[20rem] lg:w-[23rem] lg:h-[23rem] rounded-full border border-indigo-500/15 pointer-events-none animate-spin"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[17rem] h-[17rem] sm:w-[19rem] sm:h-[19rem] lg:w-[22rem] lg:h-[22rem] rounded-full border border-indigo-500/15 pointer-events-none animate-spin"
         style={{ animationDuration: "24s", animationDirection: "reverse" }}
       />
 
@@ -318,11 +293,11 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
         />
       ))}
 
-      {/* ── Floating Tech Badges (Orbiting around the hero video card) ── */}
+      {/* ── Floating Tech Badges (Orbiting around the hero video) ── */}
       {!reduce &&
         FLOAT_BADGES.map((badge, i) => {
           const angle = ((badgeAngle + badge.orbit) * Math.PI) / 180;
-          const rx = 180, ry = 145;
+          const rx = 175, ry = 140;
           const bx = Math.cos(angle) * rx;
           const by = Math.sin(angle) * ry;
           const Icon = badge.icon;
@@ -353,180 +328,90 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
           );
         })}
 
-      {/* ── 3D Card: Moving Forward with Scroll ("Gaya bergerak makin maju ke depan") ── */}
+      {/* ── Main Hero Photo / Video Portrait (Clean Modern Portrait Card) ── */}
       <div
         ref={cardRef}
-        className="relative w-64 h-[21rem] sm:w-72 sm:h-[24rem] lg:w-[21.5rem] lg:h-[28.5rem] rounded-[2.2rem] p-[2.5px] shadow-2xl shadow-sky-500/10 cursor-pointer"
+        className="relative w-[18rem] h-[24rem] sm:w-[21rem] sm:h-[27rem] lg:w-[22.5rem] lg:h-[29.5rem] rounded-[2.2rem] overflow-hidden border border-white/15 bg-slate-950 shadow-2xl shadow-sky-500/10 cursor-pointer pointer-events-auto"
         style={{
           transformStyle: "preserve-3d",
           willChange: "transform",
         }}
       >
-        {/* Animated Rotating Gradient Border */}
-        <div
-          className="absolute inset-0 rounded-[2.2rem] pointer-events-none opacity-90 animate-spin"
-          style={{
-            background:
-              "conic-gradient(from 0deg, #38bdf8, #818cf8, #a855f7, #ec4899, #38bdf8)",
-            animationDuration: "10s",
-          }}
+        {/* Main Video (about-me-loop2.mp4) */}
+        <video
+          ref={videoRef}
+          src="/digitalhuman/about-me-loop2.mp4"
+          playsInline
+          muted
+          autoPlay
+          preload="auto"
+          className="w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Inner Card Container */}
-        <div className="relative w-full h-full rounded-[2.1rem] overflow-hidden bg-slate-950 border border-white/10">
-          {/* Loading Shimmer */}
-          {!isVideoLoaded && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-slate-950">
-              <div className="w-10 h-10 rounded-full border-2 border-sky-400 border-t-transparent animate-spin" />
-              <span className="text-xs font-mono text-sky-300 tracking-wider">
-                Loading Hero Video...
-              </span>
-            </div>
-          )}
+        {/* Soft bottom vignette dissolve */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-slate-950/20 pointer-events-none" />
 
-          {/* ── Main Hero Video (about-me-loop2.mp4) ── */}
-          <video
-            ref={videoRef}
-            src="/digitalhuman/about-me-loop2.mp4"
-            playsInline
-            muted={isMuted}
-            preload="auto"
-            onLoadedMetadata={handleLoadedMetadata}
-            className={`w-full h-full object-cover object-center transition-opacity duration-500 ${
-              isVideoLoaded ? "opacity-100" : "opacity-0"
-            }`}
-          />
-
-          {/* Cinematic Vignette & Bottom Shadow */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-slate-950/30 pointer-events-none" />
-
-          {/* ── Top Status Bar ── */}
-          <div className="absolute top-3 inset-x-3 z-30 flex items-center justify-between pointer-events-none">
-            <div className="flex items-center gap-1.5 rounded-full bg-slate-950/85 border border-white/15 px-3 py-1 backdrop-blur-md shadow-lg shadow-black/50">
-              <span className="relative flex h-2 w-2">
-                <span
-                  className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    mode === "scroll" ? "bg-sky-400" : "bg-purple-400"
-                  }`}
-                />
-                <span
-                  className={`relative inline-flex rounded-full h-2 w-2 ${
-                    mode === "scroll" ? "bg-sky-400" : "bg-purple-500"
-                  }`}
-                />
-              </span>
-              <span className="text-[10px] font-semibold tracking-wider text-slate-200 uppercase font-mono flex items-center gap-1">
-                <Sparkles size={10} className={mode === "scroll" ? "text-sky-400" : "text-purple-400"} />
-                {mode === "scroll" ? "Scroll Forward" : "Auto Loop"}
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={toggleSound}
-              className={`pointer-events-auto flex items-center justify-center h-6 w-6 rounded-full border border-white/15 backdrop-blur-md transition-all ${
-                isMuted
-                  ? "bg-slate-950/80 text-slate-400 hover:text-white"
-                  : "bg-sky-500/25 border-sky-400/40 text-sky-300 shadow-sm shadow-sky-500/30"
-              }`}
-              title={isMuted ? "Aktifkan suara" : "Matikan suara"}
-              aria-label="Toggle sound"
-            >
-              {isMuted ? <VolumeX size={12} /> : <Volume2 size={12} />}
-            </button>
+        {/* ── Top Floating Minimal Status Pill ── */}
+        <div className="absolute top-3 inset-x-3 z-40 flex items-center justify-between pointer-events-none">
+          <div className="flex items-center gap-1.5 rounded-full bg-slate-950/80 border border-white/15 px-3 py-1 backdrop-blur-md shadow-lg shadow-black/50">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-400" />
+            </span>
+            <span className="text-[10px] font-semibold tracking-wider text-slate-200 uppercase font-mono flex items-center gap-1">
+              <Sparkles size={10} className="text-sky-400" />
+              Interactive Video
+            </span>
           </div>
-
-          {/* ── Interactive Scroll Hint (Fades out when scrolled) ── */}
-          <AnimatePresence>
-            {!hasScrolled && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-                className="absolute inset-x-2 bottom-5 z-30 flex justify-center pointer-events-none"
-              >
-                <div className="flex items-center gap-2 rounded-full border border-sky-400/40 bg-slate-950/90 backdrop-blur-md px-3.5 py-1.5 shadow-xl shadow-sky-500/25">
-                  <Mouse size={13} className="text-sky-400 animate-bounce" />
-                  <span className="text-[11px] font-medium tracking-wide text-slate-200">
-                    Scroll untuk gerakan maju ke depan
-                  </span>
-                  <ChevronDown size={13} className="text-sky-400 animate-pulse" />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* ── Floating Controls Toolbar (Below the card) ── */}
-      <div className="relative mt-3 z-40 flex flex-col items-center gap-2.5">
-        <div className="flex items-center gap-1.5 bg-slate-900/85 border border-white/15 rounded-full px-2.5 py-1 backdrop-blur-md shadow-xl shadow-black/50">
-          <button
-            type="button"
-            onClick={() => toggleMode("scroll")}
-            className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all ${
-              mode === "scroll"
-                ? "bg-sky-500/25 text-sky-300 border border-sky-400/30 shadow-sm shadow-sky-500/25"
-                : "text-slate-400 hover:text-white"
-            }`}
-            title="Gerakan video & 3D maju mengikuti posisi scroll"
-            aria-label="Scroll Sync mode"
-          >
-            <Mouse size={11} />
-            <span>Scroll Sync</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => toggleMode("auto")}
-            className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all ${
-              mode === "auto"
-                ? "bg-purple-500/25 text-purple-300 border border-purple-400/30 shadow-sm shadow-purple-500/25"
-                : "text-slate-400 hover:text-white"
-            }`}
-            title="Putar video loop otomatis"
-            aria-label="Auto Loop mode"
-          >
-            {mode === "auto" ? <Pause size={11} /> : <Play size={11} />}
-            <span>Auto Loop</span>
-          </button>
 
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center justify-center h-6 w-6 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
-            title="Reset ke posisi awal"
+            className="pointer-events-auto flex items-center justify-center h-6 w-6 rounded-full bg-slate-950/80 border border-white/15 text-slate-400 hover:text-white backdrop-blur-md transition-colors"
+            title="Reset video"
             aria-label="Reset video"
           >
             <RotateCcw size={11} />
           </button>
-
-          <div className="h-3 w-px bg-white/15 mx-0.5" />
-
-          {/* Progress % */}
-          <div className="flex items-center gap-1 text-[10px] text-gray-300 font-mono px-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>{progressPercent}%</span>
-          </div>
         </div>
 
-        {/* ── Verified Role Chip ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 shadow-xl shadow-black/40 whitespace-nowrap pointer-events-none"
-        >
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
-            <BadgeCheck size={12} />
-          </span>
-          <span className="flex flex-col leading-tight text-left">
-            <span className="text-xs font-semibold text-white">Software Engineer</span>
-            <span className="text-[10px] text-gray-400">Frontend &amp; Fullstack</span>
-          </span>
-        </motion.div>
+        {/* ── Interactive Scroll Hint (Fades out when scrolled) ── */}
+        <AnimatePresence>
+          {!hasScrolled && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="absolute inset-x-3 bottom-5 z-40 flex justify-center pointer-events-none"
+            >
+              <div className="flex items-center gap-2 rounded-full border border-sky-400/40 bg-slate-950/90 backdrop-blur-md px-3.5 py-1.5 shadow-xl shadow-sky-500/25">
+                <Mouse size={13} className="text-sky-400 animate-bounce" />
+                <span className="text-[11px] font-medium tracking-wide text-slate-200">
+                  Scroll ke bawah untuk melihat gerakan maju
+                </span>
+                <ChevronDown size={13} className="text-sky-400 animate-pulse" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      {/* ── Verified Role Chip (Positioned cleanly below the character) ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.6 }}
+        className="relative mt-3 z-40 flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-md px-4 py-2 shadow-xl shadow-black/40 whitespace-nowrap pointer-events-none"
+      >
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
+          <BadgeCheck size={12} />
+        </span>
+        <span className="flex flex-col leading-tight text-left">
+          <span className="text-xs font-semibold text-white">Software Engineer</span>
+          <span className="text-[10px] text-gray-400">Frontend &amp; Fullstack</span>
+        </span>
+      </motion.div>
     </div>
   );
 }

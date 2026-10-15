@@ -1,9 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, ArrowDown, BadgeCheck, Mouse, Sparkles, ChevronDown } from "lucide-react";
+import { Mail, Github, Linkedin, ArrowDown } from "lucide-react";
 import { Link } from "react-scroll";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const InteractiveProfile = dynamic(
+  () => import("./digital-human/InteractiveProfile"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="relative w-64 h-80 sm:w-72 sm:h-[24rem] lg:w-[21rem] lg:h-[28rem] rounded-[2rem] bg-slate-900/60 animate-pulse" />
+    ),
+  }
+);
 
 const roles = [
   "Frontend Developer",
@@ -188,58 +199,9 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* ── Right Column: Hero Stage Elements aligned with Background Character ── */}
-          <div
-            className={`lg:col-span-5 xl:col-span-5 order-1 lg:order-2 flex flex-col items-center justify-center min-h-[300px] lg:min-h-[460px] relative pointer-events-none transition-all duration-500 ${
-              scrolled ? "opacity-0 -translate-y-3" : "opacity-100 translate-y-0"
-            }`}
-          >
-            {/* Floating Live Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="absolute top-4 flex items-center gap-1.5 rounded-full bg-slate-950/80 border border-white/15 px-3 py-1 backdrop-blur-md shadow-lg"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-400" />
-              </span>
-              <span className="text-[10px] font-semibold tracking-wider text-slate-200 uppercase font-mono flex items-center gap-1">
-                <Sparkles size={10} className="text-sky-400" />
-                Interactive Digital Human
-              </span>
-            </motion.div>
-
-            {/* Scroll hint indicator */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              className="absolute bottom-6 flex items-center gap-2 rounded-full border border-sky-400/35 bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 shadow-xl shadow-sky-500/20"
-            >
-              <Mouse size={13} className="text-sky-400 animate-bounce" />
-              <span className="text-[11px] font-medium tracking-wide text-slate-200">
-                Scroll ke bawah untuk melihat gerakan maju
-              </span>
-              <ChevronDown size={13} className="text-sky-400 animate-pulse" />
-            </motion.div>
-
-            {/* Verified Role Chip */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.75, duration: 0.6 }}
-              className="absolute -bottom-4 flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-md px-4 py-2 shadow-xl shadow-black/50 whitespace-nowrap"
-            >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
-                <BadgeCheck size={12} />
-              </span>
-              <span className="flex flex-col leading-tight text-left">
-                <span className="text-xs font-semibold text-white">Software Engineer</span>
-                <span className="text-[10px] text-gray-400">Frontend &amp; Fullstack</span>
-              </span>
-            </motion.div>
+          {/* ── Right Column: Interactive Profile Video (No background, follows scroll) ── */}
+          <div className="lg:col-span-5 xl:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end">
+            <InteractiveProfile />
           </div>
         </div>
       </div>
