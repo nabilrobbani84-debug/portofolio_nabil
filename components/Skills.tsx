@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Layout, Server, Database, Wrench } from "lucide-react";
 import { ScrollReveal } from "./ScrollAnimation";
+import { useLanguage } from "./LanguageProvider";
 
 const categories = [
   {
@@ -43,6 +44,8 @@ const categories = [
 const marquee = ["React", "Next.js", "TypeScript", "Laravel", "Node.js", "Tailwind CSS", "PostgreSQL", "Docker", "Figma", "Vue.js", "Go", "MySQL"];
 
 export default function Skills() {
+  const { t } = useLanguage();
+
   return (
     <section id="skills" className="py-24 relative overflow-hidden">
       {/* Floating background blobs */}
@@ -61,13 +64,12 @@ export default function Skills() {
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
-            <span className="eyebrow">Tech Stack</span>
+            <span className="eyebrow">{t.skills.eyebrow}</span>
             <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
-              Technical <span className="text-gradient">Skills</span>
+              {t.skills.titlePrefix} <span className="text-gradient">{t.skills.titleGradient}</span>
             </h2>
             <p className="mt-4 text-slate-600 dark:text-gray-400 max-w-xl mx-auto text-sm md:text-base">
-              Teknologi dan tools yang saya gunakan untuk membangun produk digital
-              yang cepat, andal, dan menarik.
+              {t.skills.subtitle}
             </p>
           </div>
         </ScrollReveal>

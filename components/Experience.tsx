@@ -3,37 +3,35 @@
 import { motion } from "framer-motion";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
 import { ScrollReveal, ParallaxBlob } from "./ScrollAnimation";
+import { useLanguage } from "./LanguageProvider";
 
-const experiences = [
+const itemStyles = [
   {
-    role: "Fullstack Developer",
-    company: "PT. Winnicode Garuda Indonesia",
-    type: "Internship",
-    period: "Feb 2025 - Present",
-    location: "Bandung, Indonesia (Remote)",
-    description: "Developing and maintaining web applications using modern full-stack technologies. Collaborating with cross-functional teams to deliver high-quality software solutions.",
-    skills: ["Figma", "Front-End Development", "React", "Laravel"],
     color: "text-sky-400",
     bg: "bg-sky-500/10",
-    border: "border-sky-500/20"
+    border: "border-sky-500/20",
   },
   {
-    role: "Core Team Lead of Media",
-    company: "GROW WITH DATA STT TERPADU NURUL FIKRI",
-    type: "Part-time",
-    period: "Jan 2025 - Present",
-    location: "Jakarta Selatan, Indonesia (Hybrid)",
-    description: "Leading the media team to produce engaging content and strategies. Managing team workflows and ensuring consistent brand messaging across platforms.",
-    skills: ["Team Leadership", "Figma", "Content Strategy", "Communication"],
     color: "text-emerald-400",
     bg: "bg-emerald-500/10",
-    border: "border-emerald-500/20"
+    border: "border-emerald-500/20",
   },
 ];
 
-type ExperienceItem = (typeof experiences)[number];
+interface ExperienceItemProps {
+  role: string;
+  company: string;
+  type: string;
+  period: string;
+  location: string;
+  description: string;
+  skills: string[];
+  color: string;
+  bg: string;
+  border: string;
+}
 
-const ExperienceCard = ({ item, index }: { item: ExperienceItem; index: number }) => {
+const ExperienceCard = ({ item, index }: { item: ExperienceItemProps; index: number }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -44,36 +42,40 @@ const ExperienceCard = ({ item, index }: { item: ExperienceItem; index: number }
       <div className={`absolute left-[-17px] top-0 p-2 rounded-full border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-800 ${item.color} shadow-sm`}>
         <Briefcase size={16} />
       </div>
-      
+
       <div className={`p-6 rounded-xl border bg-white/80 dark:bg-slate-900/50 hover:bg-white dark:hover:bg-slate-800/50 transition-colors shadow-sm dark:shadow-none ${item.border}`}>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-            <div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors">{item.role}</h3>
-                <p className="text-base text-slate-700 dark:text-gray-300 font-medium">{item.company} <span className="text-sm font-normal text-slate-500 dark:text-gray-500">• {item.type}</span></p>
+          <div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors">
+              {item.role}
+            </h3>
+            <p className="text-base text-slate-700 dark:text-gray-300 font-medium">
+              {item.company} <span className="text-sm font-normal text-slate-500 dark:text-gray-500">• {item.type}</span>
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1 text-sm text-slate-500 dark:text-gray-400 shrink-0">
+            <div className="flex items-center gap-2">
+              <Calendar size={14} />
+              <span>{item.period}</span>
             </div>
-            
-            <div className="flex flex-col gap-1 text-sm text-slate-500 dark:text-gray-400 shrink-0">
-                <div className="flex items-center gap-2">
-                    <Calendar size={14} />
-                    <span>{item.period}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <MapPin size={14} />
-                    <span>{item.location}</span>
-                </div>
+            <div className="flex items-center gap-2">
+              <MapPin size={14} />
+              <span>{item.location}</span>
             </div>
+          </div>
         </div>
 
         <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
-            {item.description}
+          {item.description}
         </p>
 
         <div className="flex flex-wrap gap-2">
-            {item.skills.map((skill: string) => (
-                <span key={skill} className={`px-2 py-1 text-xs rounded-md ${item.bg} ${item.color} font-medium`}>
-                    {skill}
-                </span>
-            ))}
+          {item.skills.map((skill: string) => (
+            <span key={skill} className={`px-2 py-1 text-xs rounded-md ${item.bg} ${item.color} font-medium`}>
+              {skill}
+            </span>
+          ))}
         </div>
       </div>
     </motion.div>
@@ -81,6 +83,13 @@ const ExperienceCard = ({ item, index }: { item: ExperienceItem; index: number }
 };
 
 export default function Experience() {
+  const { t } = useLanguage();
+
+  const experiences = t.experience.items.map((item, idx) => ({
+    ...item,
+    ...(itemStyles[idx] || itemStyles[0]),
+  }));
+
   return (
     <section id="experience" className="py-24 relative overflow-hidden">
       <ParallaxBlob
@@ -91,9 +100,9 @@ export default function Experience() {
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
-            <span className="eyebrow">Career</span>
+            <span className="eyebrow">{t.experience.eyebrow}</span>
             <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
-              Work <span className="text-gradient">Experience</span>
+              {t.experience.titlePrefix} <span className="text-gradient">{t.experience.titleGradient}</span>
             </h2>
           </div>
         </ScrollReveal>
@@ -109,3 +118,4 @@ export default function Experience() {
     </section>
   );
 }
+

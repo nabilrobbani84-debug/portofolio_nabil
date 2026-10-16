@@ -15,6 +15,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useSafeReducedMotion } from "../ScrollAnimation";
+import { useLanguage } from "../LanguageProvider";
 
 // Floating tech badges orbiting around the hero character position
 const FLOAT_BADGES = [
@@ -41,6 +42,7 @@ interface InteractiveProfileProps {
 
 export function InteractiveProfile({ className = "" }: InteractiveProfileProps) {
   const reduce = useSafeReducedMotion();
+  const { t } = useLanguage();
 
   const [hasScrolled, setHasScrolled] = useState(false);
   const [badgeAngle, setBadgeAngle] = useState(0);
@@ -190,7 +192,7 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
             </span>
             <span className="text-[10px] font-semibold tracking-wider text-slate-700 dark:text-slate-200 uppercase font-mono flex items-center gap-1">
               <Sparkles size={10} className="text-sky-500 dark:text-sky-400" />
-              Interactive Video
+              {t.hero.interactiveStatus}
             </span>
           </div>
 
@@ -198,8 +200,8 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
             type="button"
             onClick={handleReset}
             className="pointer-events-auto flex items-center justify-center h-6 w-6 rounded-full bg-white/90 dark:bg-slate-950/80 border border-slate-200/90 dark:border-white/15 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white backdrop-blur-md transition-colors"
-            title="Reset ke atas"
-            aria-label="Reset ke atas"
+            title={t.hero.resetTitle}
+            aria-label={t.hero.resetTitle}
           >
             <RotateCcw size={11} />
           </button>
@@ -218,7 +220,7 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
               <div className="flex items-center gap-2 rounded-full border border-sky-400/40 bg-white/95 dark:bg-slate-950/90 backdrop-blur-md px-3.5 py-1.5 shadow-xl shadow-sky-500/15 dark:shadow-sky-500/25">
                 <Mouse size={13} className="text-sky-500 dark:text-sky-400 animate-bounce" />
                 <span className="text-[11px] font-medium tracking-wide text-slate-800 dark:text-slate-200">
-                  Scroll ke bawah untuk melihat pergerakan
+                  {t.hero.scrollHint}
                 </span>
                 <ChevronDown size={13} className="text-sky-500 dark:text-sky-400 animate-pulse" />
               </div>

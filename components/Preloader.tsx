@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "./LanguageProvider";
 
-const STATUS_STAGES = [
+const DEFAULT_STAGES = [
   { threshold: 0,  text: "INITIALIZING NEURAL INTERFACE..." },
   { threshold: 25, text: "LOADING DIGITAL HUMAN ASSETS..." },
   { threshold: 55, text: "CONFIGURING 3D ENVIRONMENT..." },
@@ -12,6 +13,7 @@ const STATUS_STAGES = [
 ];
 
 export default function Preloader() {
+  const { t } = useLanguage();
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -75,8 +77,9 @@ export default function Preloader() {
   if (!mounted) return null;
 
   // Determine current active status message
+  const stages = t?.preloader?.stages || DEFAULT_STAGES;
   const activeStatus =
-    STATUS_STAGES.slice()
+    stages.slice()
       .reverse()
       .find((s) => progress >= s.threshold)?.text || "LOADING...";
 

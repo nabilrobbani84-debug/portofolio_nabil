@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "./LanguageProvider";
 
 const WA_NUMBER = "628577111166079";
-const WA_MESSAGE = "Halo Nabil, saya tertarik untuk berkolaborasi dengan Anda!";
 
 export default function WhatsAppFloat() {
+  const { t } = useLanguage();
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -21,7 +22,7 @@ export default function WhatsAppFloat() {
             transition={{ duration: 0.2 }}
             className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white text-sm font-medium px-4 py-2 rounded-xl shadow-xl whitespace-nowrap"
           >
-            💬 Chat dengan Nabil di WhatsApp
+            {t.whatsappFloat.tooltip}
           </motion.div>
         )}
       </AnimatePresence>
@@ -29,7 +30,7 @@ export default function WhatsAppFloat() {
       {/* Floating Button */}
       <motion.a
         id="whatsapp-float-btn"
-        href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`}
+        href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.whatsappFloat.waMessage)}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat via WhatsApp"

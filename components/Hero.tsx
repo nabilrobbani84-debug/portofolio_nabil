@@ -16,19 +16,21 @@ const InteractiveProfile = dynamic(
   }
 );
 
-const roles = [
-  "Frontend Developer",
-  "Fullstack Developer",
-  "Software Engineer",
-];
+import { useLanguage } from "./LanguageProvider";
 
-const Typewriter = () => {
+const Typewriter = ({ roles }: { roles: string[] }) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (subIndex === roles[index].length + 1 && !deleting) {
+    // Reset index if roles change
+    if (index >= roles.length) setIndex(0);
+  }, [roles, index]);
+
+  useEffect(() => {
+    const currentWord = roles[index] || "";
+    if (subIndex === currentWord.length + 1 && !deleting) {
       const t = setTimeout(() => setDeleting(true), 1400);
       return () => clearTimeout(t);
     }
@@ -43,21 +45,17 @@ const Typewriter = () => {
       setSubIndex((prev) => prev + (deleting ? -1 : 1));
     }, deleting ? 55 : 95);
     return () => clearTimeout(timeout);
-  }, [subIndex, index, deleting]);
+  }, [subIndex, index, deleting, roles]);
+
+  const currentRole = roles[index] || "";
 
   return (
     <span className="text-gradient font-semibold">
-      {roles[index].substring(0, subIndex)}
+      {currentRole.substring(0, subIndex)}
       <span className="inline-block w-[3px] h-[1.1em] bg-sky-400 ml-1 align-middle animate-pulse rounded-full" />
     </span>
   );
 };
-
-const stats = [
-  { value: "10+", label: "Projects Built" },
-  { value: "3.63", label: "GPA / IPK" },
-  { value: "4+", label: "Years Coding" },
-];
 
 const socials = [
   { href: "https://github.com/nabilrobbani84-debug", label: "GitHub", Icon: Github },
@@ -66,7 +64,14 @@ const socials = [
 ];
 
 export default function Hero() {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
+
+  const stats = [
+    { value: "10+", label: t.hero.stats.projects },
+    { value: "3.63", label: t.hero.stats.gpa },
+    { value: "4+", label: t.hero.stats.experience },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -120,30 +125,28 @@ export default function Hero() {
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
                 </span>
                 <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
-                  Available for Career &amp; Freelance
+                  {t.hero.badge}
                 </span>
               </div>
 
               <p className="text-base md:text-lg text-slate-600 dark:text-gray-400 mb-2">
-                Hi, I&apos;m Nabil Robbani 👋
+                {t.hero.greeting}
               </p>
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] text-slate-900 dark:text-white">
-                I build modern
+                {t.hero.headingPrefix}
                 <br />
-                <span className="text-gradient">web experiences</span>
+                <span className="text-gradient">{t.hero.headingGradient}</span>
               </h1>
 
               {/* Role line */}
               <div className="mt-4 flex items-center gap-2.5 text-lg md:text-xl">
                 <span className="h-px w-8 bg-gradient-to-r from-sky-400 to-transparent" />
-                <span className="text-slate-500 dark:text-gray-500">I&apos;m a</span>
-                <Typewriter />
+                <span className="text-slate-500 dark:text-gray-500">{t.hero.rolePrefix}</span>
+                <Typewriter roles={t.hero.roles} />
               </div>
 
               <p className="mt-5 text-base md:text-lg text-slate-600 dark:text-gray-400 max-w-xl leading-relaxed">
-                Software Engineer specializing in building modern, high-performance web
-                applications and seamless digital experiences using React, Next.js, and
-                Laravel.
+                {t.hero.bio}
               </p>
 
               {/* CTAs */}
@@ -155,14 +158,14 @@ export default function Hero() {
                   duration={500}
                   className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-sky-500/40 hover:scale-[1.03] cursor-pointer"
                 >
-                  View My Work
+                  {t.hero.viewWork}
                   <ArrowDown size={18} className="transition-transform group-hover:translate-y-0.5" />
                 </Link>
                 <a
                   href="mailto:nabilrobbani6@gmail.com"
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-slate-900/5 hover:bg-slate-900/10 border border-slate-300/80 text-slate-800 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:text-white backdrop-blur-md rounded-full font-semibold transition-all hover:scale-[1.03] cursor-pointer shadow-sm dark:shadow-none"
                 >
-                  <Mail size={18} /> Contact Me
+                  <Mail size={18} /> {t.hero.contactMe}
                 </a>
               </div>
 

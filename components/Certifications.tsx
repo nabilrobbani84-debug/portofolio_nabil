@@ -2,6 +2,7 @@
 
 import { Award, BadgeCheck } from "lucide-react";
 import { ScrollReveal, StaggeredList, StaggerItem, ParallaxBlob } from "./ScrollAnimation";
+import { useLanguage } from "./LanguageProvider";
 
 const certs = [
   {
@@ -17,6 +18,8 @@ const certs = [
 ];
 
 export default function Certifications() {
+  const { t } = useLanguage();
+
   return (
     <section id="certifications" className="py-24 relative overflow-hidden">
       <ParallaxBlob
@@ -27,9 +30,9 @@ export default function Certifications() {
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
-            <span className="eyebrow">Credentials</span>
+            <span className="eyebrow">{t.certifications.eyebrow}</span>
             <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
-              Certifications
+              {t.certifications.title}
             </h2>
           </div>
         </ScrollReveal>

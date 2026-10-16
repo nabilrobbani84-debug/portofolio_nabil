@@ -5,196 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, ChevronDown, ArrowUpRight, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { ScrollReveal, ParallaxBlob } from "./ScrollAnimation";
-
-// ─── Data ───────────────────────────────────────────────────────────────────
-
-interface Badge {
-  label: string;
-  color: "cyan" | "purple" | "rose" | "amber" | "sky" | "orange" | "green" | "indigo";
-  icon: string;
-}
-
-interface Project {
-  title: string;
-  description: string;
-  badges: Badge[];
-  github?: string;
-  demo?: string;
-  image?: string;
-  accent: string;        // tailwind gradient class
-  featured?: boolean;   // first card gets larger treatment
-}
-
-const projects: Project[] = [
-  {
-    title: "FlowSphere Management Dashboard",
-    description:
-      "Dashboard manajemen tim & proyek modern berbasis Angular 19. Menyajikan visualisasi data interaktif dengan Chart.js, papan tugas (kanban), analitik produktivitas, serta manajemen tim dan anggota. Dilengkapi elemen 3D dengan Three.js, animasi confetti, dan integrasi EmailJS untuk notifikasi instan (penugasan tugas, mention, dan persetujuan workflow). Ditata dengan Tailwind CSS, aksesibilitas yang diperhatikan, dan cakupan unit test yang komprehensif.",
-    badges: [
-      { label: "Angular 19", color: "rose", icon: "🅰️" },
-      { label: "TypeScript", color: "sky", icon: "TS" },
-      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
-      { label: "Chart.js", color: "purple", icon: "📊" },
-      { label: "Three.js", color: "indigo", icon: "🧊" },
-      { label: "EmailJS", color: "amber", icon: "✉️" },
-    ],
-    accent: "from-sky-500 via-indigo-500 to-purple-500",
-    github: "https://github.com/nabilrobbani84-debug/Management_Dashboard",
-    image: "/flowsphere.svg",
-    featured: true,
-  },
-  {
-    title: "Dukun Duplikat Kunci",
-    description:
-      "Platform bisnis digital modern untuk jasa duplikat kunci profesional. Website dibangun menggunakan Next.js & TypeScript untuk performa optimal, menampilkan landing page atraktif dengan desain dark navy  & gold yang elegan, sistem pemesanan terintegrasi WhatsApp, halaman detail layanan (motor, mobil, rumah, brankas), serta fitur layanan panggil 24 jam. Backend menggunakan Java Spring Boot yang dicontainerisasi dengan Docker untuk kemudahan deployment. Frontend di-deploy ke Firebase Hosting untuk distribusi CDN global yang stabil dan cepat.",
-    badges: [
-      { label: "Next.js", color: "cyan", icon: "▲" },
-      { label: "TypeScript", color: "sky", icon: "TS" },
-      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
-      { label: "Java Spring Boot", color: "orange", icon: "☕" },
-      { label: "Docker", color: "sky", icon: "🐳" },
-      { label: "Firebase Hosting", color: "amber", icon: "🚀" },
-    ],
-    accent: "from-yellow-500 via-amber-400 to-orange-500",
-    github: "https://github.com/nabilrobbani84-debug/duplikat_kunci",
-    image: "/duplikat-kunci.svg",
-    featured: true,
-  },
-  {
-    title: "Ruqyah Syar'iyyah",
-    description:
-      "Platform web komprehensif untuk digitalisasi klinik pengobatan Islami. Fitur utama mencakup sistem reservasi terintegrasi WhatsApp Gateway, manajemen konten admin, dan optimasi SEO lokal menggunakan Structured Data untuk meningkatkan visibilitas bisnis di mesin pencari.",
-    badges: [
-      { label: "Django", color: "green", icon: "🐍" },
-      { label: "Python", color: "amber", icon: "🐍" },
-      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
-      { label: "PostgreSQL", color: "sky", icon: "🐘" },
-    ],
-    accent: "from-green-500 via-emerald-400 to-teal-500",
-    github: "https://github.com/nabilrobbani84-debug/ruqyah-syariyyah",
-    demo: "https://ruqyah-syariyyah.vercel.app",
-    image: "/ruqyah.png",
-  },
-  {
-    title: "Warkop QR Payment System",
-    description:
-      "Sistem pemesanan warkop berbasis QR yang menghubungkan mode pembeli, kasir, dan admin dalam satu aplikasi. Pembeli dapat scan QR meja, memilih menu beserta varian, lalu membayar via tunai atau QRIS; kasir dapat memantau pesanan masuk, konfirmasi pembayaran, dan melihat riwayat transaksi; sementara admin mengelola menu, meja, QR code, laporan, pajak, keamanan akses, sinkronisasi Firestore, dan integrasi Google Sheets.",
-    badges: [
-      { label: "React.js", color: "cyan", icon: "⚛️" },
-      { label: "TypeScript", color: "sky", icon: "TS" },
-      { label: "Vite", color: "purple", icon: "⚡" },
-      { label: "Firebase", color: "amber", icon: "🔥" },
-      { label: "Firestore", color: "green", icon: "DB" },
-      { label: "QR Code", color: "indigo", icon: "QR" },
-    ],
-    accent: "from-cyan-500 via-blue-500 to-rose-500",
-    github: "https://github.com/nabilrobbani84-debug/system_payment-warkop",
-    demo: "https://warkop-d23a1.web.app",
-    image: "/warkop-payment.svg",
-  },
-  {
-    title: "FinTech Core API",
-    description:
-      "Monorepo platform transaksi keuangan berbasis microservices dengan backend Go dan pendekatan Clean Architecture. Sistem mencakup Auth Service untuk JWT, RBAC, bcrypt, enkripsi data user AES-GCM, dan HMAC email lookup; Transaction Service untuk deposit, withdraw, transfer, monthly report, Server-Sent Events, serta ledger PostgreSQL dengan row locking untuk menjaga konsistensi transaksi. Dilengkapi dashboard Next.js dan demo Streamlit aman untuk showcase arsitektur, endpoint explorer, snapshot ledger, dan simulasi transaksi tanpa koneksi ke sistem finansial produksi.",
-    badges: [
-      { label: "Go", color: "sky", icon: "GO" },
-      { label: "Microservices", color: "indigo", icon: "µ" },
-      { label: "PostgreSQL", color: "sky", icon: "🐘" },
-      { label: "MySQL", color: "orange", icon: "🗄️" },
-      { label: "gRPC", color: "purple", icon: "RPC" },
-      { label: "Docker", color: "cyan", icon: "🐳" },
-      { label: "Streamlit", color: "rose", icon: "▶" },
-    ],
-    accent: "from-emerald-500 via-cyan-500 to-blue-500",
-    github: "https://github.com/nabilrobbani84-debug/fintech_api",
-    demo: "https://share.streamlit.io/nabilrobbani84-debug/fintech_api/main/streamlit_app.py",
-    image: "/fintech-core-api.svg",
-  },
-  {
-    title: "BookWise Library",
-    description:
-      "Sistem perpustakaan universitas modern dengan fitur peminjaman digital dan manajemen stok buku real-time. Menggunakan PostgreSQL untuk manajemen relasi data yang kompleks dengan performa tinggi, keamanan data terjamin, dan autentikasi multi-role via NextAuth.",
-    badges: [
-      { label: "Next.js", color: "cyan", icon: "▲" },
-      { label: "PostgreSQL", color: "sky", icon: "🐘" },
-      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
-      { label: "NextAuth", color: "purple", icon: "🔐" },
-      { label: "Figma", color: "purple", icon: "🎭" },
-    ],
-    accent: "from-blue-500 via-indigo-500 to-violet-600",
-    github: "https://github.com/nabilrobbani84-debug/university-_library",
-    image: "/bookwise.png",
-  },
-  {
-    title: "Recruitment Platform",
-    description:
-      "Platform pencarian kerja modern yang menghubungkan talenta dengan perusahaan impian. Menampilkan antarmuka yang bersih dengan fitur pencarian kerja canggih, sistem filter multi-kriteria, dan dashboard pelamar yang intuitif dan responsif di semua perangkat.",
-    badges: [
-      { label: "TypeScript", color: "sky", icon: "TS" },
-      { label: "React.js", color: "cyan", icon: "⚛️" },
-      { label: "Tailwind CSS", color: "cyan", icon: "🎨" },
-      { label: "Figma", color: "purple", icon: "🎭" },
-    ],
-    accent: "from-blue-400 via-cyan-400 to-sky-500",
-    github: "https://github.com/nabilrobbani84-debug/Recruitment",
-    image: "/recruitment.png",
-  },
-  {
-    title: "Modiva App",
-    description:
-      "Aplikasi mobile monitoring TTD (Tablet Tambah Darah) remaja putri dengan sistem pelaporan digital yang terintegrasi, dashboard kepatuhan untuk tenaga kesehatan, dan fitur edukasi kesehatan terpadu. Dikembangkan menggunakan metodologi Scrum dan diuji dengan Blackbox Testing & UAT.",
-    badges: [
-      { label: "React Native", color: "cyan", icon: "📱" },
-      { label: "Expo", color: "indigo", icon: "⚡" },
-      { label: "NativeWind", color: "cyan", icon: "🌬️" },
-      { label: "Figma", color: "purple", icon: "🎭" },
-      { label: "Scrum", color: "amber", icon: "🔄" },
-      { label: "UAT", color: "rose", icon: "✅" },
-    ],
-    accent: "from-rose-500 via-pink-500 to-red-500",
-    github: "https://github.com/nabilrobbani84-debug/mobile_app_Tester",
-    image: "/modiva_v2.png",
-  },
-  {
-    title: "Helpdesk Hub",
-    description:
-      "Ticketing system berbasis web yang komprehensif dengan fitur reporting detail, sistem auto-assignment tiket ke agen yang tersedia, dan Role-Based Access Control (RBAC) menggunakan tiga level pengguna: Admin, Agent, dan User untuk manajemen permintaan dukungan yang efisien.",
-    badges: [
-      { label: "React.js", color: "cyan", icon: "⚛️" },
-      { label: "Laravel", color: "rose", icon: "🔥" },
-      { label: "MySQL", color: "orange", icon: "🗄️" },
-    ],
-    accent: "from-blue-500 via-cyan-400 to-teal-500",
-    github: "https://github.com/nabilrobbani84-debug/helpdesk",
-    image: "/helpdesk.png",
-  },
-  {
-    title: "Web MovieApp",
-    description:
-      "Web application informatif film yang menampilkan koleksi film dengan data lengkap dari TMDB API. Dilengkapi fitur pencarian real-time, halaman detail film, sistem rating, dan state management yang efisien untuk pengalaman browsing film yang menyenangkan.",
-    badges: [
-      { label: "React.js", color: "cyan", icon: "⚛️" },
-      { label: "CSS", color: "purple", icon: "🎨" },
-      { label: "TMDB API", color: "amber", icon: "🎬" },
-    ],
-    accent: "from-purple-500 via-violet-500 to-pink-500",
-    github: "https://github.com/nabilrobbani84/MF-Project2-Kelompok4",
-    image: "/movieapp.png",
-  },
-  {
-    title: "Kidstation",
-    description:
-      "Sistem manajemen stok dan kasir (POS) untuk toko bayi premium dengan dashboard analitik penjualan real-time. Fitur utama meliputi manajemen produk, transaksi kasir, laporan harian/bulanan, dan manajemen stok otomatis untuk membantu operasional toko berjalan lebih efisien.",
-    badges: [
-      { label: "Laravel", color: "rose", icon: "🔥" },
-      { label: "MySQL", color: "orange", icon: "🗄️" },
-      { label: "Bootstrap", color: "purple", icon: "🅱️" },
-    ],
-    accent: "from-indigo-500 via-blue-500 to-cyan-500",
-    github: "https://github.com/nabilrobbani84-debug/kidstation",
-    image: "/kidstation.png",
-  },
-];
+import { useLanguage } from "./LanguageProvider";
+import { projectsData, ProjectData } from "@/lib/translations";
 
 // ─── Badge Color Map ─────────────────────────────────────────────────────────
 
@@ -214,9 +26,16 @@ const badgeColors: Record<string, string> = {
 const MAX_BADGES = 3;
 const INITIAL_VISIBLE = 6;
 
-const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+interface ProjectCardProps {
+  project: ProjectData;
+  index: number;
+}
+
+const ProjectCard = ({ project, index }: ProjectCardProps) => {
+  const { lang, t } = useLanguage();
   const visibleBadges = project.badges.slice(0, MAX_BADGES);
   const hiddenCount = project.badges.length - visibleBadges.length;
+  const descriptionText = project.description[lang] || project.description.id;
 
   return (
     <motion.div
@@ -271,9 +90,9 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
               {project.title}
             </h3>
 
-            {/* Description clamped to 3 lines for uniform height */}
+            {/* Description clamped to 2-3 lines for uniform height */}
             <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2">
-              {project.description}
+              {descriptionText}
             </p>
           </div>
 
@@ -305,7 +124,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 hover:text-slate-900 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:hover:border-white/20 dark:text-gray-300 dark:hover:text-white text-xs font-medium transition-all duration-200"
               >
                 <Github size={14} />
-                Code
+                {t.projects.btnCode}
               </a>
             )}
             {project.demo && project.demo !== "#" && (
@@ -316,7 +135,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r ${project.accent} text-white text-xs font-semibold shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200`}
               >
                 <ExternalLink size={14} />
-                Live Demo
+                {t.projects.btnDemo}
               </a>
             )}
           </div>
@@ -328,27 +147,25 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
 
 // ─── Section ─────────────────────────────────────────────────────────────────
 
-const FILTERS = ["All", "Web Apps", "Internal Systems", "APIs", "Mobile Apps"] as const;
-type Filter = (typeof FILTERS)[number];
+const FILTER_CONFIG = [
+  { key: "All", labelKey: "all" },
+  { key: "Web Apps", labelKey: "webApps" },
+  { key: "Internal Systems", labelKey: "internalSystems" },
+  { key: "APIs", labelKey: "apis" },
+  { key: "Mobile Apps", labelKey: "mobileApps" },
+] as const;
 
-const categoryMap: Record<string, Exclude<Filter, "All">> = {
-  "FlowSphere Management Dashboard": "Internal Systems",
-  "Dukun Duplikat Kunci": "Web Apps",
-  "Ruqyah Syar'iyyah": "Web Apps",
-  "Warkop QR Payment System": "Internal Systems",
-  "FinTech Core API": "APIs",
-  "BookWise Library": "Web Apps",
-  "Recruitment Platform": "Web Apps",
-  "Modiva App": "Mobile Apps",
-  "Helpdesk Hub": "Internal Systems",
-  "Web MovieApp": "Web Apps",
-  "Kidstation": "Internal Systems",
-};
+type FilterKey = (typeof FILTER_CONFIG)[number]["key"];
 
 export default function Projects() {
+  const { t } = useLanguage();
   const [showAll, setShowAll] = useState(false);
-  const [filter, setFilter] = useState<Filter>("All");
-  const filtered = filter === "All" ? projects : projects.filter((p) => categoryMap[p.title] === filter);
+  const [filter, setFilter] = useState<FilterKey>("All");
+
+  const filtered = filter === "All"
+    ? projectsData
+    : projectsData.filter((p) => p.category === filter);
+
   const visibleProjects = showAll ? filtered : filtered.slice(0, INITIAL_VISIBLE);
 
   return (
@@ -372,11 +189,11 @@ export default function Projects() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
             <div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold flex items-center gap-3 text-slate-900 dark:text-white">
-                Featured <span className="text-gradient">Projects</span>
+                {t.projects.titlePrefix} <span className="text-gradient">{t.projects.titleGradient}</span>
                 <Sparkles className="text-amber-400" size={20} />
               </h2>
               <p className="mt-3 text-slate-600 dark:text-gray-400 max-w-md text-sm md:text-base">
-                Kumpulan proyek pilihan yang menunjukkan kemampuan teknis dan kreativitas dalam pengembangan software.
+                {t.projects.subtitle}
               </p>
             </div>
             <a
@@ -385,30 +202,33 @@ export default function Projects() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-colors shrink-0"
             >
-              View all projects <ArrowUpRight size={16} />
+              {t.projects.viewAllGithub} <ArrowUpRight size={16} />
             </a>
           </div>
         </ScrollReveal>
 
         {/* Filter pills */}
         <div className="flex flex-wrap gap-2.5 mb-8">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              id={`filter-${f.toLowerCase().replace(/\s+/g, "-")}`}
-              onClick={() => {
-                setFilter(f);
-                setShowAll(false);
-              }}
-              className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer ${
-                filter === f
-                  ? "bg-sky-500 border-sky-500 text-white shadow-lg shadow-sky-500/25"
-                  : "bg-slate-100 border-slate-200 text-slate-700 hover:border-sky-400/60 hover:text-slate-900 dark:bg-white/5 dark:border-white/15 dark:text-gray-300 dark:hover:border-sky-400/60 dark:hover:text-white"
-              }`}
-            >
-              {f}
-            </button>
-          ))}
+          {FILTER_CONFIG.map(({ key, labelKey }) => {
+            const label = t.projects.filterLabels[labelKey as keyof typeof t.projects.filterLabels] || key;
+            return (
+              <button
+                key={key}
+                id={`filter-${key.toLowerCase().replace(/\s+/g, "-")}`}
+                onClick={() => {
+                  setFilter(key);
+                  setShowAll(false);
+                }}
+                className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer ${
+                  filter === key
+                    ? "bg-sky-500 border-sky-500 text-white shadow-lg shadow-sky-500/25"
+                    : "bg-slate-100 border-slate-200 text-slate-700 hover:border-sky-400/60 hover:text-slate-900 dark:bg-white/5 dark:border-white/15 dark:text-gray-300 dark:hover:border-sky-400/60 dark:hover:text-white"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Project grid */}
@@ -420,7 +240,9 @@ export default function Projects() {
           </AnimatePresence>
         </div>
         {filtered.length === 0 && (
-          <p className="text-center text-slate-500 dark:text-gray-500 py-10">Belum ada proyek di kategori ini.</p>
+          <p className="text-center text-slate-500 dark:text-gray-500 py-10">
+            {t.projects.emptyCategory}
+          </p>
         )}
 
         {/* Show more / less */}
@@ -430,7 +252,7 @@ export default function Projects() {
               onClick={() => setShowAll((v) => !v)}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 hover:border-sky-500/40 text-sm font-medium text-slate-700 hover:text-slate-900 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:text-gray-300 dark:hover:text-white transition-all cursor-pointer shadow-sm dark:shadow-none"
             >
-              {showAll ? "Tampilkan lebih sedikit" : `Tampilkan semua (${filtered.length})`}
+              {showAll ? t.projects.showLess : `${t.projects.showAll} (${filtered.length})`}
               <ChevronDown size={16} className={`transition-transform ${showAll ? "rotate-180" : ""}`} />
             </button>
           </div>
@@ -439,14 +261,14 @@ export default function Projects() {
         {/* Footer note */}
         <ScrollReveal width="100%">
           <p className="text-center text-slate-500 dark:text-gray-600 text-sm mt-8">
-            dan masih banyak lagi ·{" "}
+            {t.projects.footerNote}{" "}
             <a
               href="https://github.com/nabilrobbani84-debug"
               target="_blank"
               rel="noopener noreferrer"
               className="text-cyan-600 dark:text-cyan-500 hover:text-cyan-500 dark:hover:text-cyan-400 underline underline-offset-2 transition-colors"
             >
-              Lihat semua di GitHub →
+              {t.projects.footerLink}
             </a>
           </p>
         </ScrollReveal>

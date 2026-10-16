@@ -5,6 +5,7 @@ import StarCursor from "@/components/StarCursor";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import Preloader from "@/components/Preloader";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -19,21 +20,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="id" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
-                  var stored = localStorage.getItem('portfolio_theme');
-                  if (stored === 'dark') {
+                  var storedTheme = localStorage.getItem('portfolio_theme');
+                  if (storedTheme === 'dark') {
                     document.documentElement.classList.add('dark');
-                  } else if (stored === 'light') {
+                  } else if (storedTheme === 'light') {
                     document.documentElement.classList.remove('dark');
                   } else {
-                    // Default to dark mode for cyberpunk aesthetic
                     document.documentElement.classList.add('dark');
+                  }
+
+                  var storedLang = localStorage.getItem('portfolio_lang');
+                  if (storedLang === 'en' || storedLang === 'id') {
+                    document.documentElement.lang = storedLang;
                   }
                 } catch (e) {
                   document.documentElement.classList.add('dark');
@@ -48,10 +53,12 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <Preloader />
-          <StarCursor />
-          {children}
-          <WhatsAppFloat />
+          <LanguageProvider>
+            <Preloader />
+            <StarCursor />
+            {children}
+            <WhatsAppFloat />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

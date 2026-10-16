@@ -2,31 +2,13 @@
 
 import { GraduationCap, MapPin, Code2, Rocket, Users, Sparkles } from "lucide-react";
 import { ScrollReveal, Parallax, ParallaxBlob } from "./ScrollAnimation";
+import { useLanguage } from "./LanguageProvider";
 
-const highlights = [
-  {
-    icon: Code2,
-    title: "Clean Code",
-    desc: "Menulis kode yang rapi, terstruktur, dan mudah dikembangkan tim.",
-  },
-  {
-    icon: Rocket,
-    title: "Fast Learner",
-    desc: "Cepat beradaptasi dengan teknologi dan tools baru sesuai kebutuhan.",
-  },
-  {
-    icon: Users,
-    title: "Team Player",
-    desc: "Terbiasa berkolaborasi lintas fungsi dan memimpin tim media.",
-  },
-  {
-    icon: Sparkles,
-    title: "Detail-Oriented",
-    desc: "Fokus pada UX, performa, dan kualitas hasil akhir produk.",
-  },
-];
+const highlightIcons = [Code2, Rocket, Users, Sparkles];
 
 export default function About() {
+  const { t } = useLanguage();
+
   return (
     <section id="about" className="py-24 relative overflow-hidden">
       {/* Parallax background blobs */}
@@ -44,9 +26,9 @@ export default function About() {
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
-            <span className="eyebrow">About Me</span>
+            <span className="eyebrow">{t.about.eyebrow}</span>
             <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
-              Get to know <span className="text-gradient">me better</span>
+              {t.about.titlePrefix} <span className="text-gradient">{t.about.titleGradient}</span>
             </h2>
           </div>
         </ScrollReveal>
@@ -65,17 +47,17 @@ export default function About() {
 
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">Nabil Robbani</h3>
               <p className="text-sm text-sky-500 dark:text-sky-400 font-medium mb-4">
-                Software Engineer
+                {t.about.role}
               </p>
 
               <div className="w-full space-y-3 text-left mt-2">
                 <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-gray-300">
                   <GraduationCap size={18} className="text-sky-500 dark:text-sky-400 shrink-0" />
-                  <span>Informatics Engineering Graduate (2026) — GPA 3.63</span>
+                  <span>{t.about.education}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-gray-300">
                   <MapPin size={18} className="text-sky-500 dark:text-sky-400 shrink-0" />
-                  <span>STT Terpadu Nurul Fikri, Indonesia</span>
+                  <span>{t.about.institution}</span>
                 </div>
               </div>
             </div>
@@ -86,39 +68,32 @@ export default function About() {
           <ScrollReveal width="100%" className="lg:col-span-3" delay={0.15}>
             <div className="glass-card p-8 rounded-2xl h-full">
               <p className="text-slate-700 dark:text-gray-300 leading-relaxed mb-4">
-                Saya lulusan Teknik Informatika dari{" "}
-                <span className="text-sky-600 dark:text-sky-400 font-semibold">
-                  Sekolah Tinggi Teknologi Terpadu Nurul Fikri
-                </span>{" "}
-                tahun 2026 dengan IPK{" "}
-                <span className="text-indigo-600 dark:text-indigo-400 font-bold">3.63</span> yang
-                memiliki passion mendalam dalam pengembangan aplikasi web modern dan
-                user-friendly.
+                {t.about.bio1}
               </p>
               <p className="text-slate-600 dark:text-gray-400 leading-relaxed mb-8">
-                Berpengalaman membangun aplikasi frontend maupun fullstack menggunakan
-                React, Next.js, dan Laravel. Saya senang mengubah ide menjadi produk
-                nyata yang berdampak, sambil terus belajar teknologi terbaru untuk
-                menghasilkan solusi software berkualitas tinggi.
+                {t.about.bio2}
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4">
-                {highlights.map((h) => (
-                  <div
-                    key={h.title}
-                    className="group flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-sky-500/30 hover:bg-slate-100/80 dark:bg-white/[0.03] dark:border-white/5 dark:hover:border-sky-500/30 dark:hover:bg-white/[0.05] transition-all shadow-sm dark:shadow-none"
-                  >
-                    <div className="p-2 rounded-lg bg-sky-500/10 text-sky-500 dark:text-sky-400 group-hover:scale-110 transition-transform">
-                      <h.icon size={18} />
+                {t.about.highlights.map((h, idx) => {
+                  const Icon = highlightIcons[idx] || Sparkles;
+                  return (
+                    <div
+                      key={h.title}
+                      className="group flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-sky-500/30 hover:bg-slate-100/80 dark:bg-white/[0.03] dark:border-white/5 dark:hover:border-sky-500/30 dark:hover:bg-white/[0.05] transition-all shadow-sm dark:shadow-none"
+                    >
+                      <div className="p-2 rounded-lg bg-sky-500/10 text-sky-500 dark:text-sky-400 group-hover:scale-110 transition-transform">
+                        <Icon size={18} />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-slate-900 dark:text-white text-sm mb-0.5">
+                          {h.title}
+                        </h4>
+                        <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">{h.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-900 dark:text-white text-sm mb-0.5">
-                        {h.title}
-                      </h4>
-                      <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">{h.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </ScrollReveal>
@@ -127,3 +102,4 @@ export default function About() {
     </section>
   );
 }
+
