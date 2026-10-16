@@ -17,7 +17,7 @@ const BackgroundDigitalHuman = dynamic(
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-slate-950 text-white selection:bg-cyan-500/30 selection:text-cyan-200">
+    <main className="relative min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white selection:bg-cyan-500/30 selection:text-cyan-800 dark:selection:text-cyan-200 transition-colors duration-300">
       {/* ── Persistent Scroll-Driven Transparent Digital Human ── */}
       <BackgroundDigitalHuman />
 

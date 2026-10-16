@@ -89,10 +89,10 @@ export default function Hero() {
         <div className="absolute bottom-0 left-1/3 w-[30rem] h-[30rem] rounded-full bg-purple-500/[0.07] blur-[130px]" />
         {/* Subtle grid */}
         <div
-          className="absolute inset-0 opacity-[0.14]"
+          className="absolute inset-0 opacity-[0.06] dark:opacity-[0.14]"
           style={{
             backgroundImage:
-              "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
+              "linear-gradient(to right, rgba(100,116,139,0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(100,116,139,0.2) 1px, transparent 1px)",
             backgroundSize: "56px 56px",
             maskImage:
               "radial-gradient(ellipse 80% 60% at 50% 40%, black 40%, transparent 100%)",
@@ -114,20 +114,20 @@ export default function Hero() {
               className="max-w-2xl"
             >
               {/* Availability badge */}
-              <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3.5 py-1.5">
+              <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-emerald-500/30 bg-emerald-500/10 dark:border-emerald-400/30 dark:bg-emerald-400/10 px-3.5 py-1.5">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
                 </span>
-                <span className="text-xs font-medium text-emerald-300">
+                <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
                   Available for Career &amp; Freelance
                 </span>
               </div>
 
-              <p className="text-base md:text-lg text-gray-400 mb-2">
+              <p className="text-base md:text-lg text-slate-600 dark:text-gray-400 mb-2">
                 Hi, I&apos;m Nabil Robbani 👋
               </p>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08]">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] text-slate-900 dark:text-white">
                 I build modern
                 <br />
                 <span className="text-gradient">web experiences</span>
@@ -136,11 +136,11 @@ export default function Hero() {
               {/* Role line */}
               <div className="mt-4 flex items-center gap-2.5 text-lg md:text-xl">
                 <span className="h-px w-8 bg-gradient-to-r from-sky-400 to-transparent" />
-                <span className="text-gray-500">I&apos;m a</span>
+                <span className="text-slate-500 dark:text-gray-500">I&apos;m a</span>
                 <Typewriter />
               </div>
 
-              <p className="mt-5 text-base md:text-lg text-gray-400 max-w-xl leading-relaxed">
+              <p className="mt-5 text-base md:text-lg text-slate-600 dark:text-gray-400 max-w-xl leading-relaxed">
                 Software Engineer specializing in building modern, high-performance web
                 applications and seamless digital experiences using React, Next.js, and
                 Laravel.
@@ -160,7 +160,7 @@ export default function Hero() {
                 </Link>
                 <a
                   href="mailto:nabilrobbani6@gmail.com"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/5 border border-white/10 backdrop-blur-md rounded-full font-semibold text-white hover:bg-white/10 transition-all hover:scale-[1.03] cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-slate-900/5 hover:bg-slate-900/10 border border-slate-300/80 text-slate-800 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:text-white backdrop-blur-md rounded-full font-semibold transition-all hover:scale-[1.03] cursor-pointer shadow-sm dark:shadow-none"
                 >
                   <Mail size={18} /> Contact Me
                 </a>
@@ -176,20 +176,20 @@ export default function Hero() {
                       target={href.startsWith("http") ? "_blank" : undefined}
                       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                       aria-label={label}
-                      className="p-2.5 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-sky-400/40 hover:bg-white/10 transition-all hover:-translate-y-0.5"
+                      className="p-2.5 rounded-full bg-slate-900/5 hover:bg-slate-900/10 border border-slate-300/80 text-slate-600 hover:text-slate-900 dark:bg-white/5 dark:border-white/10 dark:text-gray-400 dark:hover:text-white dark:hover:border-sky-400/40 dark:hover:bg-white/10 transition-all hover:-translate-y-0.5"
                     >
                       <Icon size={18} />
                     </a>
                   ))}
                 </div>
 
-                <div className="h-10 w-px bg-white/10 hidden sm:block" />
+                <div className="h-10 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
 
                 <div className="flex items-center gap-7">
                   {stats.map((s) => (
                     <div key={s.label}>
-                      <div className="text-2xl font-bold text-white">{s.value}</div>
-                      <div className="text-[11px] text-gray-500 uppercase tracking-wider">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white">{s.value}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-gray-500 uppercase tracking-wider">
                         {s.label}
                       </div>
                     </div>

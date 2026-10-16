@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useTheme } from "./ThemeProvider";
 
 interface Particle {
   x: number;
@@ -16,10 +17,18 @@ interface Particle {
 }
 
 const StarCursor = () => {
+  const { theme, mounted } = useTheme();
+  const isDark = mounted ? theme === "dark" : true;
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particles = useRef<Particle[]>([]);
   const cursor = useRef({ x: 0, y: 0 });
   const lastCursor = useRef({ x: 0, y: 0 });
+  const isDarkRef = useRef(isDark);
+
+  useEffect(() => {
+    isDarkRef.current = isDark;
+  }, [isDark]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,15 +51,17 @@ const StarCursor = () => {
 
     window.addEventListener("mousemove", onMouseMove);
 
-    const colors = ["#00f3ff", "#bc13fe", "#ffffff", "#ffd700"]; // Cyan, Purple, White, Gold
+    const darkColors = ["#00f3ff", "#bc13fe", "#ffffff", "#ffd700"]; // Cyan, Purple, White, Gold
+    const lightColors = ["#0284c7", "#7c3aed", "#2563eb", "#d97706", "#059669"]; // Rich vibrant jewel tones
 
     const createParticle = (x: number, y: number) => {
-      const size = Math.random() * 3 + 1; // Random size 1-4px
+      const size = Math.random() * 3 + 1.2; // 1.2-4.2px
       const speedX = (Math.random() - 0.5) * 1.5;
       const speedY = (Math.random() - 0.5) * 1.5;
       const life = Math.random() * 20 + 30; // 30-50 frames
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      
+      const palette = isDarkRef.current ? darkColors : lightColors;
+      const color = palette[Math.floor(Math.random() * palette.length)];
+
       particles.current.push({
         x,
         y,
@@ -61,30 +72,38 @@ const StarCursor = () => {
         maxLife: life,
         color,
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.2
+        rotationSpeed: (Math.random() - 0.5) * 0.2,
       });
     };
 
-    const drawStar = (ctx: CanvasRenderingContext2D, x: number, y: number, spikes: number, outerRadius: number, innerRadius: number, rotation: number) => {
-        const cx = x;
-        const cy = y;
-        const step = Math.PI / spikes;
+    const drawStar = (
+      ctx: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      spikes: number,
+      outerRadius: number,
+      innerRadius: number,
+      rotation: number
+    ) => {
+      const cx = x;
+      const cy = y;
+      const step = Math.PI / spikes;
 
-        ctx.beginPath();
-        let rot = rotation;
-        for (let i = 0; i < spikes; i++) {
-            let x = cx + Math.cos(rot) * outerRadius;
-            let y = cy + Math.sin(rot) * outerRadius;
-            ctx.lineTo(x, y);
-            rot += step;
+      ctx.beginPath();
+      let rot = rotation;
+      for (let i = 0; i < spikes; i++) {
+        let sx = cx + Math.cos(rot) * outerRadius;
+        let sy = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(sx, sy);
+        rot += step;
 
-            x = cx + Math.cos(rot) * innerRadius;
-            y = cy + Math.sin(rot) * innerRadius;
-            ctx.lineTo(x, y);
-            rot += step;
-        }
-        ctx.lineTo(cx, cy - outerRadius);
-        ctx.closePath();
+        sx = cx + Math.cos(rot) * innerRadius;
+        sy = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(sx, sy);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
     };
 
     const animate = () => {
@@ -95,18 +114,17 @@ const StarCursor = () => {
       const dx = cursor.current.x - lastCursor.current.x;
       const dy = cursor.current.y - lastCursor.current.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      
+
       // Spawn particles based on movement distance
       if (dist > 2) {
-         const steps = Math.min(dist, 5); // Limit interpolation steps
-         for(let i=0; i<steps; i++){
-            const lerpX = lastCursor.current.x + (dx * (i/steps));
-            const lerpY = lastCursor.current.y + (dy * (i/steps));
-            // Chance to spawn
-            if(Math.random() > 0.5) createParticle(lerpX, lerpY);
-         }
+        const steps = Math.min(dist, 5);
+        for (let i = 0; i < steps; i++) {
+          const lerpX = lastCursor.current.x + dx * (i / steps);
+          const lerpY = lastCursor.current.y + dy * (i / steps);
+          if (Math.random() > 0.5) createParticle(lerpX, lerpY);
+        }
       }
-      
+
       lastCursor.current = { ...cursor.current };
 
       // Update and draw particles
@@ -122,12 +140,9 @@ const StarCursor = () => {
           const opacity = p.life / p.maxLife;
           ctx.globalAlpha = opacity;
           ctx.fillStyle = p.color;
-          
-          // Draw small star shape
+
           ctx.save();
           ctx.translate(p.x, p.y);
-          // Simplified star drawing or simple circle for performance if needed
-          // Using small 4-point star ("sparkle")
           drawStar(ctx, 0, 0, 4, p.size, p.size / 3, p.rotation);
           ctx.fill();
           ctx.restore();
@@ -151,9 +166,10 @@ const StarCursor = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-[9999]"
-      style={{ mixBlendMode: "screen" }}
+      style={{ mixBlendMode: isDark ? "screen" : "normal" }}
     />
   );
 };
 
 export default StarCursor;
+

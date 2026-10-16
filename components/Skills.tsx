@@ -62,10 +62,10 @@ export default function Skills() {
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
             <span className="eyebrow">Tech Stack</span>
-            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
               Technical <span className="text-gradient">Skills</span>
             </h2>
-            <p className="mt-4 text-gray-400 max-w-xl mx-auto text-sm md:text-base">
+            <p className="mt-4 text-slate-600 dark:text-gray-400 max-w-xl mx-auto text-sm md:text-base">
               Teknologi dan tools yang saya gunakan untuk membangun produk digital
               yang cepat, andal, dan menarik.
             </p>
@@ -81,7 +81,7 @@ export default function Skills() {
               whileHover={{ y: -6 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: i * 0.12, ease: "easeOut" }}
-              className={`glass-card p-6 rounded-2xl border border-white/8 ${cat.border} hover:shadow-2xl hover:shadow-black/40 transition-colors`}
+              className={`glass-card p-6 rounded-2xl border border-slate-200/80 dark:border-white/8 ${cat.border} hover:shadow-xl hover:shadow-slate-900/5 dark:hover:shadow-2xl dark:hover:shadow-black/40 transition-colors`}
             >
               <div className="flex items-center gap-3 mb-5">
                 <motion.div
@@ -92,7 +92,7 @@ export default function Skills() {
                 >
                   <cat.icon size={22} />
                 </motion.div>
-                <h3 className="text-lg font-bold text-white">{cat.title}</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">{cat.title}</h3>
               </div>
               <div className="flex flex-wrap gap-2">
                 {cat.skills.map((skill, j) => (
@@ -108,7 +108,7 @@ export default function Skills() {
                       damping: 18,
                       delay: i * 0.12 + 0.25 + j * 0.04,
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/8 text-sm text-gray-300 hover:text-white hover:bg-white/[0.1] hover:border-white/25 cursor-default"
+                    className="px-3 py-1.5 rounded-lg bg-slate-100/90 border border-slate-200/90 text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-200/80 hover:border-slate-300 dark:bg-white/[0.04] dark:border-white/8 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/[0.1] dark:hover:border-white/25 cursor-default transition-colors"
                   >
                     {skill}
                   </motion.span>
@@ -121,8 +121,8 @@ export default function Skills() {
 
       {/* Marquee strip */}
       <div className="relative w-full flex overflow-x-hidden mt-16 group">
-        <div className="absolute top-0 bottom-0 left-0 w-24 z-10 bg-gradient-to-r from-slate-950 to-transparent" />
-        <div className="absolute top-0 bottom-0 right-0 w-24 z-10 bg-gradient-to-l from-slate-950 to-transparent" />
+        <div className="absolute top-0 bottom-0 left-0 w-24 z-10 bg-gradient-to-r from-slate-50 dark:from-slate-950 to-transparent pointer-events-none" />
+        <div className="absolute top-0 bottom-0 right-0 w-24 z-10 bg-gradient-to-l from-slate-50 dark:from-slate-950 to-transparent pointer-events-none" />
         <motion.div
           className="flex space-x-6 whitespace-nowrap"
           animate={{ x: [0, -1200] }}
@@ -131,7 +131,7 @@ export default function Skills() {
           {[...marquee, ...marquee, ...marquee].map((skill, index) => (
             <span
               key={index}
-              className="text-xl md:text-2xl font-semibold text-gray-600 group-hover:text-gray-400 transition-colors"
+              className="text-xl md:text-2xl font-semibold text-slate-400 dark:text-gray-600 group-hover:text-slate-600 dark:group-hover:text-gray-400 transition-colors"
             >
               {skill} <span className="text-sky-500/40 mx-2">•</span>
             </span>

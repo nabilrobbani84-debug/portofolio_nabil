@@ -39,20 +39,20 @@ const ExperienceCard = ({ item, index }: { item: ExperienceItem; index: number }
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className={`relative pl-8 pb-12 border-l border-white/10 last:border-0 last:pb-0`}
+      className={`relative pl-8 pb-12 border-l border-slate-200 dark:border-white/10 last:border-0 last:pb-0`}
     >
-      <div className={`absolute left-[-17px] top-0 p-2 rounded-full border border-slate-900 bg-slate-800 ${item.color}`}>
+      <div className={`absolute left-[-17px] top-0 p-2 rounded-full border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-800 ${item.color} shadow-sm`}>
         <Briefcase size={16} />
       </div>
       
-      <div className={`p-6 rounded-xl border bg-slate-900/50 hover:bg-slate-800/50 transition-colors ${item.border}`}>
+      <div className={`p-6 rounded-xl border bg-white/80 dark:bg-slate-900/50 hover:bg-white dark:hover:bg-slate-800/50 transition-colors shadow-sm dark:shadow-none ${item.border}`}>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
             <div>
-                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-sky-400 transition-colors">{item.role}</h3>
-                <p className="text-base text-gray-300 font-medium">{item.company} <span className="text-sm font-normal text-gray-500">• {item.type}</span></p>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors">{item.role}</h3>
+                <p className="text-base text-slate-700 dark:text-gray-300 font-medium">{item.company} <span className="text-sm font-normal text-slate-500 dark:text-gray-500">• {item.type}</span></p>
             </div>
             
-            <div className="flex flex-col gap-1 text-sm text-gray-400 shrink-0">
+            <div className="flex flex-col gap-1 text-sm text-slate-500 dark:text-gray-400 shrink-0">
                 <div className="flex items-center gap-2">
                     <Calendar size={14} />
                     <span>{item.period}</span>
@@ -64,7 +64,7 @@ const ExperienceCard = ({ item, index }: { item: ExperienceItem; index: number }
             </div>
         </div>
 
-        <p className="text-gray-400 text-sm leading-relaxed mb-4">
+        <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
             {item.description}
         </p>
 
@@ -92,7 +92,7 @@ export default function Experience() {
         <ScrollReveal width="100%">
           <div className="text-center mb-14">
             <span className="eyebrow">Career</span>
-            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold">
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
               Work <span className="text-gradient">Experience</span>
             </h2>
           </div>

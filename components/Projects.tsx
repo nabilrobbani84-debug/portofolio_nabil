@@ -199,14 +199,14 @@ const projects: Project[] = [
 // ─── Badge Color Map ─────────────────────────────────────────────────────────
 
 const badgeColors: Record<string, string> = {
-  cyan:   "bg-cyan-500/10 border-cyan-500/30 text-cyan-400",
-  purple: "bg-purple-500/10 border-purple-500/30 text-purple-400",
-  rose:   "bg-rose-500/10 border-rose-500/30 text-rose-400",
-  amber:  "bg-amber-500/10 border-amber-500/30 text-amber-400",
-  sky:    "bg-sky-500/10 border-sky-500/30 text-sky-400",
-  orange: "bg-orange-500/10 border-orange-500/30 text-orange-400",
-  green:  "bg-green-500/10 border-green-500/30 text-green-400",
-  indigo: "bg-indigo-500/10 border-indigo-500/30 text-indigo-400",
+  cyan:   "bg-cyan-500/10 border-cyan-500/30 text-cyan-700 dark:text-cyan-400",
+  purple: "bg-purple-500/10 border-purple-500/30 text-purple-700 dark:text-purple-400",
+  rose:   "bg-rose-500/10 border-rose-500/30 text-rose-700 dark:text-rose-400",
+  amber:  "bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400",
+  sky:    "bg-sky-500/10 border-sky-500/30 text-sky-700 dark:text-sky-400",
+  orange: "bg-orange-500/10 border-orange-500/30 text-orange-700 dark:text-orange-400",
+  green:  "bg-green-500/10 border-green-500/30 text-green-700 dark:text-green-400",
+  indigo: "bg-indigo-500/10 border-indigo-500/30 text-indigo-700 dark:text-indigo-400",
 };
 
 // ─── Project Card ────────────────────────────────────────────────────────────
@@ -231,7 +231,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
         className={`absolute -inset-px rounded-2xl bg-gradient-to-r ${project.accent} opacity-0 group-hover:opacity-60 blur-sm transition-opacity duration-500`}
       />
 
-      <div className="relative h-full flex flex-col rounded-2xl bg-slate-900/90 border border-white/8 overflow-hidden backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1">
+      <div className="relative h-full flex flex-col rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-white/8 shadow-md dark:shadow-none overflow-hidden backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1">
 
         {/* ── Image (fixed aspect ratio) ── */}
         <div className="relative w-full aspect-[16/8] overflow-hidden shrink-0">
@@ -253,7 +253,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
           )}
 
           {/* Fade for legibility */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/90 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/95 dark:from-slate-900/90 to-transparent" />
 
           {/* Number tag */}
           <div className="absolute top-3 left-3 z-10">
@@ -267,12 +267,12 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
         <div className="flex flex-col flex-1 p-4 gap-3">
 
           <div className="flex-1">
-            <h3 className="text-base md:text-lg font-bold text-white mb-2 transition-colors group-hover:text-sky-300">
+            <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white mb-2 transition-colors group-hover:text-sky-600 dark:group-hover:text-sky-300">
               {project.title}
             </h3>
 
             {/* Description clamped to 3 lines for uniform height */}
-            <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+            <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2">
               {project.description}
             </p>
           </div>
@@ -289,20 +289,20 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
               </span>
             ))}
             {hiddenCount > 0 && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border border-white/10 bg-white/5 text-gray-400">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-400">
                 +{hiddenCount}
               </span>
             )}
           </div>
 
           {/* Action Buttons (pinned to bottom) */}
-          <div className="flex items-center gap-2.5 mt-auto pt-3 border-t border-white/5">
+          <div className="flex items-center gap-2.5 mt-auto pt-3 border-t border-slate-200/80 dark:border-white/5">
             {project.github && (
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-xs font-medium transition-all duration-200"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 hover:text-slate-900 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:hover:border-white/20 dark:text-gray-300 dark:hover:text-white text-xs font-medium transition-all duration-200"
               >
                 <Github size={14} />
                 Code
@@ -352,7 +352,7 @@ export default function Projects() {
   const visibleProjects = showAll ? filtered : filtered.slice(0, INITIAL_VISIBLE);
 
   return (
-    <section id="projects" className="py-24 text-white relative overflow-hidden">
+    <section id="projects" className="py-24 text-slate-900 dark:text-white relative overflow-hidden">
       {/* Parallax background decoration */}
       <ParallaxBlob
         offset={180}
@@ -371,11 +371,11 @@ export default function Projects() {
         <ScrollReveal width="100%">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
             <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold flex items-center gap-3">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold flex items-center gap-3 text-slate-900 dark:text-white">
                 Featured <span className="text-gradient">Projects</span>
-                <Sparkles className="text-amber-300" size={20} />
+                <Sparkles className="text-amber-400" size={20} />
               </h2>
-              <p className="mt-3 text-gray-400 max-w-md text-sm md:text-base">
+              <p className="mt-3 text-slate-600 dark:text-gray-400 max-w-md text-sm md:text-base">
                 Kumpulan proyek pilihan yang menunjukkan kemampuan teknis dan kreativitas dalam pengembangan software.
               </p>
             </div>
@@ -383,7 +383,7 @@ export default function Projects() {
               href="https://github.com/nabilrobbani84-debug"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-sky-400 hover:text-sky-300 transition-colors shrink-0"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-colors shrink-0"
             >
               View all projects <ArrowUpRight size={16} />
             </a>
@@ -400,10 +400,10 @@ export default function Projects() {
                 setFilter(f);
                 setShowAll(false);
               }}
-              className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all ${
+              className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer ${
                 filter === f
-                  ? "bg-sky-400 border-sky-400 text-slate-950 shadow-lg shadow-sky-500/25"
-                  : "bg-white/5 border-white/15 text-gray-300 hover:border-sky-400/60 hover:text-white"
+                  ? "bg-sky-500 border-sky-500 text-white shadow-lg shadow-sky-500/25"
+                  : "bg-slate-100 border-slate-200 text-slate-700 hover:border-sky-400/60 hover:text-slate-900 dark:bg-white/5 dark:border-white/15 dark:text-gray-300 dark:hover:border-sky-400/60 dark:hover:text-white"
               }`}
             >
               {f}
@@ -420,7 +420,7 @@ export default function Projects() {
           </AnimatePresence>
         </div>
         {filtered.length === 0 && (
-          <p className="text-center text-gray-500 py-10">Belum ada proyek di kategori ini.</p>
+          <p className="text-center text-slate-500 dark:text-gray-500 py-10">Belum ada proyek di kategori ini.</p>
         )}
 
         {/* Show more / less */}
@@ -428,7 +428,7 @@ export default function Projects() {
           <div className="flex justify-center mt-8">
             <button
               onClick={() => setShowAll((v) => !v)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-sky-500/40 text-sm font-medium text-gray-300 hover:text-white transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 hover:border-sky-500/40 text-sm font-medium text-slate-700 hover:text-slate-900 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:text-gray-300 dark:hover:text-white transition-all cursor-pointer shadow-sm dark:shadow-none"
             >
               {showAll ? "Tampilkan lebih sedikit" : `Tampilkan semua (${filtered.length})`}
               <ChevronDown size={16} className={`transition-transform ${showAll ? "rotate-180" : ""}`} />
@@ -438,13 +438,13 @@ export default function Projects() {
 
         {/* Footer note */}
         <ScrollReveal width="100%">
-          <p className="text-center text-gray-600 text-sm mt-8">
+          <p className="text-center text-slate-500 dark:text-gray-600 text-sm mt-8">
             dan masih banyak lagi ·{" "}
             <a
               href="https://github.com/nabilrobbani84-debug"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-cyan-500 hover:text-cyan-400 underline underline-offset-2 transition-colors"
+              className="text-cyan-600 dark:text-cyan-500 hover:text-cyan-500 dark:hover:text-cyan-400 underline underline-offset-2 transition-colors"
             >
               Lihat semua di GitHub →
             </a>

@@ -162,13 +162,13 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
                     transform: `translate(calc(-50% + ${bx}px), calc(-50% + ${by}px))`,
                   }}
                 >
-                  <div className="flex items-center gap-1.5 rounded-full bg-slate-900/90 border border-white/20 backdrop-blur-md shadow-lg shadow-black/70 px-2.5 py-1">
+                  <div className="flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-white/20 backdrop-blur-md shadow-md dark:shadow-black/70 px-2.5 py-1">
                     <span
                       className={`flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br ${badge.color}`}
                     >
                       <Icon size={9} className="text-white" />
                     </span>
-                    <span className="text-[10px] font-semibold text-white/95 tracking-wide">
+                    <span className="text-[10px] font-semibold text-slate-800 dark:text-white/95 tracking-wide">
                       {badge.label}
                     </span>
                   </div>
@@ -183,13 +183,13 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
           className="absolute top-2 inset-x-2 z-30 flex items-center justify-between pointer-events-none transition-opacity duration-300"
           style={{ opacity: heroOpacity }}
         >
-          <div className="flex items-center gap-1.5 rounded-full bg-slate-950/80 border border-white/15 px-3 py-1 backdrop-blur-md shadow-lg shadow-black/50">
+          <div className="flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-slate-950/80 border border-slate-200/90 dark:border-white/15 px-3 py-1 backdrop-blur-md shadow-md dark:shadow-black/50">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-400" />
             </span>
-            <span className="text-[10px] font-semibold tracking-wider text-slate-200 uppercase font-mono flex items-center gap-1">
-              <Sparkles size={10} className="text-sky-400" />
+            <span className="text-[10px] font-semibold tracking-wider text-slate-700 dark:text-slate-200 uppercase font-mono flex items-center gap-1">
+              <Sparkles size={10} className="text-sky-500 dark:text-sky-400" />
               Interactive Video
             </span>
           </div>
@@ -197,7 +197,7 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
           <button
             type="button"
             onClick={handleReset}
-            className="pointer-events-auto flex items-center justify-center h-6 w-6 rounded-full bg-slate-950/80 border border-white/15 text-slate-400 hover:text-white backdrop-blur-md transition-colors"
+            className="pointer-events-auto flex items-center justify-center h-6 w-6 rounded-full bg-white/90 dark:bg-slate-950/80 border border-slate-200/90 dark:border-white/15 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white backdrop-blur-md transition-colors"
             title="Reset ke atas"
             aria-label="Reset ke atas"
           >
@@ -215,12 +215,12 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
               transition={{ delay: 0.6, duration: 0.5 }}
               className="absolute inset-x-2 bottom-3 z-30 flex justify-center pointer-events-none"
             >
-              <div className="flex items-center gap-2 rounded-full border border-sky-400/40 bg-slate-950/90 backdrop-blur-md px-3.5 py-1.5 shadow-xl shadow-sky-500/25">
-                <Mouse size={13} className="text-sky-400 animate-bounce" />
-                <span className="text-[11px] font-medium tracking-wide text-slate-200">
+              <div className="flex items-center gap-2 rounded-full border border-sky-400/40 bg-white/95 dark:bg-slate-950/90 backdrop-blur-md px-3.5 py-1.5 shadow-xl shadow-sky-500/15 dark:shadow-sky-500/25">
+                <Mouse size={13} className="text-sky-500 dark:text-sky-400 animate-bounce" />
+                <span className="text-[11px] font-medium tracking-wide text-slate-800 dark:text-slate-200">
                   Scroll ke bawah untuk melihat pergerakan
                 </span>
-                <ChevronDown size={13} className="text-sky-400 animate-pulse" />
+                <ChevronDown size={13} className="text-sky-500 dark:text-sky-400 animate-pulse" />
               </div>
             </motion.div>
           )}
@@ -232,15 +232,15 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.6 }}
-        className="relative mt-2 z-30 flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-md px-4 py-2 shadow-xl shadow-black/40 whitespace-nowrap pointer-events-none transition-opacity duration-300"
+        className="relative mt-2 z-30 flex items-center gap-2 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2 shadow-lg dark:shadow-black/40 whitespace-nowrap pointer-events-none transition-opacity duration-300"
         style={{ opacity: heroOpacity }}
       >
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white">
           <BadgeCheck size={12} />
         </span>
         <span className="flex flex-col leading-tight text-left">
-          <span className="text-xs font-semibold text-white">Software Engineer</span>
-          <span className="text-[10px] text-gray-400">Frontend &amp; Fullstack</span>
+          <span className="text-xs font-semibold text-slate-900 dark:text-white">Software Engineer</span>
+          <span className="text-[10px] text-slate-500 dark:text-gray-400">Frontend &amp; Fullstack</span>
         </span>
       </motion.div>
     </div>

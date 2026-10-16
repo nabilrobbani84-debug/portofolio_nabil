@@ -19,7 +19,7 @@ export default function WhatsAppFloat() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 20, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            className="bg-slate-800 border border-white/10 text-white text-sm font-medium px-4 py-2 rounded-xl shadow-xl whitespace-nowrap"
+            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white text-sm font-medium px-4 py-2 rounded-xl shadow-xl whitespace-nowrap"
           >
             💬 Chat dengan Nabil di WhatsApp
           </motion.div>
