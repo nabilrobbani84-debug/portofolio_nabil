@@ -91,12 +91,12 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
 
   return (
     <div
-      className={`relative select-none flex flex-col items-center justify-center w-full max-w-[24rem] sm:max-w-[27rem] lg:max-w-[29rem] ${className}`}
+      className={`relative select-none flex flex-col items-center justify-center w-full max-w-[20rem] sm:max-w-[25rem] lg:max-w-[29rem] ${className}`}
     >
       {/* ── Anchor Container: BackgroundDigitalHuman aligns its position with this box at scroll=0 ── */}
       <div
         id="hero-character-anchor"
-        className="relative w-full h-[26rem] sm:h-[30rem] lg:h-[33rem] flex items-center justify-center"
+        className="relative w-full h-[22rem] sm:h-[27rem] lg:h-[33rem] flex items-center justify-center"
       >
         {/* Floating Cyber Portal Rings (Fades out when user scrolls past Hero) */}
         <div
@@ -104,11 +104,11 @@ export function InteractiveProfile({ className = "" }: InteractiveProfileProps) 
           style={{ opacity: heroOpacity }}
         >
           <div
-            className="w-[19rem] h-[19rem] sm:w-[22rem] sm:h-[22rem] lg:w-[25rem] lg:h-[25rem] rounded-full border border-sky-400/20 border-dashed animate-spin"
+            className="w-[15rem] h-[15rem] sm:w-[20rem] sm:h-[20rem] lg:w-[25rem] lg:h-[25rem] rounded-full border border-sky-400/20 border-dashed animate-spin"
             style={{ animationDuration: "36s" }}
           />
           <div
-            className="absolute w-[15rem] h-[15rem] sm:w-[17.5rem] sm:h-[17.5rem] lg:w-[20rem] lg:h-[20rem] rounded-full border border-indigo-500/15 animate-spin"
+            className="absolute w-[12rem] h-[12rem] sm:w-[16rem] sm:h-[16rem] lg:w-[20rem] lg:h-[20rem] rounded-full border border-indigo-500/15 animate-spin"
             style={{ animationDuration: "24s", animationDirection: "reverse" }}
           />
         </div>

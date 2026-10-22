@@ -85,7 +85,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden bg-transparent pt-28 pb-16 lg:pt-32 lg:pb-20"
+      className="relative min-h-screen flex items-center overflow-hidden bg-transparent pt-24 sm:pt-28 pb-14 sm:pb-16 lg:pt-32 lg:pb-20"
     >
       {/* Ambient gradient backdrops */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -108,10 +108,10 @@ export default function Hero() {
       </div>
 
       {/* Content grid */}
-      <div className="mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-20 relative z-10">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-12 xl:px-20 relative z-10">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-          {/* ── Left Column: Intro & Bio ── */}
-          <div className="lg:col-span-7 xl:col-span-7 order-2 lg:order-1">
+          {/* ── Column 1: Intro & Bio (First on all devices) ── */}
+          <div className="lg:col-span-7 xl:col-span-7 order-1 lg:order-1">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
@@ -119,58 +119,58 @@ export default function Hero() {
               className="max-w-2xl"
             >
               {/* Availability badge */}
-              <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-emerald-500/30 bg-emerald-500/10 dark:border-emerald-400/30 dark:bg-emerald-400/10 px-3.5 py-1.5">
+              <div className="inline-flex items-center gap-2 mb-4 sm:mb-5 rounded-full border border-emerald-500/30 bg-emerald-500/10 dark:border-emerald-400/30 dark:bg-emerald-400/10 px-3 sm:px-3.5 py-1.5">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
                 </span>
-                <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+                <span className="text-[11px] sm:text-xs font-medium text-emerald-700 dark:text-emerald-300">
                   {t.hero.badge}
                 </span>
               </div>
 
-              <p className="text-base md:text-lg text-slate-600 dark:text-gray-400 mb-2">
+              <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-gray-400 mb-1.5 sm:mb-2">
                 {t.hero.greeting}
               </p>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] text-slate-900 dark:text-white">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-slate-900 dark:text-white">
                 {t.hero.headingPrefix}
                 <br />
                 <span className="text-gradient">{t.hero.headingGradient}</span>
               </h1>
 
               {/* Role line */}
-              <div className="mt-4 flex items-center gap-2.5 text-lg md:text-xl">
-                <span className="h-px w-8 bg-gradient-to-r from-sky-400 to-transparent" />
+              <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-2.5 text-base sm:text-lg md:text-xl">
+                <span className="h-px w-6 sm:w-8 bg-gradient-to-r from-sky-400 to-transparent" />
                 <span className="text-slate-500 dark:text-gray-500">{t.hero.rolePrefix}</span>
                 <Typewriter roles={t.hero.roles} />
               </div>
 
-              <p className="mt-5 text-base md:text-lg text-slate-600 dark:text-gray-400 max-w-xl leading-relaxed">
+              <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-slate-600 dark:text-gray-400 max-w-xl leading-relaxed">
                 {t.hero.bio}
               </p>
 
               {/* CTAs */}
-              <div className="mt-7 flex flex-col sm:flex-row items-start gap-4">
+              <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-start gap-3 sm:gap-4">
                 <Link
                   to="projects"
                   smooth={true}
                   offset={-70}
                   duration={500}
-                  className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-sky-500/40 hover:scale-[1.03] cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-sky-500/40 hover:scale-[1.03] cursor-pointer text-sm sm:text-base"
                 >
                   {t.hero.viewWork}
                   <ArrowDown size={18} className="transition-transform group-hover:translate-y-0.5" />
                 </Link>
                 <a
                   href="mailto:nabilrobbani6@gmail.com"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-slate-900/5 hover:bg-slate-900/10 border border-slate-300/80 text-slate-800 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:text-white backdrop-blur-md rounded-full font-semibold transition-all hover:scale-[1.03] cursor-pointer shadow-sm dark:shadow-none"
+                  className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-slate-900/5 hover:bg-slate-900/10 border border-slate-300/80 text-slate-800 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:text-white backdrop-blur-md rounded-full font-semibold transition-all hover:scale-[1.03] cursor-pointer shadow-sm dark:shadow-none text-sm sm:text-base"
                 >
                   <Mail size={18} /> {t.hero.contactMe}
                 </a>
               </div>
 
               {/* Social + stats */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-5">
+              <div className="mt-7 sm:mt-8 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
                 <div className="flex items-center gap-3">
                   {socials.map(({ href, label, Icon }) => (
                     <a
@@ -179,20 +179,20 @@ export default function Hero() {
                       target={href.startsWith("http") ? "_blank" : undefined}
                       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                       aria-label={label}
-                      className="p-2.5 rounded-full bg-slate-900/5 hover:bg-slate-900/10 border border-slate-300/80 text-slate-600 hover:text-slate-900 dark:bg-white/5 dark:border-white/10 dark:text-gray-400 dark:hover:text-white dark:hover:border-sky-400/40 dark:hover:bg-white/10 transition-all hover:-translate-y-0.5"
+                      className="p-2 sm:p-2.5 rounded-full bg-slate-900/5 hover:bg-slate-900/10 border border-slate-300/80 text-slate-600 hover:text-slate-900 dark:bg-white/5 dark:border-white/10 dark:text-gray-400 dark:hover:text-white dark:hover:border-sky-400/40 dark:hover:bg-white/10 transition-all hover:-translate-y-0.5"
                     >
                       <Icon size={18} />
                     </a>
                   ))}
                 </div>
 
-                <div className="h-10 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
+                <div className="h-px sm:h-10 w-full sm:w-px bg-slate-200 dark:bg-white/10" />
 
-                <div className="flex items-center gap-7">
+                <div className="grid grid-cols-3 gap-2 sm:flex sm:items-center sm:gap-7">
                   {stats.map((s) => (
-                    <div key={s.label}>
-                      <div className="text-2xl font-bold text-slate-900 dark:text-white">{s.value}</div>
-                      <div className="text-[11px] text-slate-500 dark:text-gray-500 uppercase tracking-wider">
+                    <div key={s.label} className="text-left">
+                      <div className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">{s.value}</div>
+                      <div className="text-[10px] sm:text-[11px] text-slate-500 dark:text-gray-500 uppercase tracking-wider leading-tight">
                         {s.label}
                       </div>
                     </div>
@@ -202,8 +202,8 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* ── Right Column: Interactive Profile Video (No background, follows scroll) ── */}
-          <div className="lg:col-span-5 xl:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end">
+          {/* ── Column 2: Interactive Profile Video (Follows scroll smoothly) ── */}
+          <div className="lg:col-span-5 xl:col-span-5 order-2 lg:order-2 flex justify-center lg:justify-end mt-4 lg:mt-0">
             <InteractiveProfile />
           </div>
         </div>

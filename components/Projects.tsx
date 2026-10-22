@@ -169,30 +169,30 @@ export default function Projects() {
   const visibleProjects = showAll ? filtered : filtered.slice(0, INITIAL_VISIBLE);
 
   return (
-    <section id="projects" className="py-24 text-slate-900 dark:text-white relative overflow-hidden">
+    <section id="projects" className="py-16 sm:py-20 lg:py-24 text-slate-900 dark:text-white relative overflow-hidden">
       {/* Parallax background decoration */}
       <ParallaxBlob
         offset={180}
         x={50}
-        className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-sky-500/[0.06] rounded-full blur-[120px] pointer-events-none"
+        className="absolute top-1/4 left-0 w-[320px] sm:w-[600px] h-[320px] sm:h-[600px] bg-sky-500/[0.06] rounded-full blur-[100px] sm:blur-[120px] pointer-events-none"
       />
       <ParallaxBlob
         offset={-160}
         x={-40}
-        className="absolute bottom-1/4 right-0 w-[440px] h-[440px] bg-purple-500/[0.06] rounded-full blur-[120px] pointer-events-none"
+        className="absolute bottom-1/4 right-0 w-[280px] sm:w-[440px] h-[280px] sm:h-[440px] bg-purple-500/[0.06] rounded-full blur-[100px] sm:blur-[120px] pointer-events-none"
       />
 
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
 
         {/* Section header */}
         <ScrollReveal width="100%">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6 sm:mb-8">
             <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold flex items-center gap-3 text-slate-900 dark:text-white">
-                {t.projects.titlePrefix} <span className="text-gradient">{t.projects.titleGradient}</span>
-                <Sparkles className="text-amber-400" size={20} />
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold flex flex-wrap items-center gap-2 sm:gap-3 text-slate-900 dark:text-white">
+                <span>{t.projects.titlePrefix}</span> <span className="text-gradient">{t.projects.titleGradient}</span>
+                <Sparkles className="text-amber-400 shrink-0" size={20} />
               </h2>
-              <p className="mt-3 text-slate-600 dark:text-gray-400 max-w-md text-sm md:text-base">
+              <p className="mt-2 sm:mt-3 text-slate-600 dark:text-gray-400 max-w-md text-xs sm:text-sm md:text-base">
                 {t.projects.subtitle}
               </p>
             </div>
@@ -200,7 +200,7 @@ export default function Projects() {
               href="https://github.com/nabilrobbani84-debug"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-colors shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-colors shrink-0"
             >
               {t.projects.viewAllGithub} <ArrowUpRight size={16} />
             </a>
@@ -208,7 +208,7 @@ export default function Projects() {
         </ScrollReveal>
 
         {/* Filter pills */}
-        <div className="flex flex-wrap gap-2.5 mb-8">
+        <div className="flex flex-wrap gap-2 sm:gap-2.5 mb-6 sm:mb-8">
           {FILTER_CONFIG.map(({ key, labelKey }) => {
             const label = t.projects.filterLabels[labelKey as keyof typeof t.projects.filterLabels] || key;
             return (
@@ -219,7 +219,7 @@ export default function Projects() {
                   setFilter(key);
                   setShowAll(false);
                 }}
-                className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer ${
+                className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
                   filter === key
                     ? "bg-sky-500 border-sky-500 text-white shadow-lg shadow-sky-500/25"
                     : "bg-slate-100 border-slate-200 text-slate-700 hover:border-sky-400/60 hover:text-slate-900 dark:bg-white/5 dark:border-white/15 dark:text-gray-300 dark:hover:border-sky-400/60 dark:hover:text-white"

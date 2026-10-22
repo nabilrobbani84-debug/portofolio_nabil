@@ -34,14 +34,14 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Desktop top bar */}
+      {/* Desktop top bar (lg and up: >= 1024px) */}
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className={`fixed inset-x-0 top-0 z-50 hidden md:block transition-all duration-300 ${
+        className={`fixed inset-x-0 top-0 z-50 hidden lg:block transition-all duration-300 ${
           scrolled
-            ? "bg-white/80 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/10 shadow-lg shadow-slate-900/5 dark:shadow-black/20"
+            ? "bg-white/85 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/10 shadow-lg shadow-slate-900/5 dark:shadow-black/20"
             : "bg-transparent border-b border-transparent"
         }`}
       >
@@ -53,7 +53,7 @@ export default function Navbar() {
             duration={500}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 text-sm font-bold text-white shadow-lg shadow-sky-500/25">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 text-sm font-bold text-white shadow-lg shadow-sky-500/25 transition-transform group-hover:scale-105">
               NR
             </span>
             <span className="text-sm font-semibold tracking-wide text-slate-900 dark:text-white">
@@ -108,65 +108,98 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* Mobile Top Controls */}
-      <div className="md:hidden fixed top-5 right-5 z-50 flex items-center gap-2">
-        <LanguageToggle size="sm" idPrefix="mobile" />
-        <ThemeToggle size="sm" />
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-          className="p-2.5 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/90 dark:border-white/10 rounded-full text-slate-800 dark:text-white shadow-lg"
-        >
-          {isOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>
+      {/* Mobile & Tablet Top Bar (< lg: < 1024px) */}
+      <header
+        className={`lg:hidden fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          scrolled || isOpen
+            ? "bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/10 shadow-md shadow-slate-900/5 dark:shadow-black/20"
+            : "bg-white/60 dark:bg-slate-950/60 backdrop-blur-md border-b border-slate-200/40 dark:border-white/5"
+        }`}
+      >
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-3.5 sm:px-6">
+          {/* Brand */}
+          <Link
+            to="home"
+            smooth={true}
+            duration={500}
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-2 cursor-pointer shrink-0"
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 text-xs font-bold text-white shadow-md shadow-sky-500/25">
+              NR
+            </span>
+            <span className="text-xs sm:text-sm font-semibold tracking-wide text-slate-900 dark:text-white max-w-[130px] sm:max-w-none truncate">
+              Nabil Robbani
+            </span>
+          </Link>
 
-      {/* Mobile brand */}
-      <div className="md:hidden fixed top-5 left-5 z-50">
-        <div className="flex items-center gap-2 rounded-full bg-white/90 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/90 dark:border-white/10 px-3 py-2 shadow-lg">
-          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-sky-400 to-indigo-500 text-[10px] font-bold text-white">
-            NR
-          </span>
-          <span className="text-xs font-semibold text-slate-900 dark:text-white">Nabil Robbani</span>
+          {/* Controls: Language, Theme, Hamburger */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <LanguageToggle size="sm" idPrefix="mobile" />
+            <ThemeToggle size="sm" />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+              aria-expanded={isOpen}
+              className="p-2 sm:p-2.5 bg-slate-100 dark:bg-white/10 hover:bg-slate-200/80 dark:hover:bg-white/15 border border-slate-200/90 dark:border-white/10 rounded-full text-slate-800 dark:text-white transition-colors cursor-pointer"
+            >
+              {isOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay with scroll support for short heights */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed inset-4 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl flex flex-col items-center justify-center space-y-5 border border-slate-200/90 dark:border-white/10 md:hidden shadow-2xl"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-3 top-20 bottom-4 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-2xl border border-slate-200/90 dark:border-white/10 lg:hidden shadow-2xl flex flex-col overflow-hidden"
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                offset={-70}
-                smooth={true}
-                duration={500}
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-4 text-xl font-bold text-slate-700 hover:text-sky-600 dark:text-gray-300 dark:hover:text-sky-400 active:text-sky-500 transition-colors"
-              >
-                <item.icon size={22} className="text-sky-500" />
-                {item.name}
-              </Link>
-            ))}
+            <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col items-center justify-start space-y-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  offset={-70}
+                  smooth={true}
+                  duration={500}
+                  onClick={() => setIsOpen(false)}
+                  className={`flex items-center gap-3.5 w-full max-w-xs px-4 py-3 rounded-xl text-base sm:text-lg font-semibold transition-all cursor-pointer ${
+                    activeTab === item.to
+                      ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-400/20"
+                      : "text-slate-700 hover:text-sky-600 dark:text-gray-300 dark:hover:text-sky-400 hover:bg-slate-100/80 dark:hover:bg-white/5"
+                  }`}
+                >
+                  <item.icon size={20} className="text-sky-500 shrink-0" />
+                  <span>{item.name}</span>
+                </Link>
+              ))}
 
-            <div className="pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col items-center gap-3">
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  {t.nav.selectLang}
-                </span>
-                <LanguageToggle size="md" idPrefix="drawer" />
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  {t.nav.selectMode}
-                </span>
-                <ThemeToggle size="md" />
+              <div className="w-full max-w-xs pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col gap-3">
+                <Link
+                  to="contact"
+                  smooth={true}
+                  offset={-70}
+                  duration={500}
+                  onClick={() => setIsOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 cursor-pointer"
+                >
+                  {t.nav.hireMe}
+                  <ArrowUpRight size={16} />
+                </Link>
+
+                <div className="flex items-center justify-between pt-2 px-2 text-xs text-slate-500 dark:text-slate-400">
+                  <span>{t.nav.selectLang}</span>
+                  <LanguageToggle size="sm" idPrefix="drawer" />
+                </div>
+                <div className="flex items-center justify-between px-2 text-xs text-slate-500 dark:text-slate-400">
+                  <span>{t.nav.selectMode}</span>
+                  <ThemeToggle size="sm" />
+                </div>
               </div>
             </div>
           </motion.div>

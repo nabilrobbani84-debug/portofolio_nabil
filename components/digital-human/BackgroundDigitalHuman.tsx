@@ -179,11 +179,12 @@ export function BackgroundDigitalHuman() {
       // ── C. Horizontal Transition: Hero Right Column -> Center Viewport ──
       const winW = window.innerWidth;
       const winH = window.innerHeight;
-      const isMobile = winW < 1024;
+      const isMobile = winW < 768;
+      const isTablet = winW >= 768 && winW < 1024;
 
       // Anchor detection: align with the hero right column when at the top
-      let heroCenterX = winW * (isMobile ? 0.5 : 0.72);
-      let heroCenterY = winH * (isMobile ? 0.38 : 0.48);
+      let heroCenterX = winW * (isMobile ? 0.5 : isTablet ? 0.5 : 0.72);
+      let heroCenterY = winH * (isMobile ? 0.5 : 0.48);
 
       const anchor = document.getElementById("hero-character-anchor");
       if (anchor) {
@@ -205,34 +206,37 @@ export function BackgroundDigitalHuman() {
       const targetX = heroCenterX + (centerTargetX - heroCenterX) * ease;
       const targetY = heroCenterY + (centerTargetY - heroCenterY) * ease;
 
-      // ── D. Scale: Expand character to eliminate empty margins ("tidak ada ruang kosong") ──
-      const baseScale = isMobile ? 0.88 : 1.0;
-      const expandedScale = isMobile ? 1.18 : 1.48;
+      // ── D. Scale: Responsive base and expanded scale for perfect proportion on every screen ──
+      let baseScale = 0.95;
+      let expandedScale = 1.42;
+
+      if (isMobile) {
+        baseScale = Math.min(0.58, (winW * 0.75) / 450);
+        expandedScale = Math.min(0.88, (winW * 1.05) / 450);
+      } else if (isTablet) {
+        baseScale = 0.74;
+        expandedScale = 1.15;
+      }
+
       const targetScale = baseScale + (expandedScale - baseScale) * ease;
 
-      // ── E. Opacity: Vibrant 1.0 in Hero, subtle 0.58 in background behind sections ──
-      const bgOpacity = isMobile ? 0.42 : 0.60;
+      // ── E. Opacity: High in Hero, gentle in background so section texts stay readable ──
+      const bgOpacity = isMobile ? 0.32 : isTablet ? 0.45 : 0.55;
       const targetOpacity = 1.0 - (1.0 - bgOpacity) * ease;
 
       // Deep scroll gentle fade (so projects and footer stay ultra legible)
       const scrollY = window.scrollY || 0;
-      const deepFade = scrollY > 2800 ? Math.max(0.25, 1 - (scrollY - 2800) / 1400) : 1;
+      const deepFade = scrollY > 2600 ? Math.max(0.2, 1 - (scrollY - 2600) / 1400) : 1;
       const finalOpacity = targetOpacity * deepFade;
 
       // Floating gentle levitation
       const floatOffset = reduce ? 0 : Math.sin(time * 0.0016) * 5;
 
-      // Canvas aspect ratio dimensions
-      const baseW = Math.min(450, winW * 0.9);
-      const baseH = baseW * (800 / 450);
-
-      // Apply GPU-accelerated transforms directly to wrapper
+      // Apply GPU-accelerated transforms directly to wrapper using exact center point
       if (wrapper) {
-        const posX = targetX - baseW / 2;
-        const posY = targetY - baseH / 2 + floatOffset;
-
         wrapper.style.transform = `
-          translate3d(${posX.toFixed(1)}px, ${posY.toFixed(1)}px, 0)
+          translate3d(${targetX.toFixed(1)}px, ${(targetY + floatOffset).toFixed(1)}px, 0)
+          translate(-50%, -50%)
           scale(${targetScale.toFixed(3)})
           perspective(1200px)
           rotateX(${state.tiltX.toFixed(2)}deg)
@@ -244,7 +248,7 @@ export function BackgroundDigitalHuman() {
       // Update ambient cyber glow position and intensity
       if (glow) {
         const glowScale = 1.0 + ease * 0.35;
-        const glowOpacity = 0.45 + ease * 0.25;
+        const glowOpacity = (isMobile ? 0.25 : 0.45) + ease * 0.2;
         glow.style.transform = `
           translate3d(${targetX.toFixed(1)}px, ${targetY.toFixed(1)}px, 0)
           translate(-50%, -50%)

@@ -31,6 +31,11 @@ const StarCursor = () => {
   }, [isDark]);
 
   useEffect(() => {
+    // Only run cursor effect on fine pointer (mouse/trackpad) devices
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
