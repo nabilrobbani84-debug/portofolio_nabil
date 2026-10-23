@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-scroll";
 import { useState, useEffect } from "react";
-import { Menu, X, Home, User, Code, Briefcase, Award, Mail, ArrowUpRight } from "lucide-react";
+import { Home, User, Code, Briefcase, Award, Mail, ArrowUpRight } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import LanguageToggle from "./LanguageToggle";
 import { useLanguage } from "./LanguageProvider";
@@ -12,7 +12,6 @@ export default function Navbar() {
   const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
-  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { name: t.nav.home, to: "home", icon: Home },
@@ -111,7 +110,7 @@ export default function Navbar() {
       {/* Mobile & Tablet Top Bar (< lg: < 1024px) */}
       <header
         className={`lg:hidden fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-          scrolled || isOpen
+          scrolled
             ? "bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/10 shadow-md shadow-slate-900/5 dark:shadow-black/20"
             : "bg-white/60 dark:bg-slate-950/60 backdrop-blur-md border-b border-slate-200/40 dark:border-white/5"
         }`}
@@ -122,7 +121,6 @@ export default function Navbar() {
             to="home"
             smooth={true}
             duration={500}
-            onClick={() => setIsOpen(false)}
             className="flex items-center gap-2 cursor-pointer shrink-0"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 text-xs font-bold text-white shadow-md shadow-sky-500/25">
@@ -133,78 +131,13 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Controls: Language, Theme, Hamburger */}
+          {/* Controls: Language & Theme Toggle */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <LanguageToggle size="sm" idPrefix="mobile" />
             <ThemeToggle size="sm" />
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label={isOpen ? "Tutup menu" : "Buka menu"}
-              aria-expanded={isOpen}
-              className="p-2 sm:p-2.5 bg-slate-100 dark:bg-white/10 hover:bg-slate-200/80 dark:hover:bg-white/15 border border-slate-200/90 dark:border-white/10 rounded-full text-slate-800 dark:text-white transition-colors cursor-pointer"
-            >
-              {isOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
           </div>
         </div>
       </header>
-
-      {/* Mobile Menu Overlay with scroll support for short heights */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-3 top-20 bottom-4 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-2xl border border-slate-200/90 dark:border-white/10 lg:hidden shadow-2xl flex flex-col overflow-hidden"
-          >
-            <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col items-center justify-start space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  offset={-70}
-                  smooth={true}
-                  duration={500}
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-3.5 w-full max-w-xs px-4 py-3 rounded-xl text-base sm:text-lg font-semibold transition-all cursor-pointer ${
-                    activeTab === item.to
-                      ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-400/20"
-                      : "text-slate-700 hover:text-sky-600 dark:text-gray-300 dark:hover:text-sky-400 hover:bg-slate-100/80 dark:hover:bg-white/5"
-                  }`}
-                >
-                  <item.icon size={20} className="text-sky-500 shrink-0" />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-
-              <div className="w-full max-w-xs pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col gap-3">
-                <Link
-                  to="contact"
-                  smooth={true}
-                  offset={-70}
-                  duration={500}
-                  onClick={() => setIsOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 cursor-pointer"
-                >
-                  {t.nav.hireMe}
-                  <ArrowUpRight size={16} />
-                </Link>
-
-                <div className="flex items-center justify-between pt-2 px-2 text-xs text-slate-500 dark:text-slate-400">
-                  <span>{t.nav.selectLang}</span>
-                  <LanguageToggle size="sm" idPrefix="drawer" />
-                </div>
-                <div className="flex items-center justify-between px-2 text-xs text-slate-500 dark:text-slate-400">
-                  <span>{t.nav.selectMode}</span>
-                  <ThemeToggle size="sm" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }
