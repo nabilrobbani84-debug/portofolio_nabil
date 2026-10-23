@@ -9,6 +9,7 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Certifications from "@/components/Certifications";
 import Footer from "@/components/Footer";
+import FloatingNav from "@/components/FloatingNav";
 
 const BackgroundDigitalHuman = dynamic(
   () => import("@/components/digital-human/BackgroundDigitalHuman"),
@@ -31,6 +32,9 @@ export default function Home() {
         <Certifications />
         <Footer />
       </div>
+
+      {/* Floating pill navigation (scroll-spy + animated notch indicator) */}
+      <FloatingNav />
     </main>
   );
 }

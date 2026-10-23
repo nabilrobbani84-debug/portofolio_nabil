@@ -15,6 +15,20 @@
   --scrollbar-track: #f1f5f9;
   --scrollbar-thumb: #cbd5e1;
   --scrollbar-thumb-hover: #94a3b8;
+
+  /* Floating pill navigation */
+  --floating-nav-bg: rgba(26, 26, 28, 0.86);
+  --floating-nav-bg-solid: #1c1c1e;
+  --floating-nav-border: rgba(255, 255, 255, 0.14);
+  --floating-nav-shadow: 0 18px 45px -12px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.25);
+  --floating-nav-accent: #5be12b;
+  --floating-nav-accent-glow: rgba(91, 225, 43, 0.55);
+  --floating-nav-accent-ink: #0d2610;
+  --floating-nav-icon: #9ca3af;
+  --floating-nav-icon-active: #9ca3af;
+  --floating-nav-icon-hover: #ffffff;
+  --floating-nav-tooltip-bg: #252527;
 }
 
 .dark {
@@ -23,6 +37,19 @@
   --scrollbar-track: #0a1120;
   --scrollbar-thumb: #334155;
   --scrollbar-thumb-hover: #475569;
+
+  --floating-nav-bg: rgba(24, 24, 26, 0.82);
+  --floating-nav-bg-solid: #1c1c1e;
+  --floating-nav-border: rgba(255, 255, 255, 0.12);
+  --floating-nav-shadow: 0 20px 55px -14px rgba(0, 0, 0, 0.75),
+    0 2px 10px rgba(0, 0, 0, 0.3);
+  --floating-nav-accent: #5be12b;
+  --floating-nav-accent-glow: rgba(91, 225, 43, 0.6);
+  --floating-nav-accent-ink: #0b1a09;
+  --floating-nav-icon: #8b8b90;
+  --floating-nav-icon-active: #9aa0a6;
+  --floating-nav-icon-hover: #ffffff;
+  --floating-nav-tooltip-bg: #2c2c2e;
 }
 
 html {
@@ -185,4 +212,33 @@ body::after {
 .animate-shimmer {
   background-size: 200% 200%;
   animation: shimmer 6s ease infinite;
+}
+
+/* ── Floating pill navigation ─────────────────────────────────── */
+.floating-nav-item {
+  color: var(--floating-nav-icon);
+  outline: none;
+}
+
+.floating-nav-icon {
+  transition:
+    color 180ms ease,
+    opacity 200ms ease,
+    transform 180ms ease;
+}
+
+.floating-nav-item:hover .floating-nav-icon,
+.floating-nav-item:focus-visible .floating-nav-icon {
+  color: var(--floating-nav-icon-hover);
+}
+
+.floating-nav-item:focus-visible {
+  box-shadow: 0 0 0 2px var(--floating-nav-bg-solid),
+    0 0 0 4px var(--floating-nav-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-nav-icon {
+    transition: none;
+  }
 }

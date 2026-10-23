@@ -10,7 +10,7 @@ export default function Footer() {
   const { t } = useLanguage();
 
   return (
-    <footer id="contact" className="py-14 sm:py-20 bg-slate-100/70 dark:bg-slate-950 border-t border-slate-200/80 dark:border-white/5 relative overflow-hidden transition-colors">
+    <footer id="contact" className="pt-14 sm:pt-20 pb-28 sm:pb-32 bg-slate-100/70 dark:bg-slate-950 border-t border-slate-200/80 dark:border-white/5 relative overflow-hidden transition-colors">
       {/* Optional background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-cyan-500/5 blur-[100px] pointer-events-none" />
 
