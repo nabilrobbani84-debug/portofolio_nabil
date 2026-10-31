@@ -78,8 +78,6 @@ const ORB_RADIUS = ORB_SIZE / 2;
 const SOCKET_SIZE = 44; // Recessed socket bed diameter (px)
 const SOCKET_RADIUS = SOCKET_SIZE / 2;
 const SCROLL_OFFSET = 70; // Header offset compensation
-const AUTO_HIDE_DELTA = 8;
-const AUTO_HIDE_THRESHOLD = 100;
 
 /* Snappy 3D spring dynamics */
 const SPRING_ORB: Transition = {
@@ -102,6 +100,14 @@ const SPRING_ICON: Transition = {
   damping: 22,
 };
 
+/* Dropping / pop landing when the orb jumps to a new section */
+const SPRING_LAND: Transition = {
+  type: "spring",
+  stiffness: 320,
+  damping: 17,
+  mass: 0.9,
+};
+
 /* ────────────────────────────────────────────────────────────────
    3D Mobile Floating Action Navigation
    ──────────────────────────────────────────────────────────────── */
@@ -117,7 +123,6 @@ export default function FloatingNav() {
   const [positions, setPositions] =
     useState<Record<SectionId, number>>(EMPTY_POSITIONS);
   const [measured, setMeasured] = useState(false);
-  const [hidden, setHidden] = useState(false);
 
   const orbX = useMotionValue(0);
   const socketX = useMotionValue(0);
@@ -315,32 +320,6 @@ export default function FloatingNav() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, [setActiveSafe, scrollToSection]);
 
-  /* ── Auto-hide on scroll ── */
-  useEffect(() => {
-    let lastY = window.scrollY;
-    let ticking = false;
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-
-      window.requestAnimationFrame(() => {
-        const y = window.scrollY;
-        const delta = y - lastY;
-
-        if (y < AUTO_HIDE_THRESHOLD) setHidden(false);
-        else if (delta > AUTO_HIDE_DELTA) setHidden(true);
-        else if (delta < -AUTO_HIDE_DELTA) setHidden(false);
-
-        lastY = y;
-        ticking = false;
-      });
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   /* ── Keyboard navigation ── */
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -379,7 +358,7 @@ export default function FloatingNav() {
       aria-label={lang === "id" ? "Navigasi mobile" : "Mobile navigation"}
       className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-3 pb-[env(safe-area-inset-bottom)] md:hidden"
       initial={reduced ? false : { y: 100, opacity: 0 }}
-      animate={{ y: hidden ? 120 : 0, opacity: hidden ? 0 : 1 }}
+      animate={{ y: 0, opacity: 1 }}
       transition={
         reduced
           ? { duration: 0.15 }
@@ -438,6 +417,33 @@ export default function FloatingNav() {
                 style={{
                   background:
                     "radial-gradient(circle at 50% 60%, rgba(91, 225, 43, 0.28) 0%, transparent 70%)",
+                }}
+              />
+            </motion.div>
+          )}
+
+          {/* ── Landing Shockwave Ring (plays on each section change) ── */}
+          {measured && (
+            <motion.div
+              key={`shockwave-${active}`}
+              aria-hidden
+              className="pointer-events-none absolute top-[7px] rounded-full"
+              style={{
+                width: SOCKET_SIZE,
+                height: SOCKET_SIZE,
+                x: socketX,
+              }}
+              initial={
+                reduced ? { opacity: 0 } : { opacity: 0.65, scale: 0.55 }
+              }
+              animate={{ opacity: 0, scale: 1.85 }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+            >
+              <div
+                className="absolute inset-0 rounded-full border-2 border-[#5be12b]"
+                style={{
+                  boxShadow:
+                    "0 0 18px rgba(91, 225, 43, 0.7), inset 0 0 12px rgba(91, 225, 43, 0.55)",
                 }}
               />
             </motion.div>
@@ -502,103 +508,117 @@ export default function FloatingNav() {
           {measured && (
             <motion.div
               aria-hidden
-              className="pointer-events-none absolute left-0 z-20 flex items-center justify-center rounded-full"
+              className="pointer-events-none absolute left-0 z-20"
               style={{
                 top: -20,
                 width: ORB_SIZE,
                 height: ORB_SIZE,
                 x: orbX,
-                /* 3D Hyper-tactile Spherical Shader */
-                background:
-                  "radial-gradient(circle at 34% 28%, #afff75 0%, #5be12b 40%, #1e8e0a 78%, #0d4603 100%)",
-                boxShadow:
-                  "0 0 26px rgba(91, 225, 43, 0.8), 0 10px 22px -2px rgba(0, 0, 0, 0.65), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -3px 4px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(18, 18, 22, 0.95)",
-                transformStyle: "preserve-3d",
-              }}
-              animate={
-                reduced
-                  ? undefined
-                  : {
-                      y: [0, -3.5, 0],
-                    }
-              }
-              transition={{
-                repeat: Infinity,
-                duration: 2.8,
-                ease: "easeInOut",
               }}
             >
-              {/* Top-left Specular Glass Glint */}
-              <div
-                className="pointer-events-none absolute left-[7px] top-[5px] h-[10px] w-[16px] rounded-full"
+              {/* Landing pop + slight roll on every section change */}
+              <motion.div
+                key={active}
+                initial={
+                  reduced
+                    ? false
+                    : { y: -26, scale: 0.55, rotate: -12 }
+                }
+                animate={{ y: 0, scale: 1, rotate: 0 }}
+                transition={SPRING_LAND}
+                className="absolute inset-0 rounded-full"
                 style={{
                   background:
-                    "radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.3) 50%, transparent 80%)",
-                  transform: "rotate(-25deg)",
+                    "radial-gradient(circle at 34% 28%, #afff75 0%, #5be12b 40%, #1e8e0a 78%, #0d4603 100%)",
+                  boxShadow:
+                    "0 0 26px rgba(91, 225, 43, 0.8), 0 10px 22px -2px rgba(0, 0, 0, 0.65), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -3px 4px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(18, 18, 22, 0.95)",
+                  transformStyle: "preserve-3d",
                 }}
-              />
-
-              {/* 3D Floating HUD Label Pill (Active Section Name) */}
-              <AnimatePresence mode="wait">
+              >
+                {/* Idle levitation layer (keeps floating while settled) */}
                 <motion.div
-                  key={active}
-                  initial={
-                    reduced
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: 4, scale: 0.85 }
-                  }
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={
-                    reduced
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: -4, scale: 0.85 }
-                  }
-                  transition={{ duration: 0.18, ease: "easeOut" }}
-                  className="pointer-events-none absolute -top-8 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 px-2.5 py-0.5 shadow-2xl backdrop-blur-md"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(28, 28, 34, 0.95) 0%, rgba(12, 12, 16, 0.98) 100%)",
-                    boxShadow:
-                      "0 8px 20px -3px rgba(0, 0, 0, 0.7), 0 0 12px rgba(91, 225, 43, 0.35)",
+                  className="absolute inset-0 flex items-center justify-center rounded-full"
+                  animate={reduced ? undefined : { y: [0, -3.5, 0] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 2.8,
+                    ease: "easeInOut",
                   }}
                 >
-                  {/* Glowing 3D Micro-LED */}
-                  <span
-                    className="h-1.5 w-1.5 rounded-full bg-[#5be12b]"
+                  {/* Top-left Specular Glass Glint */}
+                  <div
+                    className="pointer-events-none absolute left-[7px] top-[5px] h-[10px] w-[16px] rounded-full"
                     style={{
-                      boxShadow: "0 0 6px #5be12b, 0 0 10px #5be12b",
+                      background:
+                        "radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.3) 50%, transparent 80%)",
+                      transform: "rotate(-25deg)",
                     }}
                   />
-                  <span className="text-[10px] font-bold tracking-wider text-white">
-                    {t.nav[active]}
-                  </span>
-                </motion.div>
-              </AnimatePresence>
 
-              {/* 3D Active Icon with Flip / Pop Effect */}
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={active}
-                  initial={
-                    reduced
-                      ? false
-                      : { scale: 0.3, rotateY: 90, opacity: 0 }
-                  }
-                  animate={{ scale: 1, rotateY: 0, opacity: 1 }}
-                  exit={
-                    reduced
-                      ? undefined
-                      : { scale: 0.3, rotateY: -90, opacity: 0 }
-                  }
-                  transition={SPRING_ICON}
-                  className="absolute inset-0 flex items-center justify-center text-[#082a05]"
-                  style={{
-                    filter: "drop-shadow(0 1px 1px rgba(255, 255, 255, 0.35))",
-                  }}
-                >
-                  <ActiveIcon size={22} strokeWidth={2.5} />
-                </motion.span>
-              </AnimatePresence>
+                  {/* 3D Floating HUD Label Pill (Active Section Name) */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={active}
+                      initial={
+                        reduced
+                          ? { opacity: 0 }
+                          : { opacity: 0, y: 4, scale: 0.85 }
+                      }
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={
+                        reduced
+                          ? { opacity: 0 }
+                          : { opacity: 0, y: -4, scale: 0.85 }
+                      }
+                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      className="pointer-events-none absolute -top-8 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 px-2.5 py-0.5 shadow-2xl backdrop-blur-md"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(28, 28, 34, 0.95) 0%, rgba(12, 12, 16, 0.98) 100%)",
+                        boxShadow:
+                          "0 8px 20px -3px rgba(0, 0, 0, 0.7), 0 0 12px rgba(91, 225, 43, 0.35)",
+                      }}
+                    >
+                      {/* Glowing 3D Micro-LED */}
+                      <span
+                        className="h-1.5 w-1.5 rounded-full bg-[#5be12b]"
+                        style={{
+                          boxShadow: "0 0 6px #5be12b, 0 0 10px #5be12b",
+                        }}
+                      />
+                      <span className="text-[10px] font-bold tracking-wider text-white">
+                        {t.nav[active]}
+                      </span>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* 3D Active Icon with Flip / Pop Effect */}
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={active}
+                      initial={
+                        reduced
+                          ? false
+                          : { scale: 0.3, rotateY: 90, opacity: 0 }
+                      }
+                      animate={{ scale: 1, rotateY: 0, opacity: 1 }}
+                      exit={
+                        reduced
+                          ? undefined
+                          : { scale: 0.3, rotateY: -90, opacity: 0 }
+                      }
+                      transition={SPRING_ICON}
+                      className="absolute inset-0 flex items-center justify-center text-[#082a05]"
+                      style={{
+                        filter:
+                          "drop-shadow(0 1px 1px rgba(255, 255, 255, 0.35))",
+                      }}
+                    >
+                      <ActiveIcon size={22} strokeWidth={2.5} />
+                    </motion.span>
+                  </AnimatePresence>
+                </motion.div>
+              </motion.div>
             </motion.div>
           )}
         </div>

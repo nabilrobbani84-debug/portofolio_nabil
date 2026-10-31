@@ -36,7 +36,7 @@ const categories = [
     color: "text-purple-400",
     bg: "bg-purple-500/10",
     border: "hover:border-purple-500/40",
-    skills: ["Git", "Docker", "Figma", "Vite", "Scrum", "GitHub", "GitHub Actions", "CI/CD", "Vercel", "Postman", "Linux", "Nginx", "Jira"],
+    skills: ["Git", "Docker", "Figma", "Vite", "Scrum", "SDLC", "Trello", "GitHub", "GitHub Actions", "CI/CD", "Vercel", "Postman", "Linux", "Nginx", "Jira"],
   },
 ];
 
